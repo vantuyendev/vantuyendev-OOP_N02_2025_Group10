@@ -34,11 +34,5 @@ Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __M
 * Customer có thể xem sản phẩm và lịch sử mua hàng
 * Hệ thống theme đa dạng với nhiều màu sắc
 
-## **Cách chạy:**
-1. Đảm bảo đã cài đặt Java và MySQL
-2. Import database từ file `sql/f1.sql`
-3. Chạy lệnh: `javac Start.java && java Start`
-4. Hoặc sử dụng file `run.bat` trên Windows
-
 
 
