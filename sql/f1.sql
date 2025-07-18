@@ -38,8 +38,10 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`userId`, `customerName`, `phoneNumber`, `address`) VALUES
-('c001', 'Customer', '+8801234567890', 'banani'),
-('deba', 'Debashish', '+8801763923789', 'Kuril');
+('c001', 'Tuong Van Tuyen', '0123456789', 'Ha Noi'),
+('c002', 'Tran Thi Lan', '0912345678', 'Da Nang'),
+('c003', 'Le Hoang Nam', '0974856123', 'Can Tho'),
+('c004', 'Pham Thi Hoa', '0938572146', 'Hai Phong');
 
 -- --------------------------------------------------------
 
@@ -60,8 +62,10 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`userId`, `employeeName`, `phoneNumber`, `role`, `salary`) VALUES
-('e001', 'Employee1', '+8801234567890', 'Manager', 50000.00),
-('e002', 'Employee2', '+8801234567891', 'General', 30000.00);
+('e001', 'Hoang Minh Duc', '0901234567', 'Manager', 75000.00),
+('e002', 'Nguyen Thu Hien', '0912345678', 'General', 45000.00),
+('e003', 'Tran Van Khai', '0923456789', 'General', 42000.00),
+('e004', 'Le Thi Mai', '0934567890', 'Manager', 78000.00);
 
 -- --------------------------------------------------------
 
@@ -82,8 +86,12 @@ CREATE TABLE `login` (
 INSERT INTO `login` (`userId`, `password`, `status`) VALUES
 ('e001', 'e001', 0),
 ('e002', 'e002', 0),
+('e003', 'e003', 0),
+('e004', 'e004', 0),
 ('c001', 'c001', 1),
-('deba', 'aaaa', 1);
+('c002', 'c002', 1),
+('c003', 'c003', 1),
+('c004', 'c004', 1);
 
 -- --------------------------------------------------------
 
@@ -103,11 +111,14 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`productId`, `productName`, `price`, `quantity`) VALUES
-(00001, 'Juice 1L', 66.00, 7),
-(00002, 'Mi Band', 2000.00, 5),
-(00003, 'Frutika', 55.00, 21),
-(00004, 'Samsung S9', 89999.00, 5),
-(00005, 'Bagpack XL', 2500.00, 6);
+(00001, 'Laptop Dell XPS 13', 1850.00, 12),
+(00002, 'Smartphone iPhone 15', 1200.00, 8),
+(00003, 'Wireless Headphones', 150.00, 25),
+(00004, 'Gaming Mouse RGB', 85.00, 35),
+(00005, 'Mechanical Keyboard', 120.00, 18),
+(00006, 'Monitor 4K 27 inch', 450.00, 10),
+(00007, 'USB-C Hub', 65.00, 40),
+(00008, 'Webcam HD 1080p', 95.00, 22);
 
 -- --------------------------------------------------------
 
@@ -129,9 +140,11 @@ CREATE TABLE `purchaseinfo` (
 --
 
 INSERT INTO `purchaseinfo` (`purchaseId`, `userId`, `productId`, `cost`, `amount`, `date`) VALUES
-(00001, 'deba', '00003', 55.00, 1, '2018-09-26'),
-(00002, 'c001', '00005', 2500.00, 1, '2018-09-28'),
-(00006, 'c001', '00003', 110.00, 2, '2018-09-28');
+(00001, 'c001', '00003', 150.00, 1, '2025-07-15'),
+(00002, 'c002', '00005', 120.00, 1, '2025-07-16'),
+(00003, 'c003', '00001', 1850.00, 1, '2025-07-17'),
+(00004, 'c001', '00004', 170.00, 2, '2025-07-18'),
+(00005, 'c004', '00002', 1200.00, 1, '2025-07-18');
 
 --
 -- Indexes for dumped tables
@@ -178,12 +191,12 @@ ALTER TABLE `purchaseinfo`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `productId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `productId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `purchaseinfo`
 --
 ALTER TABLE `purchaseinfo`
-  MODIFY `purchaseId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `purchaseId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- Constraints for dumped tables
 --
