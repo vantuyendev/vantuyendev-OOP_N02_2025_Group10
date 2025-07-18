@@ -1,4 +1,4 @@
-# Shop-Management-System
+# Hệ thống quản lý cửa hàng
 ----------------------
 
 ## **Mô tả:**
