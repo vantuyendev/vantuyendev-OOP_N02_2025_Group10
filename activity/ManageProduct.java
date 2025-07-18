@@ -6,7 +6,12 @@ import java.awt.*;
 import java.awt.event.*;
 import attr.*;
 
+/**
+ * ManageProduct - Giao diện quản lý sản phẩm
+ * Cho phép chỉnh sửa, xóa và bán sản phẩm
+ */
 public class ManageProduct extends JFrame implements ActionListener {
+	// Các components của giao diện
 	private JPanel panel;
 	ViewProductActivity prev;
 	private Product product;
@@ -14,6 +19,11 @@ public class ManageProduct extends JFrame implements ActionListener {
 	private JLabel title, header, productIdLabel, productNameLabel, productQtLabel, productPriceLabel, userIdLabel;
 	private JTextField productIdTF, productNameTF, productQtTF, productPriceTF, userIdTF;
 	
+	/**
+	 * Constructor khởi tạo giao diện quản lý sản phẩm
+	 * @param pid ID của sản phẩm cần quản lý
+	 * @param prev Activity trước đó để quay lại
+	 */
 	public ManageProduct(String pid, ViewProductActivity prev) {
 		super("Manage Product");
 		

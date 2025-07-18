@@ -7,13 +7,21 @@ import javax.swing.border.*;
 import java.awt.event.*;
 import attr.*;
 
+/**
+ * LoginActivity - Giao diện đăng nhập của hệ thống
+ * Xử lý việc đăng nhập cho khách hàng và nhân viên
+ */
 public class LoginActivity extends JFrame implements ActionListener {
+	// Các components của giao diện
 	private JPanel mainPanel, headerPanel, formPanel, buttonPanel;
 	private JButton buttonExit, buttonLogin, buttonSignup, buttonThemeSettings;
 	private JLabel titleLabel, usernameLabel, passwordLabel, logoLabel;
 	private JTextField usernameTF;
 	private JPasswordField passwordF;
 	
+	/**
+	 * Constructor khởi tạo giao diện đăng nhập
+	 */
 	public LoginActivity() {
 		super("Shop Management System - Login");
 		initializeComponents();

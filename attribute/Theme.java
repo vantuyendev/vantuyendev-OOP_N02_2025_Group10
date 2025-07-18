@@ -3,8 +3,12 @@ package attr;
 import java.awt.*;
 import javax.swing.border.*;
 
+/**
+ * Class Theme - quản lý giao diện và màu sắc cho toàn bộ ứng dụng
+ * Chứa các constants và theme variants để customization giao diện
+ */
 public class Theme {
-	// === LAYOUT CONSTANTS ===
+	// === LAYOUT CONSTANTS - Các hằng số về kích thước giao diện ===
 	public static final int GUI_WIDTH = 900;
 	public static final int GUI_HEIGHT = 700;
 	public static final int BUTTON_PRIMARY_WIDTH = 120;
@@ -15,10 +19,10 @@ public class Theme {
 	public static final int COMPONENT_SPACING = 15;
 	public static final int HEADER_HEIGHT = 80;
 	
-	// === CURRENT THEME SELECTION ===
+	// === CURRENT THEME SELECTION - Theme hiện tại được chọn ===
 	public static ThemeVariant currentTheme = ThemeVariant.PROFESSIONAL_BLUE;
 	
-	// === THEME VARIANTS ===
+	// === THEME VARIANTS - Các biến thể theme có sẵn ===
 	public enum ThemeVariant {
 		PROFESSIONAL_BLUE,
 		MODERN_DARK,

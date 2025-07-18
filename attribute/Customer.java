@@ -9,18 +9,30 @@ import java.sql.*;
 import attr.*;
 import activity.*;
 
+/**
+ * Class Customer - đại diện cho khách hàng trong hệ thống
+ * Kế thừa từ User, chứa thông tin và chức năng liên quan đến khách hàng
+ */
 public class Customer extends User {
-	private String customerName;
-	private String phoneNumber;
-	private String address;
+	private String customerName;  // Tên khách hàng
+	private String phoneNumber;   // Số điện thoại
+	private String address;       // Địa chỉ
+	
+	// Định nghĩa các cột cho bảng hiển thị
 	public static String[] columnNames = {"PurchaseID", "ProductID", "ProductName", "Amount", "Cost", "Date"};
 	public static String[] columnName = {"CustomerID", "CustomerName", "PhoneNumber", "Address"};
+	
+	/**
+	 * Constructor khởi tạo Customer
+	 * @param userId ID của khách hàng
+	 */
 	public Customer(String userId) {
 		super(userId);
 		
 		this.setStatus(1);
 	}
 	
+	// Setter methods với validation
 	public void setCustomerName(String name) {
 		if (!name.isEmpty())
 			this.customerName = name;
@@ -36,6 +48,8 @@ public class Customer extends User {
 		else
 			throw new IllegalArgumentException("Fill in the address");
 	}
+	
+	// Getter methods
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -46,6 +60,10 @@ public class Customer extends User {
 		return address;
 	}
 
+	/**
+	 * Tạo mới khách hàng trong database
+	 * @param sa JFrame cha để hiển thị thông báo
+	 */
 	public void createCustomer(JFrame sa) {
 		String query1 = "INSERT INTO `login` VALUES ('"+userId+"','"+password+"',"+status+");";
 		String query2 = "INSERT INTO `customer` VALUES ('"+userId+"','"+customerName+"','"+phoneNumber+"','"+address+"');";

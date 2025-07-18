@@ -8,12 +8,21 @@ import java.awt.event.*;
 import java.sql.*;
 import attr.*;
 
+/**
+ * SignupActivity - Giao diện đăng ký tài khoản mới
+ * Cho phép khách hàng tạo tài khoản mới trong hệ thống
+ */
 public class SignupActivity extends JFrame implements ActionListener {
+	// Các components của giao diện đăng ký
 	private JPanel panel;
 	private JButton buttonExit, buttonSubmit, buttonBack;
 	private JLabel title, header, usernameLabel, passwordLabel, nameLabel, phoneLabel, addressLabel;
 	private JTextField usernameTF, nameTF, phoneTF1, phoneTF2, addressTF;
 	private JPasswordField passwordF;
+	
+	/**
+	 * Constructor khởi tạo giao diện đăng ký
+	 */
 	public SignupActivity() {
 		super("Sign up");
 		

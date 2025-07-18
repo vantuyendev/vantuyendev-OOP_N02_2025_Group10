@@ -7,7 +7,12 @@ import javax.swing.border.*;
 import java.awt.event.*;
 import attr.*;
 
+/**
+ * EmployeeActivity - Giao diện chính dành cho nhân viên
+ * Hiển thị dashboard và các chức năng quản lý của nhân viên
+ */
 public class EmployeeActivity extends JFrame implements ActionListener {
+	// Các components của giao diện
 	private JPanel mainPanel, headerPanel, contentPanel, dashboardPanel;
 	private Employee employee;
 	private JButton buttonLogout, buttonProfile, buttonViewProduct;
@@ -15,6 +20,10 @@ public class EmployeeActivity extends JFrame implements ActionListener {
 	private JLabel titleLabel, welcomeLabel, statsLabel, roleLabel;
 	private JPanel[] actionCards;
 	
+	/**
+	 * Constructor khởi tạo giao diện cho nhân viên
+	 * @param userId ID của nhân viên
+	 */
 	public EmployeeActivity(String userId) {
 		super("Employee Dashboard - Shop Management System");
 		

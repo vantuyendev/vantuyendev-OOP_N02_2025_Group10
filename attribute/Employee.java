@@ -7,18 +7,30 @@ import javax.swing.table.*;
 import attr.*;
 import activity.*;
 
+/**
+ * Class Employee - đại diện cho nhân viên trong hệ thống
+ * Kế thừa từ User, chứa thông tin và chức năng liên quan đến nhân viên
+ */
 public class Employee extends User {
-	private String employeeName;
-	private String phoneNumber;
-	private String role;
+	private String employeeName;  // Tên nhân viên
+	private String phoneNumber;   // Số điện thoại
+	private String role;          // Vai trò (General/Manager)
+	private double salary;        // Mức lương
+	
+	// Định nghĩa các cột cho bảng hiển thị và vai trò
 	public static String[] columnNames = {"EmployeeID", "EmployeeName", "PhoneNumber", "Role", "Salary"};
 	public static String[] roles = {"General", "Manager"};
-	private double salary;
+	
+	/**
+	 * Constructor khởi tạo Employee
+	 * @param userId ID của nhân viên
+	 */
 	public Employee(String userId) {
 		super(userId);
-		this.setStatus(0);
+		this.setStatus(0);  // Status 0 cho nhân viên
 	}
 	
+	// Setter methods với validation
 	public void setEmployeeName(String name) {
 		if (!name.isEmpty())
 			this.employeeName = name;
@@ -34,6 +46,8 @@ public class Employee extends User {
 	public void setSalary(double salary) {
 		this.salary = salary;
 	}
+	
+	// Getter methods
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -47,6 +61,9 @@ public class Employee extends User {
 		return salary;
 	}
 	
+	/**
+	 * Tạo mới nhân viên trong database
+	 */
 	public void createEmployee() {
 		String query1 = "INSERT INTO `login` VALUES ('"+userId+"','"+password+"',"+status+");";
 		String query2 = "INSERT INTO `employee` VALUES ('"+userId+"','"+employeeName+"','"+phoneNumber+"','"+role+"', '"+salary+"');";

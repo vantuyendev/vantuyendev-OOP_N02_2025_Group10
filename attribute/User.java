@@ -6,11 +6,19 @@ import attr.*;
 import javax.swing.*;
 import activity.*;
 
+/**
+ * Abstract class User - lớp cha cho tất cả các loại người dùng
+ * Định nghĩa các thuộc tính và phương thức chung cho Customer và Employee
+ */
 public abstract class User {
-	protected String userId;
-	protected String password;
-	protected int status;
+	protected String userId;      // ID người dùng
+	protected String password;    // Mật khẩu
+	protected int status;         // Trạng thái tài khoản
 	
+	/**
+	 * Constructor khởi tạo User với userId
+	 * @param userId ID của người dùng
+	 */
 	public User(String userId) {
 		if (!userId.isEmpty())
 			this.userId = userId;
@@ -18,8 +26,13 @@ public abstract class User {
 			throw new IllegalArgumentException("Fill in the User ID");
 	}
 	
+	/**
+	 * Phương thức abstract để lấy thông tin người dùng từ database
+	 * Mỗi lớp con sẽ implement theo cách riêng
+	 */
 	public abstract void fetch();
 	
+	// Getter và Setter methods
 	public String getUserId() {
 		return userId;
 	}

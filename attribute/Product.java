@@ -10,14 +10,28 @@ import attr.*;
 import activity.*;
 import javax.swing.*;
 
+/**
+ * Class Product - đại diện cho sản phẩm trong hệ thống
+ * Chứa thông tin và chức năng liên quan đến sản phẩm
+ */
 public class Product {
-	private String productId;
-	private String productName;
-	private double price;
-	private int quantity;
+	private String productId;    // ID sản phẩm
+	private String productName;  // Tên sản phẩm
+	private double price;        // Giá sản phẩm
+	private int quantity;        // Số lượng tồn kho
+	
+	// Định nghĩa các cột cho bảng hiển thị
 	public static String[] columnNames = {"PID", "Name", "Price", "AvailableQuantity"};
 	
+	/**
+	 * Constructor mặc định
+	 */
 	public Product() {}
+	
+	/**
+	 * Constructor khởi tạo Product với ID
+	 * @param productId ID của sản phẩm
+	 */
 	public Product(String productId) {
 		if (!productId.isEmpty())
 			this.productId = productId;
@@ -25,6 +39,7 @@ public class Product {
 			throw new IllegalArgumentException("Fill in the ID");
 	}
 	
+	// Setter methods với validation
 	public void setProductName(String name) {
 		if (!name.isEmpty())
 			this.productName = name;
@@ -37,6 +52,8 @@ public class Product {
 	public void setQuantity(int q) {
 		this.quantity = q;
 	}
+	
+	// Getter methods
 	public String getProductId() {
 		return productId;
 	}

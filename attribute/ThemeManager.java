@@ -5,16 +5,20 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class ThemeManager - quản lý việc thay đổi theme cho toàn bộ ứng dụng
+ * Sử dụng Observer pattern để cập nhật theme cho tất cả các frame
+ */
 public class ThemeManager {
-	private static List<JFrame> registeredFrames = new ArrayList<>();
-	private static List<ThemeChangeListener> listeners = new ArrayList<>();
+	private static List<JFrame> registeredFrames = new ArrayList<>();       // Danh sách các frame đã đăng ký
+	private static List<ThemeChangeListener> listeners = new ArrayList<>(); // Danh sách các listener
 	
-	// === THEME CHANGE LISTENER INTERFACE ===
+	// === THEME CHANGE LISTENER INTERFACE - Interface để lắng nghe thay đổi theme ===
 	public interface ThemeChangeListener {
 		void onThemeChanged(Theme.ThemeVariant newTheme);
 	}
 	
-	// === FRAME REGISTRATION ===
+	// === FRAME REGISTRATION - Đăng ký frame để cập nhật theme ===
 	public static void registerFrame(JFrame frame) {
 		if (!registeredFrames.contains(frame)) {
 			registeredFrames.add(frame);
@@ -25,7 +29,7 @@ public class ThemeManager {
 		registeredFrames.remove(frame);
 	}
 	
-	// === LISTENER MANAGEMENT ===
+	// === LISTENER MANAGEMENT - Quản lý các listener ===
 	public static void addThemeChangeListener(ThemeChangeListener listener) {
 		listeners.add(listener);
 	}

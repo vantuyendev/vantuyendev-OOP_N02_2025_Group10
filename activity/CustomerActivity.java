@@ -8,13 +8,22 @@ import java.awt.event.*;
 import java.sql.*;
 import attr.*;
 
+/**
+ * CustomerActivity - Giao diện chính dành cho khách hàng
+ * Hiển thị dashboard và các chức năng của khách hàng
+ */
 public class CustomerActivity extends JFrame implements ActionListener {
+	// Các components của giao diện
 	private JPanel mainPanel, headerPanel, contentPanel, dashboardPanel;
 	private Customer customer;
 	private JButton buttonLogout, buttonProfile, buttonViewProduct, buttonMyProduct, buttonThemeSettings;
 	private JLabel titleLabel, welcomeLabel, statsLabel;
 	private JPanel[] actionCards;
 	
+	/**
+	 * Constructor khởi tạo giao diện cho khách hàng
+	 * @param userId ID của khách hàng
+	 */
 	public CustomerActivity(String userId) {
 		super("Customer Dashboard - Shop Management System");
 		
