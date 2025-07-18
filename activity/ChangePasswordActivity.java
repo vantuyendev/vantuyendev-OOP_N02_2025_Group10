@@ -66,7 +66,7 @@ public class ChangePasswordActivity extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource().equals(buttonSubmit)) {
-			user.changePassword(this, oldPF.getText(), newPF.getText());
+			user.changePassword(this, new String(oldPF.getPassword()), new String(newPF.getPassword()));
 		}
 		else if (ae.getSource().equals(buttonCancel)) {
 			this.setVisible(false);
