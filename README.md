@@ -1,12 +1,95 @@
-# Hệ thống quản lý cửa hàng
-----------------------
+# 🏪 Shop Management System
 
-## **Mô tả:**
+Java Swing application for managing shop operations with MySQL database.
 
-Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __MySQL__
+## 🚀 Quick Start
 
-# Hệ thống quản lý cửa hàng
-----------------------
+```bash
+# Thiết lập và chạy ứng dụng
+make setup
+
+# Hoặc sử dụng script trực tiếp
+./scripts/setup_codespaces.sh
+```
+
+## 📱 Truy cập GUI
+
+Sau khi chạy setup, truy cập GUI qua:
+- **VS Code Ports Tab**: Mở tab PORTS → Click port 6080/8080/3000
+- **Direct URLs**: Xem file `QUICK_ACCESS.txt`
+
+## 🔐 Đăng nhập
+
+**Employees:**
+- Manager: `e001` / `123456`
+- Cashier: `e002` / `123456`
+
+**Customers:**
+- Customer 1: `c001` / `123456` (Silver)
+- Customer 2: `c002` / `123456` (Gold)
+
+## 📂 Project Structure
+
+```
+shop-management-system/
+├── src/main/java/com/shopmanagement/    # Java source code
+├── build/classes/                       # Compiled classes
+├── lib/                                 # Dependencies (MySQL connector)
+├── sql/                                 # Database scripts
+├── scripts/                             # Shell scripts
+├── docs/                                # Documentation
+├── config/                              # Configuration files
+├── .vscode/                             # VS Code settings
+├── pom.xml                              # Maven configuration
+├── Makefile                             # Build commands
+└── QUICK_ACCESS.txt                     # Quick access info
+```
+
+## 🛠️ Available Commands
+
+```bash
+make help       # Show all commands
+make setup      # Setup environment and run app
+make run        # Run app only (after build)
+make build      # Compile Java code
+make clean      # Clean build directory
+make check      # Check services status
+make stop       # Stop all services
+make vnc        # Start VNC servers
+```
+
+## 🗄️ Database
+
+- **Host**: localhost:3306
+- **Database**: shopmanagement  
+- **User**: root (no password)
+- **Tables**: users, employees, customers, products
+
+## 📚 Documentation
+
+- `docs/ACCESS_INFO.md` - Detailed access information
+- `docs/README_CODESPACES.md` - GitHub Codespaces setup
+- `config/access_info.json` - Configuration in JSON format
+- `QUICK_ACCESS.txt` - Quick reference
+
+## 🔧 Development
+
+**Requirements:**
+- Java 11+
+- MySQL 8.0+
+- Maven 3.6+ (optional)
+
+**IDE Setup:**
+- VS Code with Java Extension Pack
+- SQLTools extension for database management
+
+## 🚨 Troubleshooting
+
+If localhost refuses connection:
+1. Use VS Code PORTS tab instead of localhost URLs
+2. Copy GitHub Codespaces URLs from QUICK_ACCESS.txt
+3. Restart services: `make setup`
+4. Check status: `make check`
 
 ## **Mô tả:**
 

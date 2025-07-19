@@ -4,6 +4,9 @@
 
 echo "=== Thiết lập môi trường Java Swing trên GitHub Codespaces ==="
 
+# Di chuyển về thư mục gốc project
+cd "$(dirname "$0")/.."
+
 # 1. Khởi động MySQL nếu chưa chạy
 echo "1. Kiểm tra và khởi động MySQL..."
 sudo service mysql status > /dev/null 2>&1
