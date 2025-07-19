@@ -13,6 +13,9 @@ if [ "$1" = "help" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     echo "  app      - Run application only"
     echo "  vnc      - Start VNC servers only"
     echo "  check    - Check services status"
+    echo "  health   - Health check with auto-fix suggestions"
+    echo "  fix      - Auto-fix common issues"
+    echo "  cleanup  - Clean up processes and conflicts"
     echo "  stop     - Stop all services"
     echo "  clean    - Clean build directory"
     echo "  help     - Show this help"
@@ -37,6 +40,19 @@ case "$1" in
     "check")
         echo "🔍 Checking services status..."
         make check
+        ;;
+    "health")
+        echo "🏥 Running health check..."
+        make health
+        ;;
+    "fix")
+        echo "🔧 Auto-fixing common issues..."
+        chmod +x scripts/auto_fix.sh
+        ./scripts/auto_fix.sh
+        ;;
+    "cleanup")
+        echo "🧹 Cleaning up processes..."
+        make cleanup
         ;;
     "stop")
         echo "⏹️ Stopping all services..."

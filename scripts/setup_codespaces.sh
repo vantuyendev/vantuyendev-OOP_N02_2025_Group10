@@ -30,25 +30,59 @@ else
     echo "Xvfb đã đang chạy."
 fi
 
-# 3. Thiết lập VNC server
+# 3. Thiết lập VNC server với port check
 echo "3. Thiết lập VNC server..."
-if ! pgrep -x "x11vnc" > /dev/null; then
-    echo "Khởi động x11vnc..."
-    x11vnc -display :99 -forever -nopw -quiet -shared > /dev/null 2>&1 &
+
+# Cleanup existing VNC processes first
+pkill -f 'x11vnc.*5900' 2>/dev/null || true
+sleep 1
+
+# Check if port 5900 is free
+if netstat -tlnp | grep -q ':5900 '; then
+    echo "⚠️  Port 5900 is occupied, killing process..."
+    PID=$(lsof -t -i:5900 2>/dev/null || true)
+    [ ! -z "$PID" ] && kill -9 $PID 2>/dev/null
     sleep 2
-else
-    echo "x11vnc đã đang chạy."
 fi
 
-# 4. Thiết lập noVNC web server
-echo "4. Thiết lập noVNC web server..."
-if ! pgrep -f "websockify" > /dev/null; then
-    echo "Khởi động noVNC trên port 6080..."
-    websockify --web=/usr/share/novnc/ 6080 localhost:5900 > /dev/null 2>&1 &
-    sleep 2
-else
-    echo "noVNC đã đang chạy."
+echo "Khởi động x11vnc trên port 5900..."
+x11vnc -display :99 -forever -nopw -quiet -shared -rfbport 5900 > /dev/null 2>&1 &
+VNC_PID=$!
+sleep 2
+
+# Verify VNC started successfully
+if ! kill -0 $VNC_PID 2>/dev/null || ! netstat -tlnp | grep -q ':5900 '; then
+    echo "❌ Failed to start x11vnc on port 5900"
+    exit 1
 fi
+echo "✅ x11vnc started successfully on port 5900"
+
+# 4. Thiết lập noVNC web server với port check
+echo "4. Thiết lập noVNC web server..."
+
+# Cleanup existing websockify processes
+pkill -f 'websockify.*6080' 2>/dev/null || true
+sleep 1
+
+# Check if port 6080 is free
+if netstat -tlnp | grep -q ':6080 '; then
+    echo "⚠️  Port 6080 is occupied, killing process..."
+    PID=$(lsof -t -i:6080 2>/dev/null || true)
+    [ ! -z "$PID" ] && kill -9 $PID 2>/dev/null
+    sleep 2
+fi
+
+echo "Khởi động noVNC trên port 6080..."
+websockify --web=/usr/share/novnc/ 6080 localhost:5900 > /dev/null 2>&1 &
+NOVNC_PID=$!
+sleep 2
+
+# Verify noVNC started successfully
+if ! kill -0 $NOVNC_PID 2>/dev/null || ! netstat -tlnp | grep -q ':6080 '; then
+    echo "❌ Failed to start noVNC on port 6080"
+    exit 1
+fi
+echo "✅ noVNC started successfully on port 6080"
 
 # 5. Compile và chạy ứng dụng Java
 echo "5. Compile và chạy ứng dụng Java..."

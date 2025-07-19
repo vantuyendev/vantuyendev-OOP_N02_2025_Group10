@@ -1,6 +1,6 @@
 # Shop Management System - Makefile
 
-.PHONY: help setup run clean build compile check-status stop
+.PHONY: help setup run clean build compile check-status stop cleanup health vnc-multi
 
 # Default target
 help:
@@ -11,8 +11,11 @@ help:
 	@echo "  build       - Compile Java source code"
 	@echo "  clean       - Xóa các file compiled"
 	@echo "  check       - Kiểm tra trạng thái services"
+	@echo "  health      - Health check và auto-fix"
 	@echo "  stop        - Dừng tất cả services"
+	@echo "  cleanup     - Dọn dẹp processes và conflicts"
 	@echo "  vnc         - Khởi động VNC servers"
+	@echo "  vnc-multi   - Khởi động multi-port VNC (enhanced)"
 	@echo ""
 
 # Thiết lập môi trường và chạy ứng dụng
@@ -47,10 +50,25 @@ check:
 	@chmod +x scripts/check_access_methods.sh
 	@./scripts/check_access_methods.sh
 
+# Health check và auto-fix
+health:
+	@chmod +x scripts/health_check.sh
+	@./scripts/health_check.sh
+
+# Dọn dẹp processes và conflicts
+cleanup:
+	@chmod +x scripts/cleanup.sh
+	@./scripts/cleanup.sh
+
 # Khởi động VNC servers
 vnc:
 	@chmod +x scripts/start_multiport_vnc.sh
 	@./scripts/start_multiport_vnc.sh
+
+# Khởi động multi-port VNC (enhanced)
+vnc-multi:
+	@chmod +x scripts/start_multiport_vnc_v2.sh
+	@./scripts/start_multiport_vnc_v2.sh
 
 # Dừng tất cả services
 stop:
