@@ -5,25 +5,67 @@
 
 Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __MySQL__
 
-## **Cấu trúc dự án:**
+# Hệ thống quản lý cửa hàng
+----------------------
 
-### **Thư mục `attribute/`** - Chứa các class model chính:
+## **Mô tả:**
+
+Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __MySQL__
+
+## **Cấu trúc dự án mới (đã sắp xếp):**
+
+```
+project/
+├── lib/                           # Thư viện dependencies
+│   └── mysql-connector-j-8.0.33.jar
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── shopmanagement/
+│       │           ├── Start.java         # Main class
+│       │           ├── activity/          # UI và các activity
+│       │           ├── model/              # Data models  
+│       │           └── util/               # Utilities
+│       └── resources/
+│           └── sql/                # Database scripts
+├── bin/                           # Compiled classes (auto-generated)
+├── build_and_run.sh               # Build script
+└── README.md
+```
+
+### **Package `com.shopmanagement.model`** - Chứa các class model chính:
 - `User.java` - Abstract class cha cho Customer và Employee
 - `Customer.java` - Class khách hàng
 - `Employee.java` - Class nhân viên  
 - `Product.java` - Class sản phẩm
+
+### **Package `com.shopmanagement.util`** - Chứa các class tiện ích:
 - `Database.java` - Cấu hình kết nối database
 - `Theme.java` - Quản lý giao diện và màu sắc
 - `ThemeManager.java` - Quản lý thay đổi theme
 
-### **Thư mục `activity/`** - Chứa các class giao diện:
-- `Start.java` - Main class khởi chạy ứng dụng
+### **Package `com.shopmanagement.activity`** - Chứa các class giao diện:
 - `LoginActivity.java` - Giao diện đăng nhập
 - `SignupActivity.java` - Giao diện đăng ký
 - `CustomerActivity.java` - Dashboard khách hàng
 - `EmployeeActivity.java` - Dashboard nhân viên
 - `ManageProduct.java` - Quản lý sản phẩm
 - Các file View và Add khác cho từng chức năng
+
+## **Cách build và chạy:**
+
+```bash
+# Sử dụng build script (khuyến nghị)
+./build_and_run.sh
+
+# Hoặc manual:
+# Compile
+javac -cp "lib/*" -d bin src/main/java/com/shopmanagement/**/*.java
+
+# Run  
+java -cp "bin:lib/*" com.shopmanagement.Start
+```
 
 ## **Tính năng:**
 * Đăng nhập cho Manager, Employee và Customer
