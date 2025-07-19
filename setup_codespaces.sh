@@ -51,12 +51,15 @@ fi
 echo "5. Compile và chạy ứng dụng Java..."
 cd /workspaces/vantuyendev-OOP_N02_2025_Group10
 
+# Tạo thư mục output
+mkdir -p build/classes
+
 echo "Đang compile..."
-javac -cp ".:mysql-connector-j-8.0.33.jar" attribute/*.java activity/*.java Start.java
+find src/main/java -name "*.java" -print | xargs javac -cp "lib/*:." -d build/classes
 
 echo "Đang chạy ứng dụng..."
 export DISPLAY=:99
-java -cp ".:mysql-connector-j-8.0.33.jar" Start &
+java -cp "build/classes:lib/*" com.shopmanagement.Start &
 
 echo ""
 echo "=== THIẾT LẬP HOÀN TẤT ==="

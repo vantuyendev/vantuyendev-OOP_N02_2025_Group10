@@ -45,7 +45,7 @@ Sử dụng một trong các tài khoản mẫu:
 ```bash
 sudo service mysql start
 sudo mysql -u root -e "CREATE DATABASE f1;"
-sudo mysql -u root f1 < sql/quanly.sql
+sudo mysql -u root f1 < sql/f1.sql
 ```
 
 ### 3. Thiết lập môi trường GUI:
@@ -82,7 +82,7 @@ java -cp ".:mysql-connector-j-8.0.33.jar" Start
 │   ├── *Activity.java     # Các màn hình khác
 │   └── *.java            # UI components
 ├── sql/
-│   └── quanly.sql        # Database schema & data
+│   └── f1.sql            # Database schema & data
 ├── mysql-connector-j-8.0.33.jar  # JDBC driver
 ├── setup_codespaces.sh   # Script thiết lập tự động
 └── Start.java            # Main class

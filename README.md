@@ -103,7 +103,7 @@ java -cp "bin:lib/*" com.shopmanagement.Start
 
 ### **6. Database Configuration:**
 
-- **Database Name:** `quanly`
+- **Database Name:** `f1`
 - **Host:** `localhost:3306`
 - **User:** `root`
 - **Password:** (trống)

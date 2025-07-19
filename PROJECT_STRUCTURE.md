@@ -28,7 +28,7 @@ project/
 │       │               └── ThemeManager.java
 │       └── resources/
 │           └── sql/                # Database scripts
-│               └── quanly.sql
+│               └── f1.sql
 ├── bin/                           # Compiled classes (tự động tạo)
 └── README.md
 ```
