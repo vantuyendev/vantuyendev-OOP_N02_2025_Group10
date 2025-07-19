@@ -12,28 +12,6 @@ Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __M
 
 Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __MySQL__
 
-## **Cấu trúc dự án mới (đã sắp xếp):**
-
-```
-project/
-├── lib/                           # Thư viện dependencies
-│   └── mysql-connector-j-8.0.33.jar
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/
-│       │       └── shopmanagement/
-│       │           ├── Start.java         # Main class
-│       │           ├── activity/          # UI và các activity
-│       │           ├── model/              # Data models  
-│       │           └── util/               # Utilities
-│       └── resources/
-│           └── sql/                # Database scripts
-├── bin/                           # Compiled classes (auto-generated)
-├── build_and_run.sh               # Build script
-└── README.md
-```
-
 ### **Package `com.shopmanagement.model`** - Chứa các class model chính:
 - `User.java` - Abstract class cha cho Customer và Employee
 - `Customer.java` - Class khách hàng
@@ -183,17 +161,6 @@ java -cp "bin:lib/*" com.shopmanagement.Start
 - **Product Table:** `{"PID", "Name", "Price", "AvailableQuantity"}`
 - **Purchase History:** `{"PurchaseID", "ProductID", "ProductName", "Amount", "Cost", "Date"}`
 
-### **Quan hệ giữa các ID:**
-
-```text
-login (userId) ←→ customer (userId)
-               ←→ employee (userId)
-
-purchaseinfo:
-├── userId (FK → customer.userId)
-├── productId (FK → product.productId)
-└── purchaseId (PK, Auto-increment)
-```
 
 
 
