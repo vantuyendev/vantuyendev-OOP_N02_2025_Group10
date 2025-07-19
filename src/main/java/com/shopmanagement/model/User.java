@@ -2,7 +2,7 @@ package com.shopmanagement.model;
 
 import java.lang.*;
 import java.sql.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*; import com.shopmanagement.util.*;
 import javax.swing.*;
 import com.shopmanagement.activity.*;
 

@@ -1,0 +1,30 @@
+=== SHOP MANAGEMENT - THÔNG TIN TRUY CẬP NHANH ===
+
+🌐 LINK GUI (Chọn 1 trong 3):
+https://super-winner-wrgrj5rxg77xh5456-6080.app.github.dev/vnc.html
+https://super-winner-wrgrj5rxg77xh5456-8080.app.github.dev/vnc.html
+https://super-winner-wrgrj5rxg77xh5456-3000.app.github.dev/vnc.html
+
+🔐 ĐĂNG NHẬP NHANH:
+
+Manager: e001 / 123456
+Cashier: e002 / 123456
+
+Customer 1: c001 / 123456 (Silver)
+Customer 2: c002 / 123456 (Gold)
+
+🗄️ DATABASE:
+Host: localhost:3306
+Database: shopmanagement
+User: root
+Password: (để trống)
+
+🚀 CHẠY ỨNG DỤNG:
+./setup_codespaces.sh
+
+🔧 KHẮC PHỤC LỖI:
+- Mở VS Code PORTS tab
+- Click vào port 6080, 8080, hoặc 3000
+- Hoặc copy link GitHub ở trên
+
+=== HẾT ===
