@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Sep 28, 2018 at 10:10 AM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 5.6.30
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -17,13 +8,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `f1`
+-- Cơ sở dữ liệu: `f1`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer`
+-- Cấu trúc bảng cho bảng `customer` (khách hàng)
 --
 
 CREATE TABLE `customer` (
@@ -31,10 +22,10 @@ CREATE TABLE `customer` (
   `customerName` varchar(30) NOT NULL,
   `phoneNumber` varchar(14) NOT NULL,
   `address` varchar(50) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `customer`
+-- Dữ liệu mẫu cho bảng `customer`
 --
 
 INSERT INTO `customer` (`userId`, `customerName`, `phoneNumber`, `address`) VALUES
@@ -46,7 +37,7 @@ INSERT INTO `customer` (`userId`, `customerName`, `phoneNumber`, `address`) VALU
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employee`
+-- Cấu trúc bảng cho bảng `employee` (nhân viên)
 --
 
 CREATE TABLE `employee` (
@@ -55,10 +46,10 @@ CREATE TABLE `employee` (
   `phoneNumber` varchar(14) NOT NULL,
   `role` varchar(8) NOT NULL,
   `salary` double(8,2) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `employee`
+-- Dữ liệu mẫu cho bảng `employee`
 --
 
 INSERT INTO `employee` (`userId`, `employeeName`, `phoneNumber`, `role`, `salary`) VALUES
@@ -70,17 +61,17 @@ INSERT INTO `employee` (`userId`, `employeeName`, `phoneNumber`, `role`, `salary
 -- --------------------------------------------------------
 
 --
--- Table structure for table `login`
+-- Cấu trúc bảng cho bảng `login` (thông tin đăng nhập)
 --
 
 CREATE TABLE `login` (
   `userId` varchar(12) NOT NULL,
   `password` varchar(12) NOT NULL,
   `status` int(1) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `login`
+-- Dữ liệu mẫu cho bảng `login`
 --
 
 INSERT INTO `login` (`userId`, `password`, `status`) VALUES
@@ -96,7 +87,7 @@ INSERT INTO `login` (`userId`, `password`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- Cấu trúc bảng cho bảng `product` (sản phẩm)
 --
 
 CREATE TABLE `product` (
@@ -107,7 +98,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `product`
+-- Dữ liệu mẫu cho bảng `product`
 --
 
 INSERT INTO `product` (`productId`, `productName`, `price`, `quantity`) VALUES
@@ -123,89 +114,95 @@ INSERT INTO `product` (`productId`, `productName`, `price`, `quantity`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchaseinfo`
+-- Cấu trúc bảng cho bảng `purchaseinfo` (thông tin mua hàng)
 --
 
 CREATE TABLE `purchaseinfo` (
   `purchaseId` int(5) UNSIGNED ZEROFILL NOT NULL,
   `userId` varchar(12) NOT NULL,
-  `productId` varchar(12) NOT NULL,
+  `productId` int(5) UNSIGNED ZEROFILL NOT NULL,
   `cost` double(12,2) UNSIGNED NOT NULL,
   `amount` int(8) UNSIGNED NOT NULL,
   `date` varchar(18) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `purchaseinfo`
+-- Dữ liệu mẫu cho bảng `purchaseinfo`
 --
 
 INSERT INTO `purchaseinfo` (`purchaseId`, `userId`, `productId`, `cost`, `amount`, `date`) VALUES
-(00001, 'c001', '00003', 150.00, 1, '2025-07-15'),
-(00002, 'c002', '00005', 120.00, 1, '2025-07-16'),
-(00003, 'c003', '00001', 1850.00, 1, '2025-07-17'),
-(00004, 'c001', '00004', 170.00, 2, '2025-07-18'),
-(00005, 'c004', '00002', 1200.00, 1, '2025-07-18');
+(00001, 'c001', 00003, 150.00, 1, '2025-07-15'),
+(00002, 'c002', 00005, 120.00, 1, '2025-07-16'),
+(00003, 'c003', 00001, 1850.00, 1, '2025-07-17'),
+(00004, 'c001', 00004, 170.00, 2, '2025-07-18'),
+(00005, 'c004', 00002, 1200.00, 1, '2025-07-18');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã tạo
 --
 
 --
--- Indexes for table `customer`
+-- Chỉ mục cho bảng `customer`
 --
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`userId`);
 
 --
--- Indexes for table `employee`
+-- Chỉ mục cho bảng `employee`
 --
 ALTER TABLE `employee`
   ADD PRIMARY KEY (`userId`);
 
 --
--- Indexes for table `login`
+-- Chỉ mục cho bảng `login`
 --
 ALTER TABLE `login`
-  ADD UNIQUE KEY `userId` (`userId`),
-  ADD UNIQUE KEY `userId_2` (`userId`);
+  ADD PRIMARY KEY (`userId`);
 
 --
--- Indexes for table `product`
+-- Chỉ mục cho bảng `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`productId`);
 
 --
--- Indexes for table `purchaseinfo`
+-- Chỉ mục cho bảng `purchaseinfo`
 --
 ALTER TABLE `purchaseinfo`
   ADD PRIMARY KEY (`purchaseId`),
   ADD KEY `userId` (`userId`),
-  ADD KEY `userId_2` (`userId`);
+  ADD KEY `productId` (`productId`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Tự động tăng cho các bảng đã tạo
 --
 
 --
--- AUTO_INCREMENT for table `product`
+-- Tự động tăng cho bảng `product`
 --
 ALTER TABLE `product`
   MODIFY `productId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
--- AUTO_INCREMENT for table `purchaseinfo`
+-- Tự động tăng cho bảng `purchaseinfo`
 --
 ALTER TABLE `purchaseinfo`
   MODIFY `purchaseId` int(5) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- Constraints for dumped tables
+-- Ràng buộc khóa ngoại cho các bảng đã tạo
 --
 
 --
--- Constraints for table `purchaseinfo`
+-- Ràng buộc khóa ngoại cho bảng `purchaseinfo`
 --
 ALTER TABLE `purchaseinfo`
-  ADD CONSTRAINT `FK_PUR_CUS` FOREIGN KEY (`userId`) REFERENCES `purchaseinfo` (`userId`);
+  ADD CONSTRAINT `FK_PUR_CUS` FOREIGN KEY (`userId`) REFERENCES `customer` (`userId`),
+  ADD CONSTRAINT `FK_PUR_PRO` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`);
+
+--
+-- Ràng buộc khóa ngoại cho bảng `login`
+--
+-- Lưu ý: Bảng login tham chiếu đến cả bảng customer và employee thông qua userId
+-- Ràng buộc này không thể thực thi với khóa ngoại đơn giản do có nhiều bảng cha
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
