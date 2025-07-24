@@ -48,29 +48,39 @@ public abstract class User {
 	
 	public static int checkStatus(String uid, String pass) {
 		int result = -1;
-		String query = "SELECT `userId`, `password`, `status` FROM `login`;";     
+		// Use parameterized query for better security and debugging
+		String query = "SELECT `userId`, `password`, `status` FROM `login` WHERE `userId` = ? AND `password` = ?";     
         Connection con = null;
-        Statement st = null;
+        PreparedStatement pst = null;
 		ResultSet rs = null;
-		System.out.println(query);
+		
+		// Trim inputs to avoid whitespace issues
+		uid = uid.trim();
+		pass = pass.trim();
+		
+		System.out.println("Checking login for user: '" + uid + "' with password: '" + pass + "'");
         try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("driver loaded");
 			con = DriverManager.getConnection(Database.HOST_URI, Database.USER, Database.PASSWORD);
-			System.out.println("connection done");//connection with database established
-			st = con.createStatement();//create statement
-			System.out.println("statement created");
-			rs = st.executeQuery(query);//getting result
-			System.out.println("results received");
+			System.out.println("connection done");
 			
-			while(rs.next()) {
+			pst = con.prepareStatement(query);
+			pst.setString(1, uid);
+			pst.setString(2, pass);
+			System.out.println("prepared statement created");
+			
+			rs = pst.executeQuery();
+			System.out.println("query executed");
+			
+			if(rs.next()) {
                 String userId = rs.getString("userId");
                 String password = rs.getString("password");
 				int status = rs.getInt("status");
-				
-				if(userId.equals(uid) && password.equals(pass)) {
-					result = status;
-				}
+				System.out.println("Found user: " + userId + " with status: " + status);
+				result = status;
+			} else {
+				System.out.println("No matching user found for: " + uid);
 			}
 		}
         catch(Exception ex) {
@@ -82,14 +92,15 @@ public abstract class User {
                 if(rs!=null)
 					rs.close();
 
-                if(st!=null)
-					st.close();
+                if(pst!=null)
+					pst.close();
 
                 if(con!=null)
 					con.close();
             }
             catch(Exception ex) {}
         }
+		System.out.println("Final result for user '" + uid + "': " + result);
 		return result;
 	}
 	
