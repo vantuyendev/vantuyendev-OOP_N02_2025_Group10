@@ -110,7 +110,7 @@ public class AddEmployeeActivity extends JFrame implements ActionListener {
 		employeeNameTF.setFont(Theme.FONT_INPUT);
 		panel.add(employeeNameTF);
 		
-		employeePhoneTF1 = new JTextField("+880");
+		employeePhoneTF1 = new JTextField("+84");
 		employeePhoneTF1.setBounds(180, 290, 40, 30);
 		employeePhoneTF1.setEnabled(false);
 		employeePhoneTF1.setFont(Theme.FONT_INPUT);

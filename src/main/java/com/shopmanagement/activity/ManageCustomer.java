@@ -54,7 +54,7 @@ public class ManageCustomer extends JFrame implements ActionListener {
 		customerNameTF.setFont(Theme.FONT_INPUT);
 		panel.add(customerNameTF);
 		
-		phoneCodeTF = new JTextField("+880");
+		phoneCodeTF = new JTextField("+84");
 		phoneCodeTF.setEnabled(false);
 		phoneCodeTF.setBounds(160, 100, 40, 30);
 		phoneCodeTF.setFont(Theme.FONT_INPUT);
