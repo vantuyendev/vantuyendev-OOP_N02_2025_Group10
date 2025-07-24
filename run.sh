@@ -52,9 +52,9 @@ build_app() {
     # Create build directory if it doesn't exist
     mkdir -p build/classes
     
-    # Compile Java sources
+    # Compile Java sources - use find to get all files
     echo "📦 Compiling Java sources..."
-    javac -cp "lib/mysql-connector-j-8.0.33.jar" -d build/classes src/main/java/com/shopmanagement/**/*.java
+    javac -cp "lib/mysql-connector-j-8.0.33.jar" -d build/classes $(find src/main/java -name "*.java")
     
     if [ $? -eq 0 ]; then
         echo "✅ Compilation successful"
