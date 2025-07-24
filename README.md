@@ -1,52 +1,128 @@
 # 🏪 Shop Management System
 
-Java Swing application for managing shop operations with MySQL database.
+Modern Java Swing application for managing shop operations with MySQL database, VNC display support, and comprehensive database tools.
+
+![Java](https://img.shields.io/badge/Java-11+-orange.svg)
+![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)
+![Status](https://img.shields.io/badge/Status-Working-green.svg)
 
 ## 🚀 Quick Start
 
+### Method 1: Enhanced Run Script (Recommended)
 ```bash
-# Thiết lập và chạy ứng dụng
-make setup
+# Complete setup and run
+./run.sh setup
 
-# Hoặc sử dụng script trực tiếp
-./scripts/setup_codespaces.sh
+# Or just run the app (if already built)
+./run.sh app
+
+# Show help for all commands
+./run.sh help
 ```
 
-## 📱 Truy cập GUI
+### Method 2: VS Code Tasks
+1. Press `Ctrl+Shift+P`
+2. Type "Tasks: Run Task"
+3. Select "Run Java Shop Management App"
 
-Sau khi chạy setup, truy cập GUI qua:
-- **VS Code Ports Tab**: Mở tab PORTS → Click port 6080/8080/3000
-- **Direct URLs**: Xem file `QUICK_ACCESS.txt`
+### Method 3: Make Commands
+```bash
+make setup    # Complete setup
+make run      # Run app only
+make help     # Show all commands
+```
 
-## 🔐 Đăng nhập
+## 🖥️ GUI Access
 
-**Employees:**
-- Manager: `e001` / `123456`
-- Cashier: `e002` / `123456`
+After running setup, access the GUI via VNC:
 
-**Customers:**
-- Customer 1: `c001` / `123456` (Silver)
-- Customer 2: `c002` / `123456` (Gold)
+### 🌐 Web Access (GitHub Codespaces):
+- **Primary**: Port 6080 (VS Code PORTS tab)
+- **Backup**: Port 8080, 3000 
+- **URLs**: Auto-generated based on your Codespace
+
+### 🖱️ Local Access:
+- `http://localhost:6080/vnc.html`
+- `http://localhost:8080/vnc.html`
+- `http://localhost:3000/vnc.html`
+
+## 🔐 Login Credentials
+
+### Employees:
+| Role | Username | Password | Description |
+|------|----------|----------|-------------|
+| Manager | `e001` | `123456` | Full access to all features |
+| Cashier | `e002` | `123456` | Sales and basic operations |
+
+### Customers:
+| Type | Username | Password | Membership |
+|------|----------|----------|------------|
+| Customer 1 | `c001` | `123456` | Silver |
+| Customer 2 | `c002` | `123456` | Gold |
+
+## 📊 Database Management
+
+### SQLTools Integration:
+- **Extension**: SQLTools with MySQL driver installed
+- **Connection**: "Shop Management DB" (auto-configured)
+- **Access**: SQLTools sidebar → Connect → Browse tables
+
+### MySQL Database Client:
+- **Extension**: MySQL Database Client installed  
+- **Connection**: "Shop Management MySQL" (auto-configured)
+- **Features**: Visual data browsing, query execution, schema designer
+
+### Database Details:
+- **Host**: localhost:3306
+- **Database**: `shopmanagement`
+- **User**: `root` (no password)
+- **Tables**: `users`, `employees`, `customers`, `products`
 
 ## 📂 Project Structure
 
 ```
 shop-management-system/
-├── src/main/java/com/shopmanagement/    # Java source code
-├── build/classes/                       # Compiled classes
+├── src/main/java/com/shopmanagement/     # Java source code
+│   ├── Start.java                        # Main application entry
+│   ├── activity/                         # UI Activities (Login, Dashboard, etc.)
+│   ├── model/                           # Data models (User, Product, etc.)
+│   ├── util/                            # Utilities (Database, Theme)
+│   └── test/                            # Test utilities
+├── build/classes/                        # Compiled Java classes
 ├── lib/                                 # Dependencies (MySQL connector)
-├── sql/                                 # Database scripts
-├── scripts/                             # Shell scripts
-├── docs/                                # Documentation
-├── config/                              # Configuration files
-├── .vscode/                             # VS Code settings
-├── pom.xml                              # Maven configuration
-├── Makefile                             # Build commands
-└── QUICK_ACCESS.txt                     # Quick access info
+├── sql/                                 # Database scripts and test queries
+├── scripts/                             # Shell scripts for setup/management
+├── .vscode/                             # VS Code configuration
+│   ├── settings.json                    # SQLTools and extensions config
+│   ├── tasks.json                       # Build and run tasks
+│   └── database-client.json             # Database client connections
+├── DATABASE_CONNECTIONS.md              # Database setup guide
+├── PROJECT_STATUS_REPORT.md             # Latest project status
+├── Makefile                             # Build automation
+├── run.sh                               # Enhanced run script
+└── pom.xml                              # Maven configuration
 ```
 
 ## 🛠️ Available Commands
 
+### Run Script Commands:
+```bash
+./run.sh setup     # Complete setup: VNC + Build + Run  
+./run.sh build     # Build application only
+./run.sh run       # Run application only (requires build)
+./run.sh app       # Build and run application
+./run.sh vnc       # Start VNC servers only
+./run.sh check     # Check all services status
+./run.sh mysql     # Check and start MySQL service
+./run.sh status    # Show running processes
+./run.sh stop      # Stop Java application
+./run.sh cleanup   # Stop all services and clean up
+./run.sh clean     # Clean build directory
+./run.sh urls      # Show access URLs
+./run.sh help      # Show help
+```
+
+### Make Commands:
 ```bash
 make help       # Show all commands
 make setup      # Setup environment and run app
@@ -58,96 +134,144 @@ make stop       # Stop all services
 make vnc        # Start VNC servers
 ```
 
-## 🗄️ Database
+### VS Code Tasks:
+- **Build Java Shop Management App**: Compile source code
+- **Run Java Shop Management App**: Launch application
+- **Clean and Run**: Kill existing processes and restart
 
-- **Host**: localhost:3306
-- **Database**: shopmanagement  
-- **User**: root (no password)
-- **Tables**: users, employees, customers, products
+## 🎯 Features
 
-## 📚 Documentation
+### For Managers:
+- ✅ Full employee management (add, edit, delete, view)
+- ✅ Customer management and membership tracking
+- ✅ Complete product catalog management
+- ✅ Sales reporting and analytics
+- ✅ System administration
 
-- `docs/ACCESS_INFO.md` - Detailed access information
-- `docs/README_CODESPACES.md` - GitHub Codespaces setup
-- `config/access_info.json` - Configuration in JSON format
-- `QUICK_ACCESS.txt` - Quick reference
+### For Employees (Cashier):
+- ✅ Product sales and checkout
+- ✅ Customer lookup and verification
+- ✅ Basic inventory viewing
+- ✅ Transaction processing
 
-## 🔧 Development
+### For Customers:
+- ✅ Product browsing and search
+- ✅ Purchase history viewing
+- ✅ Profile management
+- ✅ Membership benefits tracking
 
-**Requirements:**
-- Java 11+
-- MySQL 8.0+
-- Maven 3.6+ (optional)
+### System Features:
+- ✅ Multi-user authentication system
+- ✅ Theme customization (multiple color schemes)
+- ✅ Real-time database synchronization
+- ✅ VNC remote access support
+- ✅ Comprehensive error handling
 
-**IDE Setup:**
-- VS Code with Java Extension Pack
-- SQLTools extension for database management
+## 🧪 Testing
+
+### Test Database Connection:
+```bash
+# Run connection test
+java -cp "build/classes:lib/mysql-connector-j-8.0.33.jar" com.shopmanagement.test.TestConnection
+
+# Test with SQL file
+mysql -u root shopmanagement < sql/test_connection.sql
+```
+
+### Manual Testing:
+1. **Login Testing**: Test all user roles with provided credentials
+2. **CRUD Operations**: Test create, read, update, delete for all entities
+3. **Database Integrity**: Verify foreign key constraints and data consistency
+4. **GUI Responsiveness**: Test all UI components and interactions
+
+## 🔧 Development Environment
+
+### Requirements:
+- **Java**: 11+ (OpenJDK recommended)
+- **MySQL**: 8.0+ 
+- **OS**: Linux (Ubuntu 20.04+), Windows, macOS
+- **Memory**: 2GB+ RAM recommended
+
+### IDE Setup:
+- **VS Code** with Java Extension Pack
+- **SQLTools** with MySQL driver for database management
+- **MySQL Database Client** for visual database operations
+
+### Extensions Installed:
+- `redhat.java` - Java language support
+- `mtxr.sqltools` - SQL database management
+- `mtxr.sqltools-driver-mysql` - MySQL driver for SQLTools
+- `cweijan.vscode-mysql-client2` - Advanced MySQL client
 
 ## 🚨 Troubleshooting
 
-If localhost refuses connection:
-1. Use VS Code PORTS tab instead of localhost URLs
-2. Copy GitHub Codespaces URLs from QUICK_ACCESS.txt
-3. Restart services: `make setup`
-4. Check status: `make check`
+### Common Issues:
 
-## **Mô tả:**
+#### 1. "Page not working" error:
+- ✅ Use VS Code PORTS tab instead of direct URLs
+- ✅ Check if VNC services are running: `./run.sh check`
+- ✅ Restart VNC services: `./run.sh vnc`
 
-Hệ thống quản lý cửa hàng được xây dựng bằng __Java__ và __MySQL__
+#### 2. Java ClassNotFoundException:
+- ✅ Rebuild application: `./run.sh build`
+- ✅ Check MySQL connector: `ls -la lib/`
+- ✅ Verify classpath in tasks.json
 
-### **Package `com.shopmanagement.model`** - Chứa các class model chính:
-- `User.java` - Abstract class cha cho Customer và Employee
-- `Customer.java` - Class khách hàng
-- `Employee.java` - Class nhân viên  
-- `Product.java` - Class sản phẩm
+#### 3. Database connection failed:
+- ✅ Start MySQL: `sudo service mysql start`
+- ✅ Check database exists: `mysql -u root -e "SHOW DATABASES;"`
+- ✅ Recreate database: `mysql -u root shopmanagement < sql/shopmanagement.sql`
 
-### **Package `com.shopmanagement.util`** - Chứa các class tiện ích:
-- `Database.java` - Cấu hình kết nối database
-- `Theme.java` - Quản lý giao diện và màu sắc
-- `ThemeManager.java` - Quản lý thay đổi theme
+#### 4. GUI not displaying:
+- ✅ Check DISPLAY variable: `echo $DISPLAY`
+- ✅ Verify Xvfb running: `ps aux | grep Xvfb`
+- ✅ Restart VNC: `./run.sh cleanup && ./run.sh vnc`
 
-### **Package `com.shopmanagement.activity`** - Chứa các class giao diện:
-- `LoginActivity.java` - Giao diện đăng nhập
-- `SignupActivity.java` - Giao diện đăng ký
-- `CustomerActivity.java` - Dashboard khách hàng
-- `EmployeeActivity.java` - Dashboard nhân viên
-- `ManageProduct.java` - Quản lý sản phẩm
-- Các file View và Add khác cho từng chức năng
-
-## **Cách build và chạy:**
-
+### Debug Commands:
 ```bash
-# Sử dụng build script (khuyến nghị)
-./build_and_run.sh
+# Check all services
+./run.sh status
 
-# Hoặc manual:
-# Compile
-javac -cp "lib/*" -d bin src/main/java/com/shopmanagement/**/*.java
+# View process details
+ps aux | grep -E "(java|vnc|mysql)"
 
-# Run  
-java -cp "bin:lib/*" com.shopmanagement.Start
+# Check ports
+netstat -tlnp | grep -E ":(3306|5900|5901|6080|8080|3000)"
+
+# View application logs
+tail -f /var/log/mysql/error.log
 ```
 
-## **Tính năng:**
-* Đăng nhập cho Manager, Employee và Customer
-* Admin có thể thêm Employee và Customer mới với mật khẩu tự động tạo
-* Manager có thể chỉnh sửa thông tin Employee và Customer
-* Manager có thể thêm, sửa và xóa sản phẩm
-* Employee có thể bán sản phẩm
-* Customer có thể xem sản phẩm và lịch sử mua hàng
-* Hệ thống theme đa dạng với nhiều màu sắc
+## 📚 Documentation Files
 
-## **Hệ thống ID trong Project:**
+- `DATABASE_CONNECTIONS.md` - Database setup and connection guide
+- `PROJECT_STATUS_REPORT.md` - Latest project status and fixes
+- `HUONG_DAN_CHAY_PROJECT.md` - Vietnamese setup guide
+- `sql/test_connection.sql` - Database test queries
 
-### **1. User ID (userId):**
+## 🤝 Contributing
 
-- **Định dạng:** Chuỗi 12 ký tự
-- **Mục đích:** ID duy nhất cho tất cả người dùng (Employee và Customer)
-- **Cách sử dụng:**
-  - Khóa chính trong bảng `login`, `customer`, `employee`
-  - Khóa ngoại trong bảng `purchaseinfo`
-- **Ví dụ:**
-  - Employee: `e001`, `e002`, `e003`, `e004`
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/new-feature`
+3. Commit changes: `git commit -am 'Add new feature'`
+4. Push to branch: `git push origin feature/new-feature`
+5. Submit pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 📞 Support
+
+If you encounter issues:
+1. Check `PROJECT_STATUS_REPORT.md` for latest fixes
+2. Run `./run.sh check` to diagnose problems
+3. Use VS Code PORTS tab for GUI access
+4. Consult troubleshooting section above
+
+**Happy coding! 🚀**
   - Customer: `c001`, `c002`, `c003`, `c004`
 
 ### **2. Product ID (productId):**
