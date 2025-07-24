@@ -99,7 +99,7 @@ public class SignupActivity extends JFrame implements ActionListener {
 		nameTF.setFont(Theme.FONT_INPUT);
 		panel.add(nameTF);
 		
-		phoneTF1 = new JTextField("+880");
+		phoneTF1 = new JTextField("+84");
 		phoneTF1.setBounds(180, 290, 40, 30);
 		phoneTF1.setForeground(Theme.COLOR_BUTTON_PRIMARY);
 		phoneTF1.setEnabled(false);
@@ -144,7 +144,7 @@ public class SignupActivity extends JFrame implements ActionListener {
 		else if (ae.getSource().equals(buttonSubmit)) {
 			try {
 				Customer c = new Customer(usernameTF.getText().trim());
-				c.setPassword(passwordF.getText());
+				c.setPassword(new String(passwordF.getPassword()));
 				c.setCustomerName(nameTF.getText());
 				c.setPhoneNumber(Integer.parseInt(phoneTF2.getText()));
 				c.setAddress(addressTF.getText());

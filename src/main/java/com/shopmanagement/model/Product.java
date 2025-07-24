@@ -6,6 +6,8 @@ import java.sql.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.text.*;
+import java.time.*;
+import java.time.format.*;
 import com.shopmanagement.util.*;
 import com.shopmanagement.activity.*;
 import javax.swing.*;
@@ -108,7 +110,7 @@ public class Product {
 	}
 	
 	public void sellProduct(String uid, int amount) {
-		String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+		String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		String query = "INSERT INTO `purchaseInfo` (`userId`, `productId`, `amount`, `date`, `cost`) VALUES ('"+uid+"','"+this.productId+"',"+amount+", '"+date+"', "+(amount*this.price)+");";
 		Connection con = null;
         Statement st = null;
