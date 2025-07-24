@@ -100,13 +100,13 @@ public class Employee extends User {
 	}
 	
 	public void fetch() {
-		String query = "SELECT `userId`, `employeeName`, `phoneNumber`, `role`, `salary` FROM `employee` WHERE userId='"+this.userId+"';";     
+		String query = "SELECT u.user_id, u.full_name, u.phone, e.position, e.salary FROM users u LEFT JOIN employees e ON u.user_id = e.user_id WHERE u.username='"+this.userId+"';";     
         Connection con = null;
         Statement st = null;
 		ResultSet rs = null;
 		System.out.println(query);
         try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("driver loaded");
 			con = DriverManager.getConnection(Database.HOST_URI, Database.USER, Database.PASSWORD);
 			System.out.println("connection done");//connection with database established
@@ -116,9 +116,9 @@ public class Employee extends User {
 			System.out.println("results received");
 			boolean flag = false;
 			while(rs.next()) {
-				this.employeeName = rs.getString("employeeName");
-				this.phoneNumber = rs.getString("phoneNumber");
-				this.role = rs.getString("role");
+				this.employeeName = rs.getString("full_name");
+				this.phoneNumber = rs.getString("phone");
+				this.role = rs.getString("position");
 				this.salary = rs.getDouble("salary");
 			}
 		}
@@ -219,16 +219,16 @@ public class Employee extends User {
 	public static DefaultTableModel searchEmployee(String keyword, String byWhat) {
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columnNames);
-		String query = "SELECT * FROM `employee` WHERE `userId`='"+keyword+"';";
+		String query = "SELECT u.user_id, u.username, u.full_name, u.phone, e.position, e.salary FROM users u LEFT JOIN employees e ON u.user_id = e.user_id WHERE u.username='"+keyword+"';";
 		if (byWhat.equals("By Name"))
-			query = "SELECT * FROM `employee` WHERE `employeeName` LIKE '%"+keyword+"%';";
+			query = "SELECT u.user_id, u.username, u.full_name, u.phone, e.position, e.salary FROM users u LEFT JOIN employees e ON u.user_id = e.user_id WHERE u.full_name LIKE '%"+keyword+"%';";
 		else {}
         Connection con = null;
         Statement st = null;
 		ResultSet rs = null;
 		System.out.println(query);
         try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("driver loaded");
 			con = DriverManager.getConnection(Database.HOST_URI, Database.USER, Database.PASSWORD);
 			System.out.println("connection done");//connection with database established
@@ -238,7 +238,7 @@ public class Employee extends User {
 			System.out.println("results received");
 			
 			while(rs.next()) {
-				model.addRow(new Object[]{rs.getString("userId"), rs.getString("employeeName"), rs.getString("phoneNumber"), rs.getString("role"), rs.getString("salary")});
+				model.addRow(new Object[]{rs.getString("username"), rs.getString("full_name"), rs.getString("phone"), rs.getString("position"), rs.getString("salary")});
 			}
 		}
         catch(Exception ex) {
