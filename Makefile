@@ -26,7 +26,7 @@ setup:
 # Chỉ compile và chạy Java app
 run: build
 	@echo "Chạy Shop Management Application..."
-	@cd . && java -cp build/classes:lib/* com.shopmanagement.Start
+	@export DISPLAY=:99 && cd . && java -cp build/classes:lib/* com.shopmanagement.Start
 
 # Compile Java source code
 build:
