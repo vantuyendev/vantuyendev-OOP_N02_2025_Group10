@@ -247,7 +247,34 @@ tail -f /var/log/mysql/error.log
 - `DATABASE_CONNECTIONS.md` - Database setup and connection guide
 - `PROJECT_STATUS_REPORT.md` - Latest project status and fixes
 - `HUONG_DAN_CHAY_PROJECT.md` - Vietnamese setup guide
+- `docs/README.md` - **UML & Activity Diagrams Documentation**
+- `docs/diagrams/class-diagram.puml` - **UML Class Diagram**
+- `docs/activity-diagrams/` - **5 Activity Diagrams**
 - `sql/test_connection.sql` - Database test queries
+
+## 📊 UML & Activity Diagrams
+
+### 🏗️ UML Class Diagram
+Comprehensive class diagram showing:
+- **Model Package**: User (abstract), Employee, Customer, Product
+- **Utility Package**: Database, Theme, ThemeManager with enums
+- **Activity Package**: All UI components and activities
+- **Test Package**: TestConnection, TestLogin
+- **Relationships**: Inheritance, Composition, Association, Dependencies
+
+### 🔄 Activity Diagrams (5 Diagrams)
+1. **Login Process** - User authentication and role-based navigation
+2. **Product Management (CRUD)** - Complete product lifecycle management
+3. **Employee Management** - Manager-only employee administration
+4. **Customer Product Browsing** - Customer interaction and purchase history
+5. **Theme Management System** - Real-time UI theme switching
+
+### 🎨 Design Patterns Implemented
+- **MVC Pattern**: Clear separation of Model, View, Controller
+- **Observer Pattern**: Theme management with real-time updates
+- **Factory Pattern**: User object creation based on role
+- **Singleton Pattern**: Database connection management
+- **Strategy Pattern**: Multiple search strategies
 
 ## 🤝 Contributing
 
@@ -270,6 +297,28 @@ If you encounter issues:
 2. Run `./run.sh check` to diagnose problems
 3. Use VS Code PORTS tab for GUI access
 4. Consult troubleshooting section above
+5. **View UML & Activity Diagrams in `docs/` folder**
+
+## 📊 **UML & Activity Diagrams Added!**
+
+### 🎉 **New Documentation**
+- **📋 Complete UML Class Diagram**: Shows all classes, relationships, and architecture
+- **🔄 5 Activity Diagrams**: Detailed workflows for all major system processes
+- **📁 Location**: `docs/` folder with comprehensive documentation
+
+### 🚀 **What's Included**
+✅ **UML Class Diagram** - Complete system architecture  
+✅ **Login Process** - Authentication and role-based navigation  
+✅ **Product Management** - Full CRUD operations workflow  
+✅ **Employee Management** - Manager-only administration flows  
+✅ **Customer Browsing** - Product browsing and purchase history  
+✅ **Theme Management** - Real-time UI theme switching system  
+
+### 📖 **How to View**
+1. **Install PlantUML extension** in VS Code
+2. **Open `.puml` files** in `docs/diagrams/` and `docs/activity-diagrams/`
+3. **Use Preview** to see rendered diagrams
+4. **Read `docs/README.md`** for complete documentation
 
 **Happy coding! 🚀**
   - Customer: `c001`, `c002`, `c003`, `c004`

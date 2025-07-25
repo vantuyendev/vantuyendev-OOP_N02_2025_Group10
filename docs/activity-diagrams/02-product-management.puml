@@ -1,0 +1,123 @@
+@startuml Product Management CRUD - Activity Diagram
+
+!theme plain
+skinparam backgroundColor #F8F9FA
+skinparam activityBackgroundColor #FFFFFF
+skinparam activityBorderColor #6C757D
+skinparam activityStartColor #28A745
+skinparam activityEndColor #DC3545
+skinparam activityDiamondBackgroundColor #FFC107
+skinparam activityDiamondBorderColor #FD7E14
+
+title Product Management (CRUD Operations) Activity Diagram
+
+|Employee|
+start
+:Access Employee Dashboard;
+:Click "Manage Products" Button;
+
+|System|
+:Load ViewProductActivity;
+:Display Product List from Database;
+:Show Search and Action Buttons;
+
+|Employee|
+if (Action Choice?) then (View/Search Products)
+  :Enter Search Keyword (Optional);
+  :Select Search Criteria (By ID/By Name);
+  :Click Search Button;
+  |System|
+  :Execute Product.searchProduct() method;
+  :Filter and Display Results;
+  |Employee|
+  :View Product Information;
+  
+elsif (Add New Product) 
+  :Click "Add" Button;
+  |System|
+  :Open AddProductActivity Form;
+  |Employee|
+  :Enter Product Name;
+  :Enter Product Price;
+  :Enter Product Quantity;
+  :Click "Add" Button;
+  |System|
+  :Validate Input Data;
+  if (Data Valid?) then (no)
+    :Display Error Message;
+    |Employee|
+    :Correct Input Data;
+  else (yes)
+    :Create New Product Object;
+    :Call product.createProduct() method;
+    :Insert into Database;
+    :Refresh Product List;
+    :Display Success Message;
+  endif
+
+elsif (Edit Existing Product)
+  :Click on Product Row in Table;
+  |System|
+  :Open ManageProduct Form;
+  :Load Current Product Data;
+  |Employee|
+  :Modify Product Information;
+  :Click "Update" Button;
+  |System|
+  :Validate Changes;
+  if (Data Valid?) then (no)
+    :Display Error Message;
+  else (yes)
+    :Call product.updateProduct() method;
+    :Update Database Record;
+    :Refresh Product List;
+    :Display Success Message;
+  endif
+
+else (Delete Product)
+  :Select Product to Delete;
+  |System|
+  :Show Confirmation Dialog;
+  |Employee|
+  if (Confirm Deletion?) then (yes)
+    |System|
+    :Call product.deleteProduct() method;
+    :Remove from Database;
+    :Refresh Product List;
+    :Display Success Message;
+  else (no)
+    :Cancel Operation;
+  endif
+endif
+
+:Return to Product Management;
+if (Continue Managing?) then (yes)
+  :Choose Another Action;
+else (no)
+  :Return to Employee Dashboard;
+  stop
+endif
+
+note right of "Execute Product.searchProduct() method"
+  Searches products by:
+  - Product ID (exact match)
+  - Product Name (partial match)
+  Returns DefaultTableModel for JTable display
+end note
+
+note right of "Create New Product Object"
+  Product validation includes:
+  - Name not empty
+  - Price > 0
+  - Quantity >= 0
+  Auto-generates Product ID
+end note
+
+note right of "Update Database Record"
+  Uses prepared statements for:
+  - SQL injection prevention
+  - Data type validation
+  - Transaction safety
+end note
+
+@enduml

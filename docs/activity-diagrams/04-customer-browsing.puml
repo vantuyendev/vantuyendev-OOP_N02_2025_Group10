@@ -1,0 +1,151 @@
+@startuml Customer Product Browsing - Activity Diagram
+
+!theme plain
+skinparam backgroundColor #F8F9FA
+skinparam activityBackgroundColor #FFFFFF
+skinparam activityBorderColor #6C757D
+skinparam activityStartColor #28A745
+skinparam activityEndColor #DC3545
+skinparam activityDiamondBackgroundColor #FFC107
+skinparam activityDiamondBorderColor #FD7E14
+
+title Customer Product Browsing and Purchase History Activity Diagram
+
+|Customer|
+start
+:Login as Customer;
+:Access Customer Dashboard;
+
+|System|
+:Load Customer Dashboard;
+:Display Available Actions;
+
+|Customer|
+if (Action Choice?) then (Browse Products)
+  :Click "Browse Products" Button;
+  |System|
+  :Load ViewProductActivity for Customer;
+  :Display All Available Products;
+  :Show Search Functionality;
+  |Customer|
+  if (Search Products?) then (yes)
+    :Enter Product Search Keyword;
+    :Select Search Criteria (By ID/By Name);
+    :Click Search Button;
+    |System|
+    :Execute Product.searchProduct() method;
+    :Filter Products by Criteria;
+    :Display Filtered Results;
+  else (no)
+    :Browse All Products;
+  endif
+  |Customer|
+  :View Product Details;
+  :Check Product Information;
+  note right: Customers can view but not modify products
+  :Select Product of Interest;
+  if (Want to Purchase?) then (yes)
+    |System|
+    :Record Purchase Interest;
+    :Update Customer Activity;
+  else (no)
+    :Continue Browsing;
+  endif
+
+elsif (View Purchase History)
+  :Click "View History" Button;
+  |System|
+  :Load MyProductActivity;
+  :Call customer.myProduct() method;
+  :Retrieve Purchase History from Database;
+  :Display Purchase Records;
+  |Customer|
+  :Review Past Purchases;
+  :Check Purchase Details;
+  note right: Shows ProductID, ProductName, Amount, Cost, Date
+  :View Order Information;
+  if (Need Details?) then (yes)
+    :Click on Purchase Record;
+    |System|
+    :Display Detailed Purchase Information;
+    :Show Product Details at Time of Purchase;
+  else (no)
+    :Continue Reviewing History;
+  endif
+
+elsif (Manage Profile)
+  :Click "My Profile" Button;
+  |System|
+  :Load MyProfileActivity for Customer;
+  :Display Current Profile Information;
+  |Customer|
+  :Review Personal Information;
+  if (Update Profile?) then (yes)
+    :Click "Edit Profile" Button;
+    |System|
+    :Enable Edit Mode;
+    |Customer|
+    :Update Customer Name;
+    :Update Phone Number;
+    :Update Address;
+    :Click "Submit" Button;
+    |System|
+    :Validate Updated Information;
+    if (Data Valid?) then (no)
+      :Display Validation Error;
+      |Customer|
+      :Correct Information;
+    else (yes)
+      :Call customer.updateCustomer() method;
+      :Update Database;
+      :Display Success Message;
+      :Refresh Profile Display;
+    endif
+  else (no)
+    :View Profile Information Only;
+  endif
+
+else (Customer Support)
+  :Click "Support" Button;
+  |System|
+  :Display Support Information;
+  :Show Contact Details;
+  :Provide Help Resources;
+endif
+
+:Return to Customer Dashboard;
+if (Continue Using System?) then (yes)
+  :Choose Another Action;
+else (no)
+  :Logout from System;
+  stop
+endif
+
+note right of "customer.myProduct() method"
+  Retrieves purchase history including:
+  - Purchase ID
+  - Product ID and Name
+  - Quantity purchased
+  - Total cost
+  - Purchase date
+  - Transaction details
+end note
+
+note right of "Record Purchase Interest"
+  While actual purchase transaction
+  is not implemented in current system,
+  customer interest and browsing
+  behavior could be tracked for
+  future analytics.
+end note
+
+note right of "Update Customer Activity"
+  System can track:
+  - Products viewed
+  - Search patterns
+  - Time spent browsing
+  - Popular products
+  For business intelligence
+end note
+
+@enduml

@@ -1,0 +1,376 @@
+@startuml Shop Management System - Class Diagram
+
+!theme plain
+skinparam backgroundColor #F8F9FA
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #E9ECEF
+skinparam classHeaderBackgroundColor #6C757D
+skinparam classHeaderFontColor #FFFFFF
+
+package "Model Package" {
+    abstract class User {
+        - String userId
+        - String password
+        - String userName
+        - String phoneNumber
+        + User(userId: String)
+        + {abstract} void fetch()
+        + {static} int checkStatus(userId: String, password: String)
+        + String getUserId()
+        + String getPassword()
+        + String getUserName()
+        + String getPhoneNumber()
+        + void setPassword(password: String)
+        + void setUserName(userName: String)
+        + void setPhoneNumber(phoneNumber: String)
+    }
+
+    class Employee {
+        - String employeeName
+        - String role
+        - double salary
+        - {static} String[] columnNames
+        + Employee(userId: String)
+        + void fetch()
+        + void createEmployee()
+        + void updateEmployee()
+        + void deleteEmployee()
+        + {static} DefaultTableModel searchEmployee(keyword: String, searchBy: String)
+        + String getEmployeeName()
+        + String getRole()
+        + double getSalary()
+        + void setEmployeeName(name: String)
+        + void setRole(role: String)
+        + void setSalary(salary: double)
+    }
+
+    class Customer {
+        - String customerName
+        - String address
+        - {static} String[] columnName
+        + Customer(userId: String)
+        + void fetch()
+        + void createCustomer()
+        + void updateCustomer()
+        + void deleteCustomer()
+        + {static} DefaultTableModel searchCustomer(keyword: String, searchBy: String)
+        + DefaultTableModel myProduct()
+        + String getCustomerName()
+        + String getAddress()
+        + void setCustomerName(name: String)
+        + void setAddress(address: String)
+    }
+
+    class Product {
+        - String productId
+        - String productName
+        - double price
+        - int quantity
+        - {static} String[] columnNames
+        + Product()
+        + Product(productId: String)
+        + void fetch()
+        + void createProduct()
+        + void updateProduct()
+        + void deleteProduct()
+        + {static} DefaultTableModel searchProduct(keyword: String, searchBy: String)
+        + String getProductId()
+        + String getProductName()
+        + double getPrice()
+        + int getQuantity()
+        + void setProductName(name: String)
+        + void setPrice(price: double)
+        + void setQuantity(quantity: int)
+    }
+}
+
+package "Utility Package" {
+    class Database {
+        + {static} String HOST_URI
+        + {static} String DATABASE_NAME
+        + {static} String USER
+        + {static} String PASSWORD
+        + {static} Connection getConnection()
+    }
+
+    class Theme {
+        + {static} ThemeVariant currentTheme
+        + {static} int GUI_WIDTH
+        + {static} int GUI_HEIGHT
+        + {static} Font FONT_TITLE
+        + {static} Font FONT_BUTTON
+        + {static} Color getPrimaryColor()
+        + {static} Color getSecondaryColor()
+        + {static} void setTheme(theme: ThemeVariant)
+        + {static} ThemeVariant getCurrentTheme()
+    }
+
+    enum ThemeVariant {
+        PROFESSIONAL_BLUE
+        MODERN_DARK
+        ELEGANT_PURPLE
+        FRESH_GREEN
+        WARM_ORANGE
+        CLASSIC_GRAY
+    }
+
+    class ThemeManager {
+        - {static} List<JFrame> registeredFrames
+        - {static} List<ThemeChangeListener> listeners
+        + {static} void registerFrame(frame: JFrame)
+        + {static} void styleButton(button: JButton, style: ButtonStyle)
+        + {static} void stylePanel(panel: JPanel, style: PanelStyle)
+        + {static} void styleLabel(label: JLabel, style: LabelStyle)
+        + {static} void changeTheme(newTheme: ThemeVariant)
+    }
+
+    enum ButtonStyle {
+        PRIMARY
+        SECONDARY
+        SUCCESS
+        DANGER
+        WARNING
+        INFO
+        OUTLINE
+    }
+
+    enum PanelStyle {
+        MAIN
+        HEADER
+        CARD
+        FORM
+    }
+
+    enum LabelStyle {
+        TITLE
+        SUBTITLE
+        HEADING
+        REGULAR
+        CAPTION
+    }
+}
+
+package "Activity Package" {
+    class LoginActivity {
+        - JTextField usernameTF
+        - JPasswordField passwordF
+        - JButton buttonLogin
+        - JButton buttonSignup
+        - JButton buttonExit
+        + LoginActivity()
+        + void actionPerformed(ae: ActionEvent)
+        - void performLogin()
+        - void showErrorMessage(message: String)
+    }
+
+    class EmployeeActivity {
+        - Employee employee
+        - JPanel[] actionCards
+        - JButton buttonViewProduct
+        - JButton buttonViewCustomer
+        - JButton buttonViewEmployee
+        - JButton buttonManageProfile
+        + EmployeeActivity(userId: String)
+        + void actionPerformed(ae: ActionEvent)
+        - void createActionCards()
+        - JPanel createActionCard(title: String, description: String, icon: String, color: Color, button: JButton)
+    }
+
+    class CustomerActivity {
+        - Customer customer
+        - JPanel[] actionCards
+        - JButton buttonViewProduct
+        - JButton buttonMyProduct
+        - JButton buttonManageProfile
+        + CustomerActivity(userId: String)
+        + void actionPerformed(ae: ActionEvent)
+        - void createActionCards()
+    }
+
+    class ViewProductActivity {
+        - JTable table
+        - JTextField keywordTF
+        - JComboBox byWhatCB
+        - JButton buttonCheck
+        - JButton buttonAddProduct
+        - Employee employee
+        - Customer customer
+        + ViewProductActivity(prev: JFrame, employee: Employee)
+        + ViewProductActivity(prev: JFrame, customer: Customer)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class ViewEmployeeActivity {
+        - JTable table
+        - JTextField keywordTF
+        - JComboBox byWhatCB
+        - JButton buttonCheck
+        - JButton buttonAddEmployee
+        - Employee employee
+        + ViewEmployeeActivity(prev: JFrame, employee: Employee)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class ViewCustomerActivity {
+        - JTable table
+        - JTextField keywordTF
+        - JComboBox byWhatCB
+        - JButton buttonCheck
+        - Employee employee
+        + ViewCustomerActivity(prev: JFrame, employee: Employee)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class AddProductActivity {
+        - JTextField productNameTF
+        - JTextField productPriceTF
+        - JTextField productQtTF
+        - JButton buttonAdd
+        - Employee employee
+        + AddProductActivity(prev: ViewProductActivity, employee: Employee)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class AddEmployeeActivity {
+        - JTextField employeeIdTF
+        - JTextField employeeNameTF
+        - JTextField employeePhoneTF2
+        - JTextField salaryTF
+        - JComboBox roleCB
+        - JButton buttonAdd
+        - Employee employee
+        + AddEmployeeActivity(prev: ViewEmployeeActivity, employee: Employee)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class MyProfileActivity {
+        - JTextField nameTF
+        - JTextField phoneTF1
+        - JTextField phoneTF2
+        - JTextField addressTF
+        - JButton buttonEdit
+        - JButton buttonSubmit
+        - User usr
+        - Employee employee
+        - Customer customer
+        + MyProfileActivity(activity: JFrame, customer: Customer)
+        + MyProfileActivity(activity: JFrame, employee: Employee)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class MyProductActivity {
+        - JTable table
+        - Customer customer
+        - JButton buttonLogout
+        - JButton buttonBack
+        + MyProductActivity(prev: JFrame, customer: Customer)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class ThemeSettingsActivity {
+        - JButton[] themeButtons
+        - JButton applyButton
+        - JButton cancelButton
+        - ThemeVariant selectedTheme
+        - JFrame parentFrame
+        + ThemeSettingsActivity(parent: JFrame)
+        + void actionPerformed(ae: ActionEvent)
+        - void updatePreview()
+    }
+
+    class ManageEmployee {
+        - Employee employee
+        - JTextField employeeNameTF
+        - JTextField phoneNumberTF
+        - JTextField salaryTF
+        - JComboBox roleCB
+        + ManageEmployee(employeeId: String, prev: ViewEmployeeActivity)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class ManageProduct {
+        - Product product
+        - JTextField productNameTF
+        - JTextField priceTF
+        - JTextField quantityTF
+        + ManageProduct(productId: String, prev: ViewProductActivity)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class ManageCustomer {
+        - Customer customer
+        - JTextField customerNameTF
+        - JTextField phoneNumberTF
+        - JTextField addressTF
+        + ManageCustomer(customerId: String, prev: ViewCustomerActivity)
+        + void actionPerformed(ae: ActionEvent)
+    }
+
+    class Start {
+        + {static} void main(args: String[])
+    }
+}
+
+package "Test Package" {
+    class TestConnection {
+        + {static} void main(args: String[])
+    }
+
+    class TestLogin {
+        + {static} void main(args: String[])
+        + {static} void testDirectDatabaseAccess()
+    }
+}
+
+' Inheritance Relationships
+User <|-- Employee
+User <|-- Customer
+
+' Composition Relationships
+Theme *-- ThemeVariant
+ThemeManager *-- ButtonStyle
+ThemeManager *-- PanelStyle
+ThemeManager *-- LabelStyle
+
+' Association Relationships
+EmployeeActivity --> Employee : manages
+CustomerActivity --> Customer : manages
+ViewProductActivity --> Product : displays
+ViewEmployeeActivity --> Employee : displays
+ViewCustomerActivity --> Customer : displays
+AddProductActivity --> Product : creates
+AddEmployeeActivity --> Employee : creates
+MyProfileActivity --> User : edits
+MyProductActivity --> Customer : shows history
+
+' Dependency Relationships
+LoginActivity ..> Employee : creates
+LoginActivity ..> Customer : creates
+EmployeeActivity ..> ViewProductActivity : navigates to
+EmployeeActivity ..> ViewEmployeeActivity : navigates to
+EmployeeActivity ..> ViewCustomerActivity : navigates to
+CustomerActivity ..> ViewProductActivity : navigates to
+CustomerActivity ..> MyProductActivity : navigates to
+
+' Database Dependencies
+Employee ..> Database : uses
+Customer ..> Database : uses
+Product ..> Database : uses
+User ..> Database : uses
+
+' Theme Dependencies
+LoginActivity ..> Theme : uses
+EmployeeActivity ..> Theme : uses
+CustomerActivity ..> Theme : uses
+ViewProductActivity ..> Theme : uses
+ThemeSettingsActivity ..> ThemeManager : modifies
+
+note top of User : Abstract base class for all users\nImplements common user functionality
+
+note top of Database : Static utility class for\ndatabase connections
+
+note top of ThemeManager : Singleton pattern for\ntheme management across application
+
+note bottom of Start : Main entry point\nfor the application
+
+@enduml
