@@ -2,6 +2,7 @@ package com.shopmanagement.model;
 
 import java.lang.*;
 import java.sql.*;
+import java.text.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import com.shopmanagement.util.*;
@@ -226,6 +227,12 @@ public class Employee extends User {
         Connection con = null;
         Statement st = null;
 		ResultSet rs = null;
+		
+		// Format cho hiển thị lương
+		java.text.NumberFormat nf = java.text.NumberFormat.getNumberInstance();
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
+		
 		System.out.println(query);
         try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -238,7 +245,10 @@ public class Employee extends User {
 			System.out.println("results received");
 			
 			while(rs.next()) {
-				model.addRow(new Object[]{rs.getString("username"), rs.getString("full_name"), rs.getString("phone"), rs.getString("position"), rs.getString("salary")});
+				// Format salary để hiển thị đúng
+				double salary = rs.getDouble("salary");
+				String formattedSalary = nf.format(salary);
+				model.addRow(new Object[]{rs.getString("username"), rs.getString("full_name"), rs.getString("phone"), rs.getString("position"), formattedSalary});
 			}
 		}
         catch(Exception ex) {

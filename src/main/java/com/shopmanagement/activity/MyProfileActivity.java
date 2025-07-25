@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import java.awt.event.*;
+import java.text.*;
 import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
 
 public class MyProfileActivity extends JFrame implements ActionListener {
@@ -119,7 +120,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 		phoneTF1.setDisabledTextColor(Color.BLACK);
 		panel.add(phoneTF1);
 		
-		phoneTF2 = new JTextField(customer.getPhoneNumber().substring(4));
+		phoneTF2 = new JTextField(customer.getPhoneNumber().substring(3));
 		phoneTF2.setBounds(220, 240, 180, 30);
 		phoneTF2.setFont(Theme.FONT_INPUT);
 		phoneTF2.setEnabled(false);
@@ -232,7 +233,9 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 		roleLabel.setFont(Theme.FONT_REGULAR);
 		panel.add(roleLabel);
 		
-		salaryLabel = new JLabel("Salary:          "+employee.getSalary());
+		// Format lương để hiển thị đúng
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		salaryLabel = new JLabel("Salary:          "+df.format(employee.getSalary()));
 		salaryLabel.setBounds(60, 340, 440, 30);
 		salaryLabel.setFont(Theme.FONT_REGULAR);
 		panel.add(salaryLabel);
@@ -252,7 +255,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 		phoneTF1.setDisabledTextColor(Color.BLACK);
 		panel.add(phoneTF1);
 		
-		phoneTF2 = new JTextField(employee.getPhoneNumber().substring(4));
+		phoneTF2 = new JTextField(employee.getPhoneNumber().substring(3));
 		phoneTF2.setBounds(220, 240, 180, 30);
 		phoneTF2.setFont(Theme.FONT_INPUT);
 		phoneTF2.setEnabled(false);

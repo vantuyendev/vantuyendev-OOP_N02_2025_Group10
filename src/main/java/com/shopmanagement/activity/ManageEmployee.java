@@ -68,7 +68,7 @@ public class ManageEmployee extends JFrame implements ActionListener {
 		panel.add(phoneCodeTF);
 		
 
-		phoneNumberTF = new JTextField(employee.getPhoneNumber().substring(4)+"");
+		phoneNumberTF = new JTextField(employee.getPhoneNumber().substring(3)+"");
 		phoneNumberTF.setBounds(200, 100, 180, 30);
 		phoneNumberTF.setFont(Theme.FONT_INPUT);
 		panel.add(phoneNumberTF);
