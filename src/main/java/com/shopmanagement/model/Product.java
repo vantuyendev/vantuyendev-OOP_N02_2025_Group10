@@ -216,6 +216,10 @@ public class Product {
         Connection con = null;
         Statement st = null;
 		ResultSet rs = null;
+		
+		// Format cho hiển thị số thập phân
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		
 		System.out.println(query);
         try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -228,7 +232,9 @@ public class Product {
 			System.out.println("results received");
 			
 			while(rs.next()) {
-				model.addRow(new Object[]{rs.getString("productId"), rs.getString("productName"), rs.getDouble("price"), rs.getInt("quantity")});
+				double price = rs.getDouble("price");
+				String formattedPrice = df.format(price);
+				model.addRow(new Object[]{rs.getString("productId"), rs.getString("productName"), formattedPrice, rs.getInt("quantity")});
 			}
 		}
         catch(Exception ex) {

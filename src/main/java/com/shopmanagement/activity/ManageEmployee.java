@@ -4,6 +4,7 @@ import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.*;
 import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
 
 public class ManageEmployee extends JFrame implements ActionListener {
@@ -60,7 +61,7 @@ public class ManageEmployee extends JFrame implements ActionListener {
 		employeeNameTF.setFont(Theme.FONT_INPUT);
 		panel.add(employeeNameTF);
 		
-		phoneCodeTF = new JTextField("+880");
+		phoneCodeTF = new JTextField("+84");
 		phoneCodeTF.setEnabled(false);
 		phoneCodeTF.setBounds(160, 100, 40, 30);
 		phoneCodeTF.setFont(Theme.FONT_INPUT);
@@ -78,7 +79,9 @@ public class ManageEmployee extends JFrame implements ActionListener {
 		roleCB.setFont(Theme.FONT_INPUT);
 		panel.add(roleCB);
 		
-		salaryTF = new JTextField(employee.getSalary()+"");
+		// Format lương để hiển thị đúng
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		salaryTF = new JTextField(df.format(employee.getSalary()));
 		salaryTF.setBounds(160, 180, 220, 30);
 		salaryTF.setFont(Theme.FONT_INPUT);
 		panel.add(salaryTF);

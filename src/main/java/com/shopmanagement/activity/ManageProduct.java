@@ -4,6 +4,7 @@ import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.*;
 import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
 
 /**
@@ -76,7 +77,9 @@ public class ManageProduct extends JFrame implements ActionListener {
 		userIdTF.setFont(Theme.FONT_INPUT);
 		panel.add(userIdTF);
 		
-		productPriceTF = new JTextField(product.getPrice()+"");
+		// Format giá tiền để hiển thị đúng
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		productPriceTF = new JTextField(df.format(product.getPrice()));
 		productPriceTF.setBounds(180, 100, 220, 30);
 		productPriceTF.setFont(Theme.FONT_INPUT);
 		productPriceTF.setVisible(false);

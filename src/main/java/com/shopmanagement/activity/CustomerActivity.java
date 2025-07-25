@@ -17,6 +17,7 @@ public class CustomerActivity extends JFrame implements ActionListener {
 	private JPanel mainPanel, headerPanel, contentPanel, dashboardPanel;
 	private Customer customer;
 	private JButton buttonLogout, buttonProfile, buttonViewProduct, buttonMyProduct, buttonThemeSettings;
+	private JButton buttonManageProfile;
 	private JLabel titleLabel, welcomeLabel, statsLabel;
 	private JPanel[] actionCards;
 	
@@ -152,7 +153,7 @@ public class CustomerActivity extends JFrame implements ActionListener {
 			"Manage your account settings",
 			"👤",
 			Theme.getSuccessColor(),
-			createProfileButton()
+			buttonManageProfile = createProfileButton()
 		);
 		
 		// Support Card
@@ -240,7 +241,7 @@ public class CustomerActivity extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource().equals(buttonProfile) || 
-			ae.getSource().equals(createProfileButton())) {
+			ae.getSource().equals(buttonManageProfile)) {
 			this.setVisible(false);
 			new MyProfileActivity(this, customer).setVisible(true);
 		} else if (ae.getSource().equals(buttonLogout)) {

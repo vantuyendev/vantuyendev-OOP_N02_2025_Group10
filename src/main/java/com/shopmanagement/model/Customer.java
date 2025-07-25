@@ -40,7 +40,7 @@ public class Customer extends User {
 			throw new IllegalArgumentException("Fill in the name");
 	}
 	public void setPhoneNumber(int num) {
-		this.phoneNumber = "+880"+num;
+		this.phoneNumber = "+84"+num;
 	}
 	public void setAddress(String address) {
 		if (!address.isEmpty())
@@ -142,7 +142,7 @@ public class Customer extends User {
 	}
 	
 	public void updateCustomer(String name, int phone, String address) {
-		String query = "UPDATE `customer` SET `customerName`='"+name+"', `phoneNumber`='+880"+phone+"', `address`='"+address+"' WHERE `userId`='"+this.userId+"';";
+		String query = "UPDATE `customer` SET `customerName`='"+name+"', `phoneNumber`='+84"+phone+"', `address`='"+address+"' WHERE `userId`='"+this.userId+"';";
 		Connection con = null;
         Statement st = null;
 		System.out.println(query);
@@ -157,7 +157,7 @@ public class Customer extends User {
 			System.out.println("data inserted");
 			JOptionPane.showMessageDialog(null,"Information Updated!");
 			this.customerName = name;
-			this.phoneNumber = "+880"+phone;
+			this.phoneNumber = "+84"+phone;
 			this.address = address;
 		}
         catch(Exception ex) {
@@ -221,6 +221,10 @@ public class Customer extends User {
         Connection con = null;
         Statement st = null;
 		ResultSet rs = null;
+		
+		// Format cho hiển thị số thập phân
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		
 		System.out.println(query);
         try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -238,8 +242,9 @@ public class Customer extends User {
 				String col3 = rs.getString("productName");
 				int col4 = rs.getInt("amount");
 				double col5 = rs.getDouble("cost");
+				String formattedCost = df.format(col5);
 				String col6 = rs.getString("date");
-				model.addRow(new Object[]{col1, col2, col3, col4, col5, col6});
+				model.addRow(new Object[]{col1, col2, col3, col4, formattedCost, col6});
 			}
 		}
         catch(Exception ex) {

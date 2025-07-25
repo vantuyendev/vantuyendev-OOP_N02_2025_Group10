@@ -245,7 +245,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 		nameTF.setDisabledTextColor(Color.BLACK);
 		panel.add(nameTF);
 		
-		phoneTF1 = new JTextField("+880");
+		phoneTF1 = new JTextField("+84");
 		phoneTF1.setBounds(180, 240, 40, 30);
 		phoneTF1.setFont(Theme.FONT_INPUT);
 		phoneTF1.setEnabled(false);

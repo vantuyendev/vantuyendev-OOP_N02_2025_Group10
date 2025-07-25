@@ -17,6 +17,7 @@ public class EmployeeActivity extends JFrame implements ActionListener {
 	private Employee employee;
 	private JButton buttonLogout, buttonProfile, buttonViewProduct;
 	private JButton buttonViewCustomer, buttonViewEmployee, buttonThemeSettings;
+	private JButton buttonManageProfile;
 	private JLabel titleLabel, welcomeLabel, statsLabel, roleLabel;
 	private JPanel[] actionCards;
 	
@@ -166,7 +167,7 @@ public class EmployeeActivity extends JFrame implements ActionListener {
 			"Manage your account settings",
 			"👤",
 			Theme.getSuccessColor(),
-			createProfileButton()
+			buttonManageProfile = createProfileButton()
 		);
 		
 		// Manager-only Employee Management Card
@@ -254,7 +255,7 @@ public class EmployeeActivity extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource().equals(buttonProfile) || 
-			ae.getSource().equals(createProfileButton())) {
+			ae.getSource().equals(buttonManageProfile)) {
 			this.setVisible(false);
 			new MyProfileActivity(this, employee).setVisible(true);
 		} else if (ae.getSource().equals(buttonLogout)) {
