@@ -142,19 +142,32 @@ public class Employee extends User {
 	}
 	
 	public void updateEmployee(String name, String phone, String role, double salary) {
-		String query = "UPDATE `employee` SET `employeeName`='"+name+"', `phoneNumber`='+84"+phone+"', `role`='"+role+"', `salary`="+salary+" WHERE `userId`='"+this.userId+"';";
+		System.out.println("DEBUG: Input phone parameter: '" + phone + "'");
+		System.out.println("DEBUG: Current phoneNumber field: '" + this.phoneNumber + "'");
+		
+		// Update users table for basic info
+		String query1 = "UPDATE `users` SET `full_name`='"+name+"', `phone`='+84"+phone+"' WHERE `user_id`='"+this.userId+"';";
+		// Update employees table for role and salary  
+		String query2 = "UPDATE `employees` SET `position`='"+role+"', `salary`="+salary+" WHERE `user_id`='"+this.userId+"';";
+		
 		Connection con = null;
         Statement st = null;
-		System.out.println(query);
+		System.out.println("Query 1: " + query1);
+		System.out.println("Query 2: " + query2);
         try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("driver loaded");
 			con = DriverManager.getConnection(Database.HOST_URI, Database.USER, Database.PASSWORD);
 			System.out.println("connection done");//connection with database established
 			st = con.createStatement();//create statement
 			System.out.println("statement created");
-			st.executeUpdate(query);//insert
-			System.out.println("data inserted");
+			
+			// Execute both update queries
+			st.executeUpdate(query1);//update users table
+			System.out.println("users table updated");
+			st.executeUpdate(query2);//update employees table  
+			System.out.println("employees table updated");
+			
 			JOptionPane.showMessageDialog(null,"Information Updated!");
 			this.employeeName = name;
 			this.phoneNumber = "+84"+phone;
