@@ -69,7 +69,7 @@ public class ManageEmployee extends JFrame implements ActionListener {
 		
 
 		phoneNumberTF = new JTextField(employee.getPhoneNumber().substring(3)+"");
-		phoneNumberTF.setBounds(200, 100, 180, 30);
+		phoneNumberTF.setBounds(200, 100, 220, 30);
 		phoneNumberTF.setFont(Theme.FONT_INPUT);
 		panel.add(phoneNumberTF);
 		
@@ -108,7 +108,7 @@ public class ManageEmployee extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource().equals(buttonEdit)) {
 			try {
-				employee.updateEmployee(employeeNameTF.getText(),Integer.parseInt(phoneNumberTF.getText()),roleCB.getSelectedItem().toString(), Double.parseDouble(salaryTF.getText()));
+				employee.updateEmployee(employeeNameTF.getText(),phoneNumberTF.getText().trim(),roleCB.getSelectedItem().toString(), Double.parseDouble(salaryTF.getText()));
 				if (!prev.keywordTF.getText().trim().isEmpty())
 					prev.table.setModel(Employee.searchEmployee(prev.keywordTF.getText().trim(), prev.byWhatCB.getSelectedItem().toString()));
 				else

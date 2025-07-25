@@ -121,7 +121,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 		panel.add(phoneTF1);
 		
 		phoneTF2 = new JTextField(customer.getPhoneNumber().substring(3));
-		phoneTF2.setBounds(220, 240, 180, 30);
+		phoneTF2.setBounds(220, 240, 220, 30);
 		phoneTF2.setFont(Theme.FONT_INPUT);
 		phoneTF2.setEnabled(false);
 		phoneTF2.setDisabledTextColor(Color.BLACK);
@@ -256,7 +256,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 		panel.add(phoneTF1);
 		
 		phoneTF2 = new JTextField(employee.getPhoneNumber().substring(3));
-		phoneTF2.setBounds(220, 240, 180, 30);
+		phoneTF2.setBounds(220, 240, 220, 30);
 		phoneTF2.setFont(Theme.FONT_INPUT);
 		phoneTF2.setEnabled(false);
 		phoneTF2.setDisabledTextColor(Color.BLACK);
@@ -293,7 +293,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 			if (customer!=null) {
 				addressTF.setEnabled(false);
 				try {
-					customer.updateCustomer(nameTF.getText().trim(), Integer.parseInt(phoneTF2.getText()), addressTF.getText().trim());
+					customer.updateCustomer(nameTF.getText().trim(), phoneTF2.getText().trim(), addressTF.getText().trim());
 					buttonEdit.setVisible(true);
 					buttonSubmit.setVisible(false);
 					nameTF.setEnabled(false);
@@ -305,7 +305,7 @@ public class MyProfileActivity extends JFrame implements ActionListener {
 			}
 			else if (employee!=null) {
 				try {
-					employee.updateEmployee(nameTF.getText().trim(), Integer.parseInt(phoneTF2.getText()), employee.getRole(), employee.getSalary());
+					employee.updateEmployee(nameTF.getText().trim(), phoneTF2.getText().trim(), employee.getRole(), employee.getSalary());
 					buttonEdit.setVisible(true);
 					buttonSubmit.setVisible(false);
 					nameTF.setEnabled(false);

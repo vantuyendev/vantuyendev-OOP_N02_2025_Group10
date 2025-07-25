@@ -39,7 +39,7 @@ public class Customer extends User {
 		else
 			throw new IllegalArgumentException("Fill in the name");
 	}
-	public void setPhoneNumber(int num) {
+	public void setPhoneNumber(String num) {
 		this.phoneNumber = "+84"+num;
 	}
 	public void setAddress(String address) {
@@ -141,7 +141,7 @@ public class Customer extends User {
         }
 	}
 	
-	public void updateCustomer(String name, int phone, String address) {
+	public void updateCustomer(String name, String phone, String address) {
 		String query = "UPDATE `customer` SET `customerName`='"+name+"', `phoneNumber`='+84"+phone+"', `address`='"+address+"' WHERE `userId`='"+this.userId+"';";
 		Connection con = null;
         Statement st = null;

@@ -93,7 +93,7 @@ public class ManageCustomer extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource().equals(buttonEdit)) {
 			try {
-				customer.updateCustomer(customerNameTF.getText(),Integer.parseInt(phoneNumberTF.getText()),addressTF.getText().trim());
+				customer.updateCustomer(customerNameTF.getText(),phoneNumberTF.getText().trim(),addressTF.getText().trim());
 				if (!prev.keywordTF.getText().trim().isEmpty())
 					prev.table.setModel(Customer.searchCustomer(prev.keywordTF.getText().trim(), prev.byWhatCB.getSelectedItem().toString()));
 				else

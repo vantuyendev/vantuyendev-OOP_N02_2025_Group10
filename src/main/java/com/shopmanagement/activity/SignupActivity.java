@@ -146,7 +146,7 @@ public class SignupActivity extends JFrame implements ActionListener {
 				Customer c = new Customer(usernameTF.getText().trim());
 				c.setPassword(new String(passwordF.getPassword()));
 				c.setCustomerName(nameTF.getText());
-				c.setPhoneNumber(Integer.parseInt(phoneTF2.getText()));
+				c.setPhoneNumber(phoneTF2.getText().trim());
 				c.setAddress(addressTF.getText());
 				c.createCustomer(this);
 			}
