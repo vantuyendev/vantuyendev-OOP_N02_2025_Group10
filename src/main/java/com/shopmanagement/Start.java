@@ -18,7 +18,7 @@ public class Start {
 		// Set modern Look and Feel for better VNC experience
 		try {
 			// Try to set system look and feel for better integration
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeel());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			
 			// Configure for better VNC rendering
 			System.setProperty("awt.useSystemAAFontSettings", "on");
@@ -28,7 +28,7 @@ public class Start {
 		} catch (Exception e) {
 			// Fallback to default if system LAF fails
 			try {
-				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeel());
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (Exception ex) {
 				// Use default LAF
 			}
