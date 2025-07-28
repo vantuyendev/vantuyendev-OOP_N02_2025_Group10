@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     "com.shopmanagement.activity",
     "com.shopmanagement.service",
     "com.shopmanagement.repository",
-    "com.shopmanagement.controller",
     "com.shopmanagement.util"
 })
 @EntityScan(basePackages = "com.shopmanagement.entity")
