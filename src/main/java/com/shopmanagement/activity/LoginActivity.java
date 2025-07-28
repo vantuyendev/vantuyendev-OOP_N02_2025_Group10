@@ -20,7 +20,7 @@ public class LoginActivity extends JFrame implements ActionListener {
 	private JPasswordField passwordF;
 	
 	/**
-	 * Constructor khởi tạo giao diện đăng nhập
+	 * Constructor khởi tạo giao diện đăng nhập với thiết kế hiện đại
 	 */
 	public LoginActivity() {
 		super("Shop Management System - Login");
@@ -35,6 +35,17 @@ public class LoginActivity extends JFrame implements ActionListener {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+		
+		// Set modern window properties
+		this.setTitle("Shop Management System - VNC Optimized");
+		
+		// Add window icon if available
+		try {
+			// This would set a custom icon - placeholder for now
+			// setIconImage(icon);
+		} catch (Exception e) {
+			// Ignore if icon not available
+		}
 	}
 	
 	private void initializeComponents() {
@@ -63,11 +74,19 @@ public class LoginActivity extends JFrame implements ActionListener {
 		buttonThemeSettings.setPreferredSize(new Dimension(80, 30));
 		buttonThemeSettings.addActionListener(this);
 		
+		JButton demoButton = new JButton("Demo");
+		ThemeManager.styleButton(demoButton, ThemeManager.ButtonStyle.INFO);
+		demoButton.setForeground(Theme.getWhiteColor());
+		demoButton.setPreferredSize(new Dimension(80, 30));
+		demoButton.addActionListener(e -> DemoActivity.showDemo());
+		
 		buttonExit = new JButton("Exit");
 		ThemeManager.styleButton(buttonExit, ThemeManager.ButtonStyle.DANGER);
 		buttonExit.setPreferredSize(new Dimension(80, 30));
 		buttonExit.addActionListener(this);
 		
+		headerButtonPanel.add(demoButton);
+		headerButtonPanel.add(Box.createHorizontalStrut(10));
 		headerButtonPanel.add(buttonThemeSettings);
 		headerButtonPanel.add(Box.createHorizontalStrut(10));
 		headerButtonPanel.add(buttonExit);
@@ -76,26 +95,36 @@ public class LoginActivity extends JFrame implements ActionListener {
 		headerPanel.add(titleLabel, BorderLayout.CENTER);
 		headerPanel.add(headerButtonPanel, BorderLayout.EAST);
 		
-		// Form panel
+		// Form panel with modern card design
 		formPanel = new JPanel();
 		formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
 		ThemeManager.stylePanel(formPanel, ThemeManager.PanelStyle.CARD);
 		formPanel.setBorder(new CompoundBorder(
-			new EmptyBorder(50, 0, 50, 0),
+			new EmptyBorder(60, 0, 60, 0),
 			new CompoundBorder(
 				new LineBorder(Theme.getPrimaryColor(), 2, true),
-				new EmptyBorder(40, 40, 40, 40)
+				new EmptyBorder(50, 50, 50, 50)
 			)
 		));
-		formPanel.setMaximumSize(new Dimension(400, 300));
+		formPanel.setMaximumSize(new Dimension(450, 400));
 		
-		// Login form title
-		JLabel loginTitle = new JLabel("Login to Your Account");
+		// Add subtle shadow effect
+		formPanel.setBackground(Theme.getCardBackgroundColor());
+		
+		// Login form title with modern typography
+		JLabel loginTitle = new JLabel("Welcome Back");
 		ThemeManager.styleLabel(loginTitle, ThemeManager.LabelStyle.SUBTITLE);
 		loginTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-		loginTitle.setBorder(new EmptyBorder(0, 0, 30, 0));
+		loginTitle.setBorder(new EmptyBorder(0, 0, 35, 0));
 		
-		// Username field
+		// Subtitle
+		JLabel loginSubtitle = new JLabel("Sign in to your account");
+		ThemeManager.styleLabel(loginSubtitle, ThemeManager.LabelStyle.REGULAR);
+		loginSubtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+		loginSubtitle.setForeground(Theme.getSecondaryColor());
+		loginSubtitle.setBorder(new EmptyBorder(0, 0, 40, 0));
+		
+		// Username field with modern styling
 		usernameLabel = new JLabel("User ID:");
 		ThemeManager.styleLabel(usernameLabel, ThemeManager.LabelStyle.REGULAR);
 		usernameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -104,8 +133,9 @@ public class LoginActivity extends JFrame implements ActionListener {
 		ThemeManager.styleTextField(usernameTF);
 		usernameTF.setMaximumSize(new Dimension(Integer.MAX_VALUE, Theme.INPUT_HEIGHT));
 		usernameTF.setAlignmentX(Component.LEFT_ALIGNMENT);
+		usernameTF.setToolTipText("Enter your user ID");
 		
-		// Password field
+		// Password field with modern styling
 		passwordLabel = new JLabel("Password:");
 		ThemeManager.styleLabel(passwordLabel, ThemeManager.LabelStyle.REGULAR);
 		passwordLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -114,24 +144,27 @@ public class LoginActivity extends JFrame implements ActionListener {
 		ThemeManager.stylePasswordField(passwordF);
 		passwordF.setMaximumSize(new Dimension(Integer.MAX_VALUE, Theme.INPUT_HEIGHT));
 		passwordF.setAlignmentX(Component.LEFT_ALIGNMENT);
+		passwordF.setToolTipText("Enter your password");
 		
-		// Login button
-		buttonLogin = new JButton("Login");
+		// Login button with enhanced styling
+		buttonLogin = new JButton("Sign In");
 		ThemeManager.styleButton(buttonLogin, ThemeManager.ButtonStyle.PRIMARY);
-		buttonLogin.setPreferredSize(new Dimension(200, Theme.BUTTON_HEIGHT));
+		buttonLogin.setPreferredSize(new Dimension(220, Theme.BUTTON_HEIGHT));
 		buttonLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonLogin.addActionListener(this);
+		buttonLogin.setToolTipText("Click to login to your account");
 		
-		// Add components to form panel
+		// Add components to form panel with improved spacing
 		formPanel.add(loginTitle);
+		formPanel.add(loginSubtitle);
 		formPanel.add(usernameLabel);
-		formPanel.add(Box.createVerticalStrut(5));
+		formPanel.add(Box.createVerticalStrut(8));
 		formPanel.add(usernameTF);
-		formPanel.add(Box.createVerticalStrut(Theme.COMPONENT_SPACING));
+		formPanel.add(Box.createVerticalStrut(Theme.COMPONENT_SPACING + 5));
 		formPanel.add(passwordLabel);
-		formPanel.add(Box.createVerticalStrut(5));
+		formPanel.add(Box.createVerticalStrut(8));
 		formPanel.add(passwordF);
-		formPanel.add(Box.createVerticalStrut(25));
+		formPanel.add(Box.createVerticalStrut(35));
 		formPanel.add(buttonLogin);
 		
 		// Bottom button panel

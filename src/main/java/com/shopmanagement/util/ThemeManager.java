@@ -58,18 +58,21 @@ public class ThemeManager {
 		}
 	}
 	
-	// === UI COMPONENT STYLING ===
+	// === UI COMPONENT STYLING (Enhanced for VNC) ===
 	public static void styleButton(JButton button, ButtonStyle style) {
-		button.setFont(Theme.FONT_BUTTON);
+		button.setFont(Theme.getBestFont(Theme.FONT_BUTTON, Theme.FONT_BUTTON_ALT));
 		button.setFocusPainted(false);
 		button.setBorderPainted(false);
 		button.setOpaque(true);
 		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		button.setPreferredSize(new Dimension(
+			Math.max(button.getPreferredSize().width, Theme.BUTTON_PRIMARY_WIDTH), 
+			Theme.BUTTON_HEIGHT
+		));
 		
 		switch (style) {
 			case PRIMARY:
-				button.setBackground(Theme.getPrimaryColor());
-				button.setForeground(Theme.getWhiteColor());
+				styleButtonPrimary(button);
 				break;
 			case SECONDARY:
 				button.setBackground(Theme.getSecondaryColor());
@@ -92,23 +95,42 @@ public class ThemeManager {
 				button.setForeground(Theme.getWhiteColor());
 				break;
 			case OUTLINE:
-				button.setBackground(new Color(0, 0, 0, 0));
-				button.setForeground(Theme.getPrimaryColor());
-				button.setBorderPainted(true);
-				button.setBorder(new javax.swing.border.LineBorder(Theme.getPrimaryColor(), 2));
+				styleButtonOutline(button);
 				break;
 		}
 		
-		// Add hover effects
 		addButtonHoverEffects(button, style);
+		addButtonShadowEffect(button);
+	}
+	
+	private static void styleButtonPrimary(JButton button) {
+		button.setBackground(Theme.getPrimaryColor());
+		button.setForeground(Theme.getWhiteColor());
+		button.setBorder(Theme.getRoundedBorder());
+	}
+	
+	private static void styleButtonOutline(JButton button) {
+		button.setBackground(new Color(0, 0, 0, 0));
+		button.setForeground(Theme.getPrimaryColor());
+		button.setBorderPainted(true);
+		button.setBorder(new javax.swing.border.CompoundBorder(
+			new javax.swing.border.LineBorder(Theme.getPrimaryColor(), 2),
+			new javax.swing.border.EmptyBorder(8, 16, 8, 16)
+		));
+	}
+	
+	private static void addButtonShadowEffect(JButton button) {
+		// Add subtle shadow effect for depth
+		button.putClientProperty("JButton.buttonType", "roundRect");
 	}
 	
 	public static void styleTextField(JTextField textField) {
-		textField.setFont(Theme.FONT_INPUT);
+		textField.setFont(Theme.getBestFont(Theme.FONT_INPUT, Theme.FONT_INPUT_ALT));
 		textField.setBackground(Theme.getWhiteColor());
 		textField.setForeground(Theme.getTextColor());
 		textField.setBorder(Theme.getInputBorder());
 		textField.setCaretColor(Theme.getPrimaryColor());
+		textField.setPreferredSize(new Dimension(textField.getPreferredSize().width, Theme.INPUT_HEIGHT));
 		
 		// Add focus effects
 		textField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -125,11 +147,12 @@ public class ThemeManager {
 	}
 	
 	public static void stylePasswordField(JPasswordField passwordField) {
-		passwordField.setFont(Theme.FONT_INPUT);
+		passwordField.setFont(Theme.getBestFont(Theme.FONT_INPUT, Theme.FONT_INPUT_ALT));
 		passwordField.setBackground(Theme.getWhiteColor());
 		passwordField.setForeground(Theme.getTextColor());
 		passwordField.setBorder(Theme.getInputBorder());
 		passwordField.setCaretColor(Theme.getPrimaryColor());
+		passwordField.setPreferredSize(new Dimension(passwordField.getPreferredSize().width, Theme.INPUT_HEIGHT));
 		
 		// Add focus effects
 		passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -146,24 +169,24 @@ public class ThemeManager {
 	}
 	
 	public static void styleLabel(JLabel label, LabelStyle style) {
-		label.setForeground(Theme.getTextColor());
+		label.setForeground(Theme.getOptimalTextColor());
 		
 		switch (style) {
 			case TITLE:
-				label.setFont(Theme.FONT_TITLE);
+				label.setFont(Theme.getBestFont(Theme.FONT_TITLE, Theme.FONT_TITLE_ALT));
 				label.setForeground(Theme.getPrimaryColor());
 				break;
 			case SUBTITLE:
-				label.setFont(Theme.FONT_SUBTITLE);
+				label.setFont(Theme.getBestFont(Theme.FONT_SUBTITLE, Theme.FONT_SUBTITLE_ALT));
 				break;
 			case HEADING:
-				label.setFont(Theme.FONT_HEADING);
+				label.setFont(Theme.getBestFont(Theme.FONT_HEADING, Theme.FONT_HEADING_ALT));
 				break;
 			case SUBHEADING:
-				label.setFont(Theme.FONT_SUBHEADING);
+				label.setFont(Theme.getBestFont(Theme.FONT_SUBHEADING, Theme.FONT_SUBHEADING_ALT));
 				break;
 			case REGULAR:
-				label.setFont(Theme.FONT_REGULAR);
+				label.setFont(Theme.getBestFont(Theme.FONT_REGULAR, Theme.FONT_REGULAR_ALT));
 				break;
 			case CAPTION:
 				label.setFont(Theme.FONT_CAPTION);
@@ -207,36 +230,49 @@ public class ThemeManager {
 		MAIN, HEADER, CARD, LIGHT
 	}
 	
-	// === PRIVATE HELPER METHODS ===
+	// === PRIVATE HELPER METHODS (Enhanced) ===
 	private static void addButtonHoverEffects(JButton button, ButtonStyle style) {
 		Color originalColor = button.getBackground();
-		Color hoverColor = Theme.getButtonHoverColor();
-		Color pressedColor = Theme.getButtonPressedColor();
+		Color originalForeground = button.getForeground();
 		
 		button.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseEntered(java.awt.event.MouseEvent e) {
 				if (style != ButtonStyle.OUTLINE) {
-					button.setBackground(hoverColor);
+					button.setBackground(Theme.getButtonHoverColor());
+				} else {
+					button.setBackground(Theme.getHoverOverlayColor());
 				}
 			}
 			
 			@Override
 			public void mouseExited(java.awt.event.MouseEvent e) {
 				button.setBackground(originalColor);
+				button.setForeground(originalForeground);
 			}
 			
 			@Override
 			public void mousePressed(java.awt.event.MouseEvent e) {
 				if (style != ButtonStyle.OUTLINE) {
-					button.setBackground(pressedColor);
+					button.setBackground(Theme.getButtonPressedColor());
+				} else {
+					button.setBackground(Theme.getPressedOverlayColor());
 				}
 			}
 			
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent e) {
-				if (style != ButtonStyle.OUTLINE) {
-					button.setBackground(hoverColor);
+				if (button.contains(e.getPoint())) {
+					// Mouse still over button
+					if (style != ButtonStyle.OUTLINE) {
+						button.setBackground(Theme.getButtonHoverColor());
+					} else {
+						button.setBackground(Theme.getHoverOverlayColor());
+					}
+				} else {
+					// Mouse not over button
+					button.setBackground(originalColor);
+					button.setForeground(originalForeground);
 				}
 			}
 		});

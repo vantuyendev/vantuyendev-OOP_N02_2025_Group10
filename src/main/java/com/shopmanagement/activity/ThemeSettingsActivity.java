@@ -25,7 +25,7 @@ public class ThemeSettingsActivity extends JDialog implements ActionListener {
 		layoutComponents();
 		setupEventHandlers();
 		
-		this.setSize(500, 400);
+		this.setSize(600, 500);
 		this.setLocationRelativeTo(parent);
 		this.setResizable(false);
 	}
@@ -87,8 +87,8 @@ public class ThemeSettingsActivity extends JDialog implements ActionListener {
 		titlePanel.add(titleLabel, BorderLayout.CENTER);
 		titlePanel.setBorder(new EmptyBorder(0, 0, 20, 0));
 		
-		// Theme selection panel
-		JPanel themePanel = new JPanel(new GridLayout(3, 2, 10, 10));
+		// Theme selection panel - Updated layout for new themes
+		JPanel themePanel = new JPanel(new GridLayout(3, 3, 10, 10));
 		themePanel.setBackground(Theme.getBackgroundPanel());
 		for (JButton button : themeButtons) {
 			themePanel.add(button);
@@ -181,6 +181,12 @@ public class ThemeSettingsActivity extends JDialog implements ActionListener {
 				return "Warm Orange";
 			case CLASSIC_GRAY:
 				return "Classic Gray";
+			case ULTRA_MODERN:
+				return "Ultra Modern";
+			case MIDNIGHT_BLUE:
+				return "Midnight Blue";
+			case CHERRY_BLOSSOM:
+				return "Cherry Blossom";
 			default:
 				return theme.name();
 		}

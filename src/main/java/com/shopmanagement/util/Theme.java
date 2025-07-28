@@ -8,16 +8,18 @@ import javax.swing.border.*;
  * Chứa các constants và theme variants để customization giao diện
  */
 public class Theme {
-	// === LAYOUT CONSTANTS - Các hằng số về kích thước giao diện ===
-	public static final int GUI_WIDTH = 900;
-	public static final int GUI_HEIGHT = 700;
-	public static final int BUTTON_PRIMARY_WIDTH = 120;
-	public static final int BUTTON_SECONDARY_WIDTH = 100;
-	public static final int BUTTON_HEIGHT = 35;
-	public static final int INPUT_HEIGHT = 30;
-	public static final int PANEL_PADDING = 20;
-	public static final int COMPONENT_SPACING = 15;
-	public static final int HEADER_HEIGHT = 80;
+	// === LAYOUT CONSTANTS - Các hằng số về kích thước giao diện (Optimized for VNC) ===
+	public static final int GUI_WIDTH = 1024;
+	public static final int GUI_HEIGHT = 768;
+	public static final int BUTTON_PRIMARY_WIDTH = 140;
+	public static final int BUTTON_SECONDARY_WIDTH = 120;
+	public static final int BUTTON_HEIGHT = 42;
+	public static final int INPUT_HEIGHT = 38;
+	public static final int PANEL_PADDING = 24;
+	public static final int COMPONENT_SPACING = 18;
+	public static final int HEADER_HEIGHT = 90;
+	public static final int CARD_RADIUS = 12;
+	public static final int SHADOW_OFFSET = 4;
 	
 	// === CURRENT THEME SELECTION - Theme hiện tại được chọn ===
 	public static ThemeVariant currentTheme = ThemeVariant.PROFESSIONAL_BLUE;
@@ -29,7 +31,10 @@ public class Theme {
 		ELEGANT_PURPLE,
 		FRESH_GREEN,
 		WARM_ORANGE,
-		CLASSIC_GRAY
+		CLASSIC_GRAY,
+		ULTRA_MODERN,    // New modern theme
+		MIDNIGHT_BLUE,   // New dark blue theme
+		CHERRY_BLOSSOM   // New pink theme
 	}
 	
 	// === COLOR PALETTES ===
@@ -117,6 +122,48 @@ public class Theme {
 		new Color(23, 162, 184)   // Info
 	};
 	
+	// Ultra Modern Theme - New sleek design
+	private static final Color[] ULTRA_MODERN_COLORS = {
+		new Color(250, 251, 252), // Background Panel - Ultra light
+		new Color(59, 130, 246),  // Primary Color - Modern blue
+		new Color(71, 85, 105),   // Secondary Color - Slate
+		new Color(255, 255, 255), // White
+		new Color(15, 23, 42),    // Dark Text - Deep slate
+		new Color(248, 250, 252), // Light Background
+		new Color(239, 68, 68),   // Danger/Error - Modern red
+		new Color(34, 197, 94),   // Success - Modern green
+		new Color(245, 158, 11),  // Warning - Modern amber
+		new Color(14, 165, 233)   // Info - Modern sky
+	};
+	
+	// Midnight Blue Theme - Professional dark
+	private static final Color[] MIDNIGHT_BLUE_COLORS = {
+		new Color(15, 23, 42),    // Background Panel - Dark slate
+		new Color(56, 189, 248),  // Primary Color - Light blue
+		new Color(71, 85, 105),   // Secondary Color - Slate
+		new Color(248, 250, 252), // White - Off white
+		new Color(226, 232, 240), // Light Text
+		new Color(30, 41, 59),    // Dark Background
+		new Color(248, 113, 113), // Danger/Error - Light red
+		new Color(74, 222, 128),  // Success - Light green
+		new Color(251, 191, 36),  // Warning - Light amber
+		new Color(56, 189, 248)   // Info - Light blue
+	};
+	
+	// Cherry Blossom Theme - Elegant pink
+	private static final Color[] CHERRY_BLOSSOM_COLORS = {
+		new Color(253, 244, 255), // Background Panel - Very light pink
+		new Color(219, 39, 119),  // Primary Color - Pink
+		new Color(107, 114, 128), // Secondary Color - Gray
+		new Color(255, 255, 255), // White
+		new Color(17, 24, 39),    // Dark Text
+		new Color(253, 244, 255), // Light Background
+		new Color(239, 68, 68),   // Danger/Error
+		new Color(34, 197, 94),   // Success
+		new Color(245, 158, 11),  // Warning
+		new Color(168, 85, 247)   // Info - Purple
+	};
+	
 	// === DYNAMIC COLOR GETTERS ===
 	public static Color getBackgroundPanel() {
 		return getCurrentThemeColors()[0];
@@ -171,6 +218,12 @@ public class Theme {
 				return WARM_ORANGE_COLORS;
 			case CLASSIC_GRAY:
 				return CLASSIC_GRAY_COLORS;
+			case ULTRA_MODERN:
+				return ULTRA_MODERN_COLORS;
+			case MIDNIGHT_BLUE:
+				return MIDNIGHT_BLUE_COLORS;
+			case CHERRY_BLOSSOM:
+				return CHERRY_BLOSSOM_COLORS;
 			default:
 				return PROFESSIONAL_BLUE_COLORS;
 		}
@@ -218,41 +271,76 @@ public class Theme {
 		return new Color(0, 0, 0, 20);
 	}
 	
-	// === ENHANCED TYPOGRAPHY ===
-	public static final Font FONT_TITLE = new Font("Segoe UI", Font.BOLD, 32);
-	public static final Font FONT_SUBTITLE = new Font("Segoe UI", Font.BOLD, 24);
-	public static final Font FONT_HEADING = new Font("Segoe UI", Font.BOLD, 20);
-	public static final Font FONT_SUBHEADING = new Font("Segoe UI", Font.BOLD, 16);
-	public static final Font FONT_BUTTON = new Font("Segoe UI", Font.BOLD, 14);
-	public static final Font FONT_REGULAR = new Font("Segoe UI", Font.PLAIN, 14);
-	public static final Font FONT_INPUT = new Font("Segoe UI", Font.PLAIN, 14);
-	public static final Font FONT_CAPTION = new Font("Segoe UI", Font.PLAIN, 12);
-	public static final Font FONT_SMALL = new Font("Segoe UI", Font.PLAIN, 10);
+	// === ENHANCED TYPOGRAPHY (VNC Optimized) ===
+	public static final Font FONT_TITLE = new Font("Segoe UI", Font.BOLD, 36);
+	public static final Font FONT_SUBTITLE = new Font("Segoe UI", Font.BOLD, 28);
+	public static final Font FONT_HEADING = new Font("Segoe UI", Font.BOLD, 22);
+	public static final Font FONT_SUBHEADING = new Font("Segoe UI", Font.BOLD, 18);
+	public static final Font FONT_BUTTON = new Font("Segoe UI", Font.BOLD, 16);
+	public static final Font FONT_REGULAR = new Font("Segoe UI", Font.PLAIN, 16);
+	public static final Font FONT_INPUT = new Font("Segoe UI", Font.PLAIN, 16);
+	public static final Font FONT_CAPTION = new Font("Segoe UI", Font.PLAIN, 14);
+	public static final Font FONT_SMALL = new Font("Segoe UI", Font.PLAIN, 12);
 	
-	// === ENHANCED BORDERS ===
+	// Alternative fonts for better VNC compatibility
+	public static final Font FONT_TITLE_ALT = new Font("SansSerif", Font.BOLD, 36);
+	public static final Font FONT_SUBTITLE_ALT = new Font("SansSerif", Font.BOLD, 28);
+	public static final Font FONT_HEADING_ALT = new Font("SansSerif", Font.BOLD, 22);
+	public static final Font FONT_SUBHEADING_ALT = new Font("SansSerif", Font.BOLD, 18);
+	public static final Font FONT_BUTTON_ALT = new Font("SansSerif", Font.BOLD, 16);
+	public static final Font FONT_REGULAR_ALT = new Font("SansSerif", Font.PLAIN, 16);
+	public static final Font FONT_INPUT_ALT = new Font("SansSerif", Font.PLAIN, 16);
+	
+	// Method to get best available font
+	public static Font getBestFont(Font primary, Font fallback) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		String[] fontNames = ge.getAvailableFontFamilyNames();
+		for (String fontName : fontNames) {
+			if (fontName.equals(primary.getFontName())) {
+				return primary;
+			}
+		}
+		return fallback;
+	}
+	
+	// === ENHANCED BORDERS (Modern Design) ===
 	public static Border getInputBorder() {
 		return new CompoundBorder(
-			new LineBorder(getInputBorderColor(), 1),
-			new EmptyBorder(8, 12, 8, 12)
+			new LineBorder(getInputBorderColor(), 2),
+			new EmptyBorder(10, 14, 10, 14)
 		);
 	}
 	
 	public static Border getInputFocusBorder() {
 		return new CompoundBorder(
-			new LineBorder(getInputFocusBorderColor(), 2),
-			new EmptyBorder(7, 11, 7, 11)
+			new LineBorder(getInputFocusBorderColor(), 3),
+			new EmptyBorder(9, 13, 9, 13)
 		);
 	}
 	
 	public static Border getCardBorder() {
 		return new CompoundBorder(
-			new LineBorder(new Color(222, 226, 230), 1),
-			new EmptyBorder(16, 16, 16, 16)
+			new LineBorder(new Color(229, 231, 235), 1),
+			new EmptyBorder(20, 20, 20, 20)
 		);
 	}
 	
 	public static Border getRoundedBorder() {
-		return new EmptyBorder(8, 16, 8, 16);
+		return new EmptyBorder(12, 20, 12, 20);
+	}
+	
+	public static Border getModernCardBorder() {
+		return new CompoundBorder(
+			new LineBorder(new Color(229, 231, 235), 1),
+			new EmptyBorder(24, 24, 24, 24)
+		);
+	}
+	
+	public static Border getElevatedBorder() {
+		return new CompoundBorder(
+			new LineBorder(getCardShadowColor(), 2),
+			new EmptyBorder(16, 20, 20, 20)
+		);
 	}
 	
 	// === THEME SWITCHING ===
@@ -276,8 +364,48 @@ public class Theme {
 				return "Warm Orange";
 			case CLASSIC_GRAY:
 				return "Classic Gray";
+			case ULTRA_MODERN:
+				return "Ultra Modern";
+			case MIDNIGHT_BLUE:
+				return "Midnight Blue";
+			case CHERRY_BLOSSOM:
+				return "Cherry Blossom";
 			default:
 				return "Professional Blue";
 		}
+	}
+	
+	// === MODERN GRADIENT COLORS ===
+	public static Color[] getPrimaryGradient() {
+		Color primary = getPrimaryColor();
+		Color lighter = new Color(
+			Math.min(255, primary.getRed() + 30),
+			Math.min(255, primary.getGreen() + 30),
+			Math.min(255, primary.getBlue() + 30)
+		);
+		return new Color[]{primary, lighter};
+	}
+	
+	public static Color getHoverOverlayColor() {
+		return new Color(255, 255, 255, 20);
+	}
+	
+	public static Color getPressedOverlayColor() {
+		return new Color(0, 0, 0, 20);
+	}
+	
+	// === VNC SPECIFIC OPTIMIZATIONS ===
+	public static boolean isHighContrastMode() {
+		return currentTheme == ThemeVariant.MODERN_DARK || 
+			   currentTheme == ThemeVariant.MIDNIGHT_BLUE;
+	}
+	
+	public static Color getOptimalTextColor() {
+		return isHighContrastMode() ? getWhiteColor() : getTextColor();
+	}
+	
+	public static int getOptimalFontSize(int baseSize) {
+		// Increase font size slightly for better VNC readability
+		return baseSize + 2;
 	}
 }
