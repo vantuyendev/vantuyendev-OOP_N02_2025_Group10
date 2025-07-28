@@ -1,437 +1,291 @@
-# 🏪 Shop Management System - Spring Boot
+# 🏪 Hệ Thống Quản Lý Cửa Hàng - Ứng Dụng Desktop
 
-Modern Spring Boot web application for managing shop operations with MySQL database, REST APIs, and responsive web interface.
+Ứng dụng Spring Boot desktop hiện đại để quản lý hoạt động cửa hàng với cơ sở dữ liệu MySQL, giao diện Swing và các tính năng quản lý kinh doanh toàn diện.
 
 ![Java](https://img.shields.io/badge/Java-11+-orange.svg)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)
+![Swing](https://img.shields.io/badge/GUI-Swing-blue.svg)
+![FlatLaf](https://img.shields.io/badge/Theme-FlatLaf-purple.svg)
 ![Status](https://img.shields.io/badge/Status-Working-green.svg)
 
-## 🚀 Quick Start
+## 🚀 Bắt Đầu Nhanh
 
-### Prerequisites
-- Java 11 or higher
+### Yêu Cầu Hệ Thống
+
+- Java 11 trở lên
 - MySQL 8.0+
 - Maven 3.6+
 
-### Running the Application
+### Chạy Ứng Dụng Desktop
 
-#### Method 1: Maven (Recommended)
+#### Phương Pháp 1: Maven (Khuyến Nghị)
+
 ```bash
-# Clean and compile
+# Khởi động dịch vụ MySQL
+sudo service mysql start
+
+# Tạo cơ sở dữ liệu và import dữ liệu mẫu
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS shopmanagement;"
+mysql -u root shopmanagement < sql/shopmanagement.sql
+
+# Dọn dẹp và biên dịch
 mvn clean compile
 
-# Run the application
+# Chạy ứng dụng desktop
 mvn spring-boot:run
 ```
 
-#### Method 2: VS Code Tasks
-1. Press `Ctrl+Shift+P`
-2. Type "Tasks: Run Task"  
-3. Select "Build Spring Boot App" or "Run Spring Boot App"
+#### Phương Pháp 2: VS Code Tasks
 
-#### Method 3: JAR file
+1. Nhấn `Ctrl+Shift+P`
+2. Gõ "Tasks: Run Task"  
+3. Chọn "Build Spring Boot App" hoặc "Run Spring Boot App"
+
+#### Phương Pháp 3: File JAR
+
 ```bash
-# Build JAR
+# Build file JAR
 mvn clean package
 
-# Run JAR
+# Chạy file JAR
 java -jar target/shop-management-system-1.0.0.jar
 ```
 
-### Access the Application
-- **Web Interface**: http://localhost:8080
-- **REST API**: http://localhost:8080/api
-- **API Documentation**: http://localhost:8080/swagger-ui.html (if configured)
-make run      # Run app only
-make help     # Show all commands
-```
+### Tính Năng Ứng Dụng
 
-## 🖥️ GUI Access
+- **Giao Diện Desktop**: Swing hiện đại với chủ đề FlatLaf
+- **Quản Lý Người Dùng**: Xác thực nhân viên và khách hàng
+- **Quản Lý Sản Phẩm**: Các thao tác CRUD cho kho hàng
+- **Hỗ Trợ Chủ Đề**: Nhiều màu sắc và giao diện hiện đại
+- **Tích Hợp Cơ Sở Dữ Liệu**: Đồng bộ MySQL thời gian thực
 
-After running setup, access the GUI via VNC:
+## 🔐 Thông Tin Đăng Nhập
 
-### 🌐 Web Access (GitHub Codespaces):
-- **Primary**: Port 6080 (VS Code PORTS tab)
-- **Backup**: Port 8080, 3000 
-- **URLs**: Auto-generated based on your Codespace
+### Tài Khoản Mặc Định
 
-### 🖱️ Local Access:
-- `http://localhost:6080/vnc.html`
-- `http://localhost:8080/vnc.html`
-- `http://localhost:3000/vnc.html`
+| Vai Trò | Tên Đăng Nhập | Mật Khẩu | Mô Tả |
+|---------|---------------|----------|-------|
+| **Quản Trị** | `admin` | `123456` | Quản trị hệ thống với quyền truy cập đầy đủ |
+| **Quản Lý** | `e001` | `123456` | Quản lý bán hàng với quyền quản lý nhân viên |
+| **Thu Ngân** | `e002` | `123456` | Nhân viên bán hàng với các thao tác cơ bản |
+| **Khách Hàng** | `c001` | `123456` | Khách hàng thành viên bạc |
+| **Khách Hàng** | `c002` | `123456` | Khách hàng thành viên vàng |
 
-## 🔐 Login Credentials
+## 📊 Quản Lý Cơ Sở Dữ Liệu
 
-### Employees:
-| Role | Username | Password | Description |
-|------|----------|----------|-------------|
-| Manager | `e001` | `123456` | Full access to all features |
-| Cashier | `e002` | `123456` | Sales and basic operations |
+### Cấu Hình Cơ Sở Dữ Liệu
 
-### Customers:
-| Type | Username | Password | Membership |
-|------|----------|----------|------------|
-| Customer 1 | `c001` | `123456` | Silver |
-| Customer 2 | `c002` | `123456` | Gold |
-
-## 📊 Database Management
-
-### SQLTools Integration:
-- **Extension**: SQLTools with MySQL driver installed
-- **Connection**: "Shop Management DB" (auto-configured)
-- **Access**: SQLTools sidebar → Connect → Browse tables
-
-### MySQL Database Client:
-- **Extension**: MySQL Database Client installed  
-- **Connection**: "Shop Management MySQL" (auto-configured)
-- **Features**: Visual data browsing, query execution, schema designer
-
-### Database Details:
 - **Host**: localhost:3306
-- **Database**: `shopmanagement`
-- **User**: `root` (no password)
-- **Tables**: `users`, `employees`, `customers`, `products`
+- **Cơ sở dữ liệu**: `shopmanagement`
+- **Người dùng**: `root` (không có mật khẩu)
+- **Bảng**: `users`, `employees`, `customers`, `products`
 
-## 📂 Project Structure
+### Thiết Lập Cơ Sở Dữ Liệu
 
+```bash
+# Khởi động dịch vụ MySQL
+sudo service mysql start
+
+# Tạo cơ sở dữ liệu
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS shopmanagement;"
+
+# Import dữ liệu mẫu
+mysql -u root shopmanagement < sql/shopmanagement.sql
 ```
+
+## 📂 Cấu Trúc Dự Án
+
+```text
 shop-management-system/
-├── src/main/java/com/shopmanagement/     # Java source code
-│   ├── Start.java                        # Main application entry
-│   ├── activity/                         # UI Activities (Login, Dashboard, etc.)
-│   ├── model/                           # Data models (User, Product, etc.)
-│   ├── util/                            # Utilities (Database, Theme)
-│   └── test/                            # Test utilities
-├── build/classes/                        # Compiled Java classes
-├── lib/                                 # Dependencies (MySQL connector)
-├── sql/                                 # Database scripts and test queries
-├── scripts/                             # Shell scripts for setup/management
-├── .vscode/                             # VS Code configuration
-│   ├── settings.json                    # SQLTools and extensions config
-│   ├── tasks.json                       # Build and run tasks
-│   └── database-client.json             # Database client connections
-├── DATABASE_CONNECTIONS.md              # Database setup guide
-├── PROJECT_STATUS_REPORT.md             # Latest project status
-├── Makefile                             # Build automation
-├── run.sh                               # Enhanced run script
-└── pom.xml                              # Maven configuration
+├── src/main/java/com/shopmanagement/     # Mã nguồn Java
+│   ├── Start.java                        # Điểm khởi động ứng dụng Spring Boot
+│   ├── activity/                         # Các Activity giao diện Swing
+│   │   ├── LoginActivity.java           # Màn hình xác thực người dùng
+│   │   ├── DashboardActivity.java       # Giao diện dashboard chính
+│   │   ├── ManageEmployee.java          # Giao diện quản lý nhân viên
+│   │   ├── ManageProduct.java           # Giao diện quản lý sản phẩm
+│   │   ├── ManageCustomer.java          # Giao diện quản lý khách hàng
+│   │   └── ThemeSettingsActivity.java   # Giao diện tùy chỉnh chủ đề
+│   ├── entity/                          # Các lớp Entity JPA
+│   │   ├── Employee.java                # Entity cơ sở dữ liệu nhân viên
+│   │   ├── Customer.java                # Entity cơ sở dữ liệu khách hàng
+│   │   ├── Product.java                 # Entity cơ sở dữ liệu sản phẩm
+│   │   └── Login.java                   # Entity xác thực người dùng
+│   ├── model/                           # Các mô hình dữ liệu và DTO
+│   │   ├── User.java                    # Lớp mô hình người dùng
+│   │   ├── Employee.java                # Mô hình nhân viên
+│   │   ├── Customer.java                # Mô hình khách hàng
+│   │   └── Product.java                 # Mô hình sản phẩm
+│   ├── repository/                      # Các repository Spring Data JPA
+│   │   ├── EmployeeRepository.java      # Truy cập dữ liệu nhân viên
+│   │   ├── CustomerRepository.java      # Truy cập dữ liệu khách hàng
+│   │   ├── ProductRepository.java       # Truy cập dữ liệu sản phẩm
+│   │   └── LoginRepository.java         # Truy cập dữ liệu xác thực
+│   ├── service/                         # Các dịch vụ logic nghiệp vụ
+│   │   ├── EmployeeService.java         # Logic nghiệp vụ nhân viên
+│   │   ├── CustomerService.java         # Logic nghiệp vụ khách hàng
+│   │   ├── ProductService.java          # Logic nghiệp vụ sản phẩm
+│   │   └── LoginService.java            # Dịch vụ xác thực
+│   ├── config/                          # Các lớp cấu hình
+│   │   └── DesktopConfiguration.java    # Cấu hình ứng dụng desktop
+│   └── util/                            # Các lớp tiện ích
+│       ├── Database.java                # Tiện ích kết nối cơ sở dữ liệu
+│       ├── DesktopUtils.java            # Tiện ích giao diện desktop
+│       └── ModernCard.java              # Các thành phần UI tùy chỉnh
+├── src/main/resources/                   # Tài nguyên ứng dụng
+│   └── application.properties           # Cấu hình Spring Boot
+├── sql/                                 # Các script cơ sở dữ liệu
+│   ├── shopmanagement.sql              # Schema cơ sở dữ liệu và dữ liệu mẫu
+│   └── test_connection.sql             # Test kết nối cơ sở dữ liệu
+├── target/classes/                      # Các lớp Java đã biên dịch
+├── pom.xml                              # Cấu hình Maven
+└── README.md                            # Tài liệu này
 ```
 
-## 🛠️ Available Commands
+## 🛠️ Các Lệnh Có Sẵn
 
-### Run Script Commands:
+### Lệnh Maven
+
 ```bash
-./run.sh setup     # Complete setup: VNC + Build + Run  
-./run.sh build     # Build application only
-./run.sh run       # Run application only (requires build)
-./run.sh app       # Build and run application
-./run.sh vnc       # Start VNC servers only
-./run.sh check     # Check all services status
-./run.sh mysql     # Check and start MySQL service
-./run.sh status    # Show running processes
-./run.sh stop      # Stop Java application
-./run.sh cleanup   # Stop all services and clean up
-./run.sh clean     # Clean build directory
-./run.sh urls      # Show access URLs
-./run.sh help      # Show help
+# Build ứng dụng
+mvn clean compile
+
+# Chạy ứng dụng desktop
+mvn spring-boot:run
+
+# Đóng gói thành file JAR
+mvn clean package
+
+# Chạy test
+mvn test
 ```
 
-### Make Commands:
+### VS Code Tasks
+
+- **Build Spring Boot App**: Biên dịch mã nguồn
+- **Run Spring Boot App**: Khởi chạy ứng dụng desktop
+- **Test Spring Boot App**: Chạy unit test
+- **Package Spring Boot App**: Tạo file JAR
+- **Clean Spring Boot App**: Dọn dẹp file build
+
+## 🎯 Tính Năng
+
+### Khả Năng Ứng Dụng
+
+**Dành Cho Quản Lý:**
+
+- ✅ Quản lý nhân viên đầy đủ (thêm, sửa, xóa, xem)
+- ✅ Quản lý khách hàng và theo dõi thành viên
+- ✅ Quản lý catalog sản phẩm hoàn chỉnh
+- ✅ Báo cáo bán hàng và phân tích
+- ✅ Quản trị hệ thống
+
+**Dành Cho Nhân Viên (Thu Ngân):**
+
+- ✅ Bán hàng và thanh toán sản phẩm
+- ✅ Tra cứu và xác minh khách hàng
+- ✅ Xem kho hàng cơ bản
+- ✅ Xử lý giao dịch
+
+**Dành Cho Khách Hàng:**
+
+- ✅ Duyệt và tìm kiếm sản phẩm
+- ✅ Xem lịch sử mua hàng
+- ✅ Quản lý hồ sơ
+- ✅ Theo dõi lợi ích thành viên
+
+**Tính Năng Hệ Thống:**
+
+- ✅ Hệ thống xác thực đa người dùng
+- ✅ Giao diện Swing hiện đại với chủ đề FlatLaf
+- ✅ Đồng bộ cơ sở dữ liệu thời gian thực
+- ✅ Dependency injection Spring Boot
+- ✅ Xử lý lỗi toàn diện
+
+## 🧪 Kiểm Thử
+
+### Kiểm Thử Kết Nối Cơ Sở Dữ Liệu
+
 ```bash
-make help       # Show all commands
-make setup      # Setup environment and run app
-make run        # Run app only (after build)
-make build      # Compile Java code
-make clean      # Clean build directory
-make check      # Check services status
-make stop       # Stop all services
-make vnc        # Start VNC servers
+# Test kết nối MySQL
+mysql -u root -e "SELECT 'Kết nối cơ sở dữ liệu thành công' as Status;"
+
+# Test cơ sở dữ liệu ứng dụng
+mysql -u root shopmanagement -e "SHOW TABLES;"
 ```
 
-### VS Code Tasks:
-- **Build Java Shop Management App**: Compile source code
-- **Run Java Shop Management App**: Launch application
-- **Clean and Run**: Kill existing processes and restart
+### Kiểm Thử Ứng Dụng
 
-## 🎯 Features
+1. **Kiểm Thử Đăng Nhập**: Test tất cả vai trò người dùng với thông tin đăng nhập được cung cấp
+2. **Thao Tác CRUD**: Test tạo, đọc, cập nhật, xóa cho tất cả các entity
+3. **Tính Toàn Vẹn Cơ Sở Dữ Liệu**: Xác minh các ràng buộc khóa ngoại và tính nhất quán dữ liệu
+4. **Chức Năng GUI**: Test tất cả các thành phần UI và tương tác người dùng
 
-### For Managers:
-- ✅ Full employee management (add, edit, delete, view)
-- ✅ Customer management and membership tracking
-- ✅ Complete product catalog management
-- ✅ Sales reporting and analytics
-- ✅ System administration
+## 🔧 Môi Trường Phát Triển
 
-### For Employees (Cashier):
-- ✅ Product sales and checkout
-- ✅ Customer lookup and verification
-- ✅ Basic inventory viewing
-- ✅ Transaction processing
+### Yêu Cầu Môi Trường Phát Triển
 
-### For Customers:
-- ✅ Product browsing and search
-- ✅ Purchase history viewing
-- ✅ Profile management
-- ✅ Membership benefits tracking
+- **Java**: 11+ (Khuyến nghị OpenJDK)
+- **MySQL**: 8.0+
+- **Hệ điều hành**: Linux (Ubuntu 20.04+), Windows, macOS
+- **Bộ nhớ**: Khuyến nghị 2GB+ RAM
 
-### System Features:
-- ✅ Multi-user authentication system
-- ✅ Theme customization (multiple color schemes)
-- ✅ Real-time database synchronization
-- ✅ VNC remote access support
-- ✅ Comprehensive error handling
+### Cấu Hình IDE
 
-## 🧪 Testing
+- **VS Code** với Java Extension Pack
+- **Spring Boot** extension để phát triển nâng cao
+- **MySQL** tools để quản lý cơ sở dữ liệu
 
-### Test Database Connection:
+## 🚨 Khắc Phục Sự Cố
+
+### Các Vấn Đề Thường Gặp
+
+#### Kết Nối Cơ Sở Dữ Liệu Thất Bại
+
+- ✅ Khởi động MySQL: `sudo service mysql start`
+- ✅ Kiểm tra cơ sở dữ liệu tồn tại: `mysql -u root -e "SHOW DATABASES;"`
+- ✅ Tạo lại cơ sở dữ liệu: `mysql -u root shopmanagement < sql/shopmanagement.sql`
+
+#### Java ClassNotFoundException
+
+- ✅ Build lại ứng dụng: `mvn clean compile`
+- ✅ Kiểm tra dependencies Maven: `mvn dependency:tree`
+- ✅ Xác minh phiên bản Java: `java -version`
+
+#### GUI Không Hiển Thị
+
+- ✅ Kiểm tra log Spring Boot để tìm lỗi
+- ✅ Xác minh dependency FlatLaf trong pom.xml
+- ✅ Đảm bảo Java được cấu hình cho ứng dụng desktop
+
+### Lệnh Debug
+
 ```bash
-# Run connection test
-java -cp "build/classes:lib/mysql-connector-j-8.0.33.jar" com.shopmanagement.test.TestConnection
+# Kiểm tra trạng thái MySQL
+sudo service mysql status
 
-# Test with SQL file
-mysql -u root shopmanagement < sql/test_connection.sql
+# Xem log ứng dụng
+mvn spring-boot:run
+
+# Test kết nối cơ sở dữ liệu
+mysql -u root shopmanagement -e "SELECT COUNT(*) FROM users;"
 ```
 
-### Manual Testing:
-1. **Login Testing**: Test all user roles with provided credentials
-2. **CRUD Operations**: Test create, read, update, delete for all entities
-3. **Database Integrity**: Verify foreign key constraints and data consistency
-4. **GUI Responsiveness**: Test all UI components and interactions
+## 📚 Tài Liệu
 
-## 🔧 Development Environment
+### Các File Tài Liệu Cốt Lõi
 
-### Requirements:
-- **Java**: 11+ (OpenJDK recommended)
-- **MySQL**: 8.0+ 
-- **OS**: Linux (Ubuntu 20.04+), Windows, macOS
-- **Memory**: 2GB+ RAM recommended
+- `README.md` - Hướng dẫn toàn diện (tiếng Anh)
+- `README_VI.md` - Hướng dẫn này (tiếng Việt)
+- `pom.xml` - Cấu hình dự án Maven
+- `sql/shopmanagement.sql` - Schema cơ sở dữ liệu và dữ liệu mẫu
+- `sql/test_connection.sql` - Các truy vấn test kết nối cơ sở dữ liệu
 
-### IDE Setup:
-- **VS Code** with Java Extension Pack
-- **SQLTools** with MySQL driver for database management
-- **MySQL Database Client** for visual database operations
+### Công Nghệ Sử Dụng
 
-### Extensions Installed:
-- `redhat.java` - Java language support
-- `mtxr.sqltools` - SQL database management
-- `mtxr.sqltools-driver-mysql` - MySQL driver for SQLTools
-- `cweijan.vscode-mysql-client2` - Advanced MySQL client
-
-## 🚨 Troubleshooting
-
-### Common Issues:
-
-#### 1. "Page not working" error:
-- ✅ Use VS Code PORTS tab instead of direct URLs
-- ✅ Check if VNC services are running: `./run.sh check`
-- ✅ Restart VNC services: `./run.sh vnc`
-
-#### 2. Java ClassNotFoundException:
-- ✅ Rebuild application: `./run.sh build`
-- ✅ Check MySQL connector: `ls -la lib/`
-- ✅ Verify classpath in tasks.json
-
-#### 3. Database connection failed:
-- ✅ Start MySQL: `sudo service mysql start`
-- ✅ Check database exists: `mysql -u root -e "SHOW DATABASES;"`
-- ✅ Recreate database: `mysql -u root shopmanagement < sql/shopmanagement.sql`
-
-#### 4. GUI not displaying:
-- ✅ Check DISPLAY variable: `echo $DISPLAY`
-- ✅ Verify Xvfb running: `ps aux | grep Xvfb`
-- ✅ Restart VNC: `./run.sh cleanup && ./run.sh vnc`
-
-### Debug Commands:
-```bash
-# Check all services
-./run.sh status
-
-# View process details
-ps aux | grep -E "(java|vnc|mysql)"
-
-# Check ports
-netstat -tlnp | grep -E ":(3306|5900|5901|6080|8080|3000)"
-
-# View application logs
-tail -f /var/log/mysql/error.log
-```
-
-## 📚 Documentation Files
-
-- `DATABASE_CONNECTIONS.md` - Database setup and connection guide
-- `PROJECT_STATUS_REPORT.md` - Latest project status and fixes
-- `HUONG_DAN_CHAY_PROJECT.md` - Vietnamese setup guide
-- `docs/README.md` - **UML & Activity Diagrams Documentation**
-- `docs/diagrams/class-diagram.puml` - **UML Class Diagram**
-- `docs/activity-diagrams/` - **5 Activity Diagrams**
-- `sql/test_connection.sql` - Database test queries
-
-## 📊 UML & Activity Diagrams
-
-### 🏗️ UML Class Diagram
-Comprehensive class diagram showing:
-- **Model Package**: User (abstract), Employee, Customer, Product
-- **Utility Package**: Database, Theme, ThemeManager with enums
-- **Activity Package**: All UI components and activities
-- **Test Package**: TestConnection, TestLogin
-- **Relationships**: Inheritance, Composition, Association, Dependencies
-
-### 🔄 Activity Diagrams (5 Diagrams)
-1. **Login Process** - User authentication and role-based navigation
-2. **Product Management (CRUD)** - Complete product lifecycle management
-3. **Employee Management** - Manager-only employee administration
-4. **Customer Product Browsing** - Customer interaction and purchase history
-5. **Theme Management System** - Real-time UI theme switching
-
-### 🎨 Design Patterns Implemented
-- **MVC Pattern**: Clear separation of Model, View, Controller
-- **Observer Pattern**: Theme management with real-time updates
-- **Factory Pattern**: User object creation based on role
-- **Singleton Pattern**: Database connection management
-- **Strategy Pattern**: Multiple search strategies
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/new-feature`
-3. Commit changes: `git commit -am 'Add new feature'`
-4. Push to branch: `git push origin feature/new-feature`
-5. Submit pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-## 📞 Support
-
-If you encounter issues:
-1. Check `PROJECT_STATUS_REPORT.md` for latest fixes
-2. Run `./run.sh check` to diagnose problems
-3. Use VS Code PORTS tab for GUI access
-4. Consult troubleshooting section above
-5. **View UML & Activity Diagrams in `docs/` folder**
-
-## 📊 **UML & Activity Diagrams Added!**
-
-### 🎉 **New Documentation**
-- **📋 Complete UML Class Diagram**: Shows all classes, relationships, and architecture
-- **🔄 5 Activity Diagrams**: Detailed workflows for all major system processes
-- **📁 Location**: `docs/` folder with comprehensive documentation
-
-### 🚀 **What's Included**
-✅ **UML Class Diagram** - Complete system architecture  
-✅ **Login Process** - Authentication and role-based navigation  
-✅ **Product Management** - Full CRUD operations workflow  
-✅ **Employee Management** - Manager-only administration flows  
-✅ **Customer Browsing** - Product browsing and purchase history  
-✅ **Theme Management** - Real-time UI theme switching system  
-
-### 📖 **How to View**
-1. **Install PlantUML extension** in VS Code
-2. **Open `.puml` files** in `docs/diagrams/` and `docs/activity-diagrams/`
-3. **Use Preview** to see rendered diagrams
-4. **Read `docs/README.md`** for complete documentation
-
-**Happy coding! 🚀**
-  - Customer: `c001`, `c002`, `c003`, `c004`
-
-### **2. Product ID (productId):**
-
-- **Định dạng:** Integer 5 chữ số với zero-fill (00001, 00002, ...)
-- **Mục đích:** ID duy nhất cho từng sản phẩm
-- **Tính năng:** Auto-increment, tự động tăng khi thêm sản phẩm mới
-- **Cách sử dụng:**
-  - Khóa chính trong bảng `product`
-  - Khóa ngoại trong bảng `purchaseinfo`
-- **Ví dụ:** `00001` (Laptop Dell XPS 13), `00002` (Smartphone iPhone 15)
-
-### **3. Purchase ID (purchaseId):**
-
-- **Định dạng:** Integer 5 chữ số với zero-fill (00001, 00002, ...)
-- **Mục đích:** ID duy nhất cho từng giao dịch mua hàng
-- **Tính năng:** Auto-increment, tự động tăng khi có giao dịch mới
-- **Cách sử dụng:**
-  - Khóa chính trong bảng `purchaseinfo`
-  - Liên kết thông tin: khách hàng, sản phẩm, số lượng, giá, ngày mua
-- **Ví dụ:** `00001`, `00002`, `00003`
-
-### **4. Status Code:**
-
-- **Định dạng:** Integer (0 hoặc 1)
-- **Mục đích:** Phân biệt loại tài khoản
-- **Giá trị:**
-  - `0`: Employee (Nhân viên/Manager)
-  - `1`: Customer (Khách hàng)
-- **Cách sử dụng:** Xác định quyền truy cập và giao diện phù hợp
-
-### **5. Theme ID:**
-
-- **Mục đích:** Quản lý các chủ đề giao diện
-- **Cách sử dụng:** Trong `Theme.java` và `ThemeManager.java` để thay đổi màu sắc
-
-### **6. Database Configuration:**
-
-- **Database Name:** `f1`
-- **Host:** `localhost:3306`
-- **User:** `root`
-- **Password:** (trống)
-- **Connection URI:** `jdbc:mysql://localhost:3306/f1`
-
-### **7. Employee Roles (vai trò nhân viên):**
-
-- **Định dạng:** String enum
-- **Các giá trị:**
-  - `"General"`: Nhân viên thường
-  - `"Manager"`: Quản lý
-- **Cách sử dụng:** Phân quyền trong hệ thống, xác định chức năng được phép truy cập
-
-### **8. Theme Variants (biến thể giao diện):**
-
-- **Enum:** `ThemeVariant`
-- **Các giá trị:**
-  - `PROFESSIONAL_BLUE`: Giao diện xanh chuyên nghiệp
-  - `MODERN_DARK`: Giao diện tối hiện đại
-  - `ELEGANT_PURPLE`: Giao diện tím thanh lịch
-  - `FRESH_GREEN`: Giao diện xanh tươi mát
-  - `WARM_ORANGE`: Giao diện cam ấm áp
-  - `CLASSIC_GRAY`: Giao diện xám cổ điển
-
-### **9. Button Styles (kiểu nút):**
-
-- **Enum:** `ButtonStyle`
-- **Các giá trị:** `PRIMARY`, `SECONDARY`, `SUCCESS`, `DANGER`, `WARNING`, `INFO`, `OUTLINE`
-
-### **10. UI Constants (hằng số giao diện):**
-
-- **Kích thước cửa sổ:** 900x700 pixels
-- **Kích thước nút chính:** 120x35 pixels
-- **Kích thước nút phụ:** 100x35 pixels
-- **Chiều cao input:** 30 pixels
-- **Padding panel:** 20 pixels
-- **Khoảng cách components:** 15 pixels
-
-### **11. Font System (hệ thống font):**
-
-- **Font chính:** Segoe UI
-- **Các kích thước:**
-  - Title: 32px (Bold)
-  - Subtitle: 24px (Bold)
-  - Heading: 20px (Bold)
-  - Subheading: 16px (Bold)
-  - Button/Regular: 14px
-  - Caption: 12px
-  - Small: 10px
-
-### **12. Column Names (tên cột bảng):**
-
-- **Customer Table:** `{"CustomerID", "CustomerName", "PhoneNumber", "Address"}`
-- **Employee Table:** `{"EmployeeID", "EmployeeName", "PhoneNumber", "Role", "Salary"}`
-- **Product Table:** `{"PID", "Name", "Price", "AvailableQuantity"}`
-- **Purchase History:** `{"PurchaseID", "ProductID", "ProductName", "Amount", "Cost", "Date"}`
-
-
-
-
+- **Backend**: Spring Boot 2.7.18 với Spring Data JPA
+- **Cơ sở dữ liệu**: MySQL 8.0+ với schema tự động tạo
+- **GUI**: Java Swing với chủ đề FlatLaf hiện đại
+- **Công cụ Build**: Maven 3.6+ để quản lý dependency
+- **Kiến trúc**: Mô hình MVC với thiết kế phân lớp
