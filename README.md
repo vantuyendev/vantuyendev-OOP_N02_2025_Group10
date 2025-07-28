@@ -1,33 +1,48 @@
-# 🏪 Shop Management System
+# 🏪 Shop Management System - Spring Boot
 
-Modern Java Swing application for managing shop operations with MySQL database, VNC display support, and comprehensive database tools.
+Modern Spring Boot web application for managing shop operations with MySQL database, REST APIs, and responsive web interface.
 
 ![Java](https://img.shields.io/badge/Java-11+-orange.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)
 ![Status](https://img.shields.io/badge/Status-Working-green.svg)
 
 ## 🚀 Quick Start
 
-### Method 1: Enhanced Run Script (Recommended)
+### Prerequisites
+- Java 11 or higher
+- MySQL 8.0+
+- Maven 3.6+
+
+### Running the Application
+
+#### Method 1: Maven (Recommended)
 ```bash
-# Complete setup and run
-./run.sh setup
+# Clean and compile
+mvn clean compile
 
-# Or just run the app (if already built)
-./run.sh app
-
-# Show help for all commands
-./run.sh help
+# Run the application
+mvn spring-boot:run
 ```
 
-### Method 2: VS Code Tasks
+#### Method 2: VS Code Tasks
 1. Press `Ctrl+Shift+P`
-2. Type "Tasks: Run Task"
-3. Select "Run Java Shop Management App"
+2. Type "Tasks: Run Task"  
+3. Select "Build Spring Boot App" or "Run Spring Boot App"
 
-### Method 3: Make Commands
+#### Method 3: JAR file
 ```bash
-make setup    # Complete setup
+# Build JAR
+mvn clean package
+
+# Run JAR
+java -jar target/shop-management-system-1.0.0.jar
+```
+
+### Access the Application
+- **Web Interface**: http://localhost:8080
+- **REST API**: http://localhost:8080/api
+- **API Documentation**: http://localhost:8080/swagger-ui.html (if configured)
 make run      # Run app only
 make help     # Show all commands
 ```

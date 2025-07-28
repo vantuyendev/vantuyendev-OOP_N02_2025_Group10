@@ -1,45 +1,40 @@
 package com.shopmanagement;
 
-import java.lang.*;
-import javax.swing.*;
-import com.shopmanagement.activity.*;
-import com.shopmanagement.util.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Main class khởi tạo ứng dụng quản lý cửa hàng
- * Class này chứa phương thức main để khởi chạy ứng dụng với giao diện hiện đại
+ * Main Spring Boot Application class
+ * Khởi tạo ứng dụng web quản lý cửa hàng với Spring Boot
  */
+@SpringBootApplication
 public class Start {
-	/**
-	 * Phương thức main - điểm khởi đầu của ứng dụng
-	 * Khởi tạo Look and Feel hiện đại và hiển thị splash screen
-	 */
-	public static void main(String args[]) {
-		// Set modern Look and Feel for better VNC experience
-		try {
-			// Try to set system look and feel for better integration
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			
-			// Configure for better VNC rendering
-			System.setProperty("awt.useSystemAAFontSettings", "on");
-			System.setProperty("swing.aatext", "true");
-			System.setProperty("sun.java2d.xrender", "true");
-			
-		} catch (Exception e) {
-			// Fallback to default if system LAF fails
-			try {
-				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-			} catch (Exception ex) {
-				// Use default LAF
-			}
-		}
-		
-		// Set default theme to Ultra Modern for better VNC experience
-		Theme.setTheme(Theme.ThemeVariant.ULTRA_MODERN);
-		
-		// Launch application with splash screen
-		SwingUtilities.invokeLater(() -> {
-			new SplashScreen().setVisible(true);
-		});
-	}
+
+    /**
+     * Phương thức main - điểm khởi đầu của Spring Boot application
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        System.out.println("Starting Shop Management System with Spring Boot...");
+        SpringApplication.run(Start.class, args);
+    }
+
+    /**
+     * CORS Configuration để cho phép các request từ frontend
+     */
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*");
+            }
+        };
+    }
 }
