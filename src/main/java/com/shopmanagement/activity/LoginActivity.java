@@ -1,253 +1,128 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.border.*;
-import java.awt.event.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import com.shopmanagement.model.User;
+import com.shopmanagement.util.DesktopUtils;
+import com.shopmanagement.Start;
+import org.springframework.stereotype.Component;
 
 /**
- * LoginActivity - Giao diện đăng nhập của hệ thống
- * Xử lý việc đăng nhập cho khách hàng và nhân viên
+ * LoginActivity - Simple login interface for desktop application
  */
+@Component
 public class LoginActivity extends JFrame implements ActionListener {
-	// Các components của giao diện
-	private JPanel mainPanel, headerPanel, formPanel, buttonPanel;
-	private JButton buttonExit, buttonLogin, buttonSignup, buttonThemeSettings;
-	private JLabel titleLabel, usernameLabel, passwordLabel, logoLabel;
-	private JTextField usernameTF;
-	private JPasswordField passwordF;
-	
-	/**
-	 * Constructor khởi tạo giao diện đăng nhập với thiết kế hiện đại
-	 */
-	public LoginActivity() {
-		super("Shop Management System - Login");
-		initializeComponents();
-		layoutComponents();
-		setupEventHandlers();
-		
-		// Register with theme manager
-		ThemeManager.registerFrame(this);
-		
-		this.setSize(Theme.GUI_WIDTH, Theme.GUI_HEIGHT);
-		this.setResizable(false);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		
-		// Set modern window properties
-		this.setTitle("Shop Management System - VNC Optimized");
-		
-		// Add window icon if available
-		try {
-			// This would set a custom icon - placeholder for now
-			// setIconImage(icon);
-		} catch (Exception e) {
-			// Ignore if icon not available
-		}
-	}
-	
-	private void initializeComponents() {
-		// Main panel
-		mainPanel = new JPanel(new BorderLayout());
-		ThemeManager.stylePanel(mainPanel, ThemeManager.PanelStyle.MAIN);
-		
-		// Header panel
-		headerPanel = new JPanel(new BorderLayout());
-		ThemeManager.stylePanel(headerPanel, ThemeManager.PanelStyle.HEADER);
-		headerPanel.setPreferredSize(new Dimension(Theme.GUI_WIDTH, Theme.HEADER_HEIGHT));
-		
-		// Title
-		titleLabel = new JLabel("Shop Management System");
-		ThemeManager.styleLabel(titleLabel, ThemeManager.LabelStyle.TITLE);
-		titleLabel.setForeground(Theme.getWhiteColor());
-		titleLabel.setBorder(new EmptyBorder(0, Theme.PANEL_PADDING, 0, 0));
-		
-		// Header buttons
-		JPanel headerButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		headerButtonPanel.setOpaque(false);
-		
-		buttonThemeSettings = new JButton("Theme");
-		ThemeManager.styleButton(buttonThemeSettings, ThemeManager.ButtonStyle.OUTLINE);
-		buttonThemeSettings.setForeground(Theme.getWhiteColor());
-		buttonThemeSettings.setPreferredSize(new Dimension(80, 30));
-		buttonThemeSettings.addActionListener(this);
-		
-		JButton demoButton = new JButton("Demo");
-		ThemeManager.styleButton(demoButton, ThemeManager.ButtonStyle.INFO);
-		demoButton.setForeground(Theme.getWhiteColor());
-		demoButton.setPreferredSize(new Dimension(80, 30));
-		demoButton.addActionListener(e -> DemoActivity.showDemo());
-		
-		buttonExit = new JButton("Exit");
-		ThemeManager.styleButton(buttonExit, ThemeManager.ButtonStyle.DANGER);
-		buttonExit.setPreferredSize(new Dimension(80, 30));
-		buttonExit.addActionListener(this);
-		
-		headerButtonPanel.add(demoButton);
-		headerButtonPanel.add(Box.createHorizontalStrut(10));
-		headerButtonPanel.add(buttonThemeSettings);
-		headerButtonPanel.add(Box.createHorizontalStrut(10));
-		headerButtonPanel.add(buttonExit);
-		headerButtonPanel.setBorder(new EmptyBorder(0, 0, 0, Theme.PANEL_PADDING));
-		
-		headerPanel.add(titleLabel, BorderLayout.CENTER);
-		headerPanel.add(headerButtonPanel, BorderLayout.EAST);
-		
-		// Form panel with modern card design
-		formPanel = new JPanel();
-		formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-		ThemeManager.stylePanel(formPanel, ThemeManager.PanelStyle.CARD);
-		formPanel.setBorder(new CompoundBorder(
-			new EmptyBorder(60, 0, 60, 0),
-			new CompoundBorder(
-				new LineBorder(Theme.getPrimaryColor(), 2, true),
-				new EmptyBorder(50, 50, 50, 50)
-			)
-		));
-		formPanel.setMaximumSize(new Dimension(450, 400));
-		
-		// Add subtle shadow effect
-		formPanel.setBackground(Theme.getCardBackgroundColor());
-		
-		// Login form title with modern typography
-		JLabel loginTitle = new JLabel("Welcome Back");
-		ThemeManager.styleLabel(loginTitle, ThemeManager.LabelStyle.SUBTITLE);
-		loginTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-		loginTitle.setBorder(new EmptyBorder(0, 0, 35, 0));
-		
-		// Subtitle
-		JLabel loginSubtitle = new JLabel("Sign in to your account");
-		ThemeManager.styleLabel(loginSubtitle, ThemeManager.LabelStyle.REGULAR);
-		loginSubtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-		loginSubtitle.setForeground(Theme.getSecondaryColor());
-		loginSubtitle.setBorder(new EmptyBorder(0, 0, 40, 0));
-		
-		// Username field with modern styling
-		usernameLabel = new JLabel("User ID:");
-		ThemeManager.styleLabel(usernameLabel, ThemeManager.LabelStyle.REGULAR);
-		usernameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		usernameTF = new JTextField();
-		ThemeManager.styleTextField(usernameTF);
-		usernameTF.setMaximumSize(new Dimension(Integer.MAX_VALUE, Theme.INPUT_HEIGHT));
-		usernameTF.setAlignmentX(Component.LEFT_ALIGNMENT);
-		usernameTF.setToolTipText("Enter your user ID");
-		
-		// Password field with modern styling
-		passwordLabel = new JLabel("Password:");
-		ThemeManager.styleLabel(passwordLabel, ThemeManager.LabelStyle.REGULAR);
-		passwordLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		passwordF = new JPasswordField();
-		ThemeManager.stylePasswordField(passwordF);
-		passwordF.setMaximumSize(new Dimension(Integer.MAX_VALUE, Theme.INPUT_HEIGHT));
-		passwordF.setAlignmentX(Component.LEFT_ALIGNMENT);
-		passwordF.setToolTipText("Enter your password");
-		
-		// Login button with enhanced styling
-		buttonLogin = new JButton("Sign In");
-		ThemeManager.styleButton(buttonLogin, ThemeManager.ButtonStyle.PRIMARY);
-		buttonLogin.setPreferredSize(new Dimension(220, Theme.BUTTON_HEIGHT));
-		buttonLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonLogin.addActionListener(this);
-		buttonLogin.setToolTipText("Click to login to your account");
-		
-		// Add components to form panel with improved spacing
-		formPanel.add(loginTitle);
-		formPanel.add(loginSubtitle);
-		formPanel.add(usernameLabel);
-		formPanel.add(Box.createVerticalStrut(8));
-		formPanel.add(usernameTF);
-		formPanel.add(Box.createVerticalStrut(Theme.COMPONENT_SPACING + 5));
-		formPanel.add(passwordLabel);
-		formPanel.add(Box.createVerticalStrut(8));
-		formPanel.add(passwordF);
-		formPanel.add(Box.createVerticalStrut(35));
-		formPanel.add(buttonLogin);
-		
-		// Bottom button panel
-		buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		ThemeManager.stylePanel(buttonPanel, ThemeManager.PanelStyle.MAIN);
-		
-		JLabel signupLabel = new JLabel("Don't have an account? ");
-		ThemeManager.styleLabel(signupLabel, ThemeManager.LabelStyle.REGULAR);
-		
-		buttonSignup = new JButton("Sign Up");
-		ThemeManager.styleButton(buttonSignup, ThemeManager.ButtonStyle.OUTLINE);
-		buttonSignup.setPreferredSize(new Dimension(100, 30));
-		buttonSignup.addActionListener(this);
-		
-		buttonPanel.add(signupLabel);
-		buttonPanel.add(buttonSignup);
-		buttonPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
-	}
-	
-	private void layoutComponents() {
-		// Center the form panel
-		JPanel centerPanel = new JPanel(new GridBagLayout());
-		ThemeManager.stylePanel(centerPanel, ThemeManager.PanelStyle.MAIN);
-		centerPanel.add(formPanel);
-		
-		mainPanel.add(headerPanel, BorderLayout.NORTH);
-		mainPanel.add(centerPanel, BorderLayout.CENTER);
-		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-		
-		this.add(mainPanel);
-	}
-	
-	private void setupEventHandlers() {
-		// Add Enter key support for login
-		KeyAdapter enterKeyListener = new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					performLogin();
-				}
-			}
-		};
-		
-		usernameTF.addKeyListener(enterKeyListener);
-		passwordF.addKeyListener(enterKeyListener);
-	}
-	
-	private void performLogin() {
-		String username = usernameTF.getText().trim();
-		String password = new String(passwordF.getPassword());
-		
-		if (username.isEmpty() || password.isEmpty()) {
-			showErrorMessage("Please enter both username and password.");
-			return;
-		}
-		
-		int status = User.checkStatus(username, password);
-		if (status == 0) {
-			this.setVisible(false);
-			new EmployeeActivity(username).setVisible(true);
-		} else if (status == 1) {
-			this.setVisible(false);
-			new CustomerActivity(username).setVisible(true);
-		} else {
-			showErrorMessage("Invalid username or password. Please try again.");
-		}
-	}
-	
-	private void showErrorMessage(String message) {
-		JOptionPane.showMessageDialog(this, message, "Login Error", JOptionPane.ERROR_MESSAGE);
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		if (ae.getSource().equals(buttonExit)) {
-			System.exit(0);
-		} else if (ae.getSource().equals(buttonSignup)) {
-			this.setVisible(false);
-			new SignupActivity().setVisible(true);
-		} else if (ae.getSource().equals(buttonLogin)) {
-			performLogin();
-		} else if (ae.getSource().equals(buttonThemeSettings)) {
-			new ThemeSettingsActivity(this).setVisible(true);
-		}
-	}
+    
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton, exitButton;
+    
+    public LoginActivity() {
+        super("Shop Management System - Login");
+        initializeComponents();
+        layoutComponents();
+        setupWindow();
+    }
+    
+    private void initializeComponents() {
+        usernameField = new JTextField(20);
+        passwordField = new JPasswordField(20);
+        loginButton = new JButton("Login");
+        exitButton = new JButton("Exit");
+        
+        loginButton.addActionListener(this);
+        exitButton.addActionListener(this);
+        
+        // Set Enter key for password field
+        passwordField.addActionListener(this);
+    }
+    
+    private void layoutComponents() {
+        setLayout(new BorderLayout());
+        
+        // Header panel
+        JPanel headerPanel = new JPanel(new FlowLayout());
+        JLabel titleLabel = new JLabel("Shop Management System");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        headerPanel.add(titleLabel);
+        
+        // Form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(new JLabel("Username:"), gbc);
+        
+        gbc.gridx = 1; gbc.gridy = 0;
+        formPanel.add(usernameField, gbc);
+        
+        gbc.gridx = 0; gbc.gridy = 1;
+        formPanel.add(new JLabel("Password:"), gbc);
+        
+        gbc.gridx = 1; gbc.gridy = 1;
+        formPanel.add(passwordField, gbc);
+        
+        // Button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(loginButton);
+        buttonPanel.add(exitButton);
+        
+        // Add panels to main frame
+        add(headerPanel, BorderLayout.NORTH);
+        add(formPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+    
+    private void setupWindow() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 250);
+        setLocationRelativeTo(null);
+        setResizable(false);
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == loginButton || e.getSource() == passwordField) {
+            performLogin();
+        } else if (e.getSource() == exitButton) {
+            System.exit(0);
+        }
+    }
+    
+    private void performLogin() {
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword());
+        
+        if (username.isEmpty() || password.isEmpty()) {
+            DesktopUtils.showErrorMessage(this, "Please enter both username and password.", "Login Error");
+            return;
+        }
+        
+        try {
+            // Basic authentication check
+            int status = User.checkStatus(username, password);
+            if (status == 0 || status == 1) {
+                // Login successful
+                this.setVisible(false);
+                this.dispose();
+                
+                // Open dashboard
+                try {
+                    DashboardActivity dashboard = Start.getApplicationContext().getBean(DashboardActivity.class);
+                    dashboard.setVisible(true);
+                } catch (Exception ex) {
+                    // Fallback
+                    new DashboardActivity().setVisible(true);
+                }
+            } else {
+                DesktopUtils.showErrorMessage(this, "Invalid username or password.", "Login Error");
+            }
+        } catch (Exception ex) {
+            DesktopUtils.showErrorMessage(this, "Login error: " + ex.getMessage(), "Error");
+            ex.printStackTrace();
+        }
+    }
 }

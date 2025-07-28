@@ -5,11 +5,15 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import com.shopmanagement.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.shopmanagement.Start;
 
 /**
  * SplashScreen - Modern loading screen for the application
  * Displays when the application starts with a beautiful animated loading interface
  */
+@Component
 public class SplashScreen extends JFrame {
     private JPanel mainPanel;
     private JLabel logoLabel, titleLabel, subtitleLabel, loadingLabel;
@@ -183,9 +187,15 @@ public class SplashScreen extends JFrame {
         this.setVisible(false);
         this.dispose();
         
-        // Show login activity
+        // Show login activity using Spring context
         SwingUtilities.invokeLater(() -> {
-            new LoginActivity().setVisible(true);
+            try {
+                LoginActivity loginActivity = Start.getApplicationContext().getBean(LoginActivity.class);
+                loginActivity.setVisible(true);
+            } catch (Exception e) {
+                // Fallback - create LoginActivity directly if not available in Spring context
+                new LoginActivity().setVisible(true);
+            }
         });
     }
     
