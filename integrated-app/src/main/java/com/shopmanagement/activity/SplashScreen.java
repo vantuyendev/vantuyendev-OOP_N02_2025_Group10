@@ -8,12 +8,14 @@ import com.shopmanagement.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.shopmanagement.Start;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
  * SplashScreen - Modern loading screen for the application
  * Displays when the application starts with a beautiful animated loading interface
  */
 @Component
+@ConditionalOnProperty(name = "spring.main.web-application-type", havingValue = "none")
 public class SplashScreen extends JFrame {
     private JPanel mainPanel;
     private JLabel logoLabel, titleLabel, subtitleLabel, loadingLabel;

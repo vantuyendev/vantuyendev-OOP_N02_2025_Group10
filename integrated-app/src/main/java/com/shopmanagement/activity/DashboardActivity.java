@@ -3,6 +3,7 @@ package com.shopmanagement.activity;
 import com.shopmanagement.util.DesktopUtils;
 import com.shopmanagement.util.Theme;
 import com.shopmanagement.Start;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
  * Giao diện chính của ứng dụng desktop
  */
 @Component
+@ConditionalOnProperty(name = "spring.main.web-application-type", havingValue = "none")
 public class DashboardActivity extends JFrame implements ActionListener {
     
     private JMenuBar menuBar;

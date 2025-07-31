@@ -7,12 +7,14 @@ import java.awt.event.ActionListener;
 import com.shopmanagement.model.User;
 import com.shopmanagement.util.DesktopUtils;
 import com.shopmanagement.Start;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
  * LoginActivity - Simple login interface for desktop application
  */
 @Component
+@ConditionalOnProperty(name = "spring.main.web-application-type", havingValue = "none")
 public class LoginActivity extends JFrame implements ActionListener {
     
     private JTextField usernameField;
