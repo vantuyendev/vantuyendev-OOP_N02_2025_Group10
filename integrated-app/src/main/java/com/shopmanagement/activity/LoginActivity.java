@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.shopmanagement.model.User;
 import com.shopmanagement.util.DesktopUtils;
-import com.shopmanagement.Start;
+import com.shopmanagement.ShopManagementApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -113,7 +113,7 @@ public class LoginActivity extends JFrame implements ActionListener {
                 
                 // Open dashboard
                 try {
-                    DashboardActivity dashboard = Start.getApplicationContext().getBean(DashboardActivity.class);
+                    DashboardActivity dashboard = ShopManagementApplication.getApplicationContext().getBean(DashboardActivity.class);
                     dashboard.setVisible(true);
                 } catch (Exception ex) {
                     // Fallback

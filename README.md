@@ -48,46 +48,76 @@ Hệ thống quản lý cửa hàng được thiết kế để giúp các chủ
 | **Build Tool** | Maven | 3.6+ |
 | **Java Version** | OpenJDK | 11+ |
 
-## 📁 Cấu Trúc Dự Án
+## 📁 Cấu Trúc Dự Án (Đã Tái Cấu Trúc)
 
 ```
 📁 Shop Management System/
 ├── 📄 README.md                          # Tài liệu hướng dẫn
 ├── 📄 pom.xml                            # Cấu hình Maven chính
-├── 📄 run-web.sh                         # 🚀 Khởi chạy nhanh web
-├── 📄 run-desktop.sh                     # 🚀 Khởi chạy nhanh desktop
-├── 📁 src/                               # 📱 Source code chính
-│   ├── 📁 main/java/com/shopmanagement/
-│   │   ├── 📄 ShopManagementApplication.java    # Class chính
-│   │   ├── 📄 Start.java                        # Entry point desktop
-│   │   ├── 📁 activity/                         # 🖥️ GUI Desktop
-│   │   │   ├── 📄 LoginActivity.java           # Màn hình đăng nhập
-│   │   │   ├── 📄 DashboardActivity.java       # Dashboard chính
-│   │   │   ├── 📄 EmployeeActivity.java        # Quản lý nhân viên
-│   │   │   ├── 📄 ManageProduct.java           # Quản lý sản phẩm
-│   │   │   └── 📄 ManageCustomer.java          # Quản lý khách hàng
-│   │   ├── 📁 controller/web/                   # 🌐 Web Controllers
-│   │   │   ├── 📄 ShopWebController.java       # Controller chính
-│   │   │   └── 📄 RootController.java          # Root routing
-│   │   ├── 📁 entity/                          # 🗄️ Database Entities
-│   │   │   ├── 📄 Employee.java                # Entity nhân viên
-│   │   │   ├── 📄 Product.java                 # Entity sản phẩm
-│   │   │   ├── 📄 Customer.java                # Entity khách hàng
-│   │   │   └── 📄 Login.java                   # Entity đăng nhập
-│   │   ├── 📁 repository/                      # 📊 Data Access Layer
-│   │   ├── 📁 service/                         # 🔧 Business Logic
-│   │   └── 📁 util/                            # ⚙️ Utilities
-│   ├── 📁 main/resources/
-│   │   ├── 📄 application.properties           # Cấu hình ứng dụng
-│   │   └── 📁 templates/shop/                  # 🎨 Web Templates
-│   │       ├── 📄 dashboard.html               # Trang dashboard
-│   │       ├── 📄 employees.html               # Trang nhân viên
-│   │       ├── 📄 products.html                # Trang sản phẩm
-│   │       └── 📄 customers.html               # Trang khách hàng
-│   └── 📁 sql/                                 # 🗃️ Database Scripts
-│       ├── 📄 shopmanagement.sql               # Script tạo database
-│       └── 📄 test_connection.sql              # Test kết nối
-└── 📁 gs-serving-web-content-main/             # 🗂️ Backup files cũ
+├── 📄 start-web.sh                       # 🚀 Khởi chạy nhanh web
+├── 📄 start-desktop.sh                   # 🚀 Khởi chạy nhanh desktop
+├── 📁 integrated-app/                    # 📱 Ứng dụng tích hợp chính
+│   ├── 📄 pom.xml                        # Maven configuration
+│   ├── 📁 src/main/java/com/shopmanagement/
+│   │   ├── 📄 ShopManagementApplication.java    # Entry point chính
+│   │   ├── � desktop/                   # 🖥️ Desktop Components
+│   │   │   ├── 📁 config/               # Desktop configuration
+│   │   │   │   └── � DesktopConfiguration.java
+│   │   │   └── 📁 ui/                   # Modern Swing UI
+│   │   │       ├── 📄 LoginFrame.java   # Giao diện đăng nhập
+│   │   │       ├── 📄 DashboardFrame.java # Dashboard chính
+│   │   │       ├── 📄 EmployeeFrame.java # Quản lý nhân viên
+│   │   │       ├── 📄 ProductFrame.java # Quản lý sản phẩm
+│   │   │       └── 📄 CustomerFrame.java # Quản lý khách hàng
+│   │   ├── 📁 web/                      # 🌐 Web Components
+│   │   │   ├── 📁 config/               # Web configuration
+│   │   │   │   └── 📄 WebConfiguration.java
+│   │   │   └── 📁 controller/           # Web Controllers
+│   │   │       └── 📄 ShopWebController.java
+│   │   ├── 📁 entity/                   # 🗄️ Database Entities
+│   │   │   ├── 📄 Employee.java         # Entity nhân viên
+│   │   │   ├── 📄 Product.java          # Entity sản phẩm
+│   │   │   ├── 📄 Customer.java         # Entity khách hàng
+│   │   │   └── 📄 Login.java            # Entity đăng nhập
+│   │   ├── 📁 repository/               # 📊 Data Access Layer
+│   │   ├── 📁 service/                  # 🔧 Business Logic
+│   │   ├── 📁 model/                    # 📋 Data Models
+│   │   ├── 📁 util/                     # ⚙️ Utilities
+│   │   └── 📁 config/                   # 🔧 Shared Configuration
+│   ├── 📁 src/main/resources/
+│   │   ├── 📄 application.properties    # Cấu hình ứng dụng
+│   │   ├── 📁 static/                   # Static web resources
+│   │   └── 📁 templates/shop/           # 🎨 Web Templates
+│   │       ├── 📄 dashboard.html        # Trang dashboard
+│   │       ├── 📄 employees.html        # Trang nhân viên
+│   │       ├── 📄 products.html         # Trang sản phẩm
+│   │       └── 📄 customers.html        # Trang khách hàng
+│   └── 📁 sql/                          # 🗃️ Database Scripts
+│       ├── 📄 shopmanagement.sql        # Script tạo database
+│       └── 📄 test_connection.sql       # Test kết nối
+```
+
+### 🔄 Cải Tiến Cấu Trúc Dự Án
+
+Dự án đã được tái cấu trúc theo các nguyên tắc Spring Boot tốt nhất:
+
+#### ✅ Những Cải Tiến Chính:
+- **🏗️ Separation of Concerns**: Tách biệt rõ ràng giữa web và desktop components
+- **📦 Package Organization**: Cấu trúc package theo chức năng thay vì theo layer
+- **🔧 Configuration Management**: Cấu hình riêng biệt cho web và desktop mode
+- **🎨 Modern UI**: Sử dụng modern Swing với FlatLaf Look and Feel
+- **🔒 Single Entry Point**: Một main class cho cả web và desktop mode
+- **⚡ Better Error Handling**: Xử lý lỗi và fallback tốt hơn
+
+#### 📈 Lợi Ích Của Cấu Trúc Mới:
+- **Maintainability**: Dễ bảo trì và mở rộng
+- **Testability**: Cấu trúc thuận lợi cho việc testing
+- **Scalability**: Dễ dàng thêm tính năng mới
+- **Best Practices**: Tuân thủ Spring Boot conventions
+- **Code Reusability**: Tái sử dụng code giữa web và desktop
+
+## 🚀 Hướng Dẫn Cài Đặt
+```
 ```
 
 ## 🚀 Hướng Dẫn Cài Đặt

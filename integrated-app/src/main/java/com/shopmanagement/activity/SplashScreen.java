@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 import com.shopmanagement.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.shopmanagement.Start;
+import com.shopmanagement.ShopManagementApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
@@ -192,7 +192,7 @@ public class SplashScreen extends JFrame {
         // Show login activity using Spring context
         SwingUtilities.invokeLater(() -> {
             try {
-                LoginActivity loginActivity = Start.getApplicationContext().getBean(LoginActivity.class);
+                LoginActivity loginActivity = ShopManagementApplication.getApplicationContext().getBean(LoginActivity.class);
                 loginActivity.setVisible(true);
             } catch (Exception e) {
                 // Fallback - create LoginActivity directly if not available in Spring context

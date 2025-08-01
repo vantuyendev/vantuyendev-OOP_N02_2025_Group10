@@ -2,7 +2,7 @@ package com.shopmanagement.activity;
 
 import com.shopmanagement.util.DesktopUtils;
 import com.shopmanagement.util.Theme;
-import com.shopmanagement.Start;
+import com.shopmanagement.ShopManagementApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -259,7 +259,7 @@ public class DashboardActivity extends JFrame implements ActionListener {
             this.dispose();
             
             try {
-                LoginActivity loginActivity = Start.getApplicationContext().getBean(LoginActivity.class);
+                LoginActivity loginActivity = ShopManagementApplication.getApplicationContext().getBean(LoginActivity.class);
                 loginActivity.setVisible(true);
             } catch (Exception e) {
                 // Fallback

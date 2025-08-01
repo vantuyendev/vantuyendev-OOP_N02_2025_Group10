@@ -1,4 +1,4 @@
-package com.shopmanagement.controller.web;
+package com.shopmanagement.web.controller;
 
 import com.shopmanagement.entity.Employee;
 import com.shopmanagement.entity.Product;
