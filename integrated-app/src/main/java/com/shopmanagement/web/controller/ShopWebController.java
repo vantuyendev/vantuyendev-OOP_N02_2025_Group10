@@ -64,6 +64,60 @@ public class ShopWebController {
         return "shop/employees";
     }
 
+    @GetMapping("/employees/add")
+    public String addEmployeeForm(Model model) {
+        model.addAttribute("employee", new Employee());
+        return "shop/add-employee";
+    }
+
+        @PostMapping("/employees/add")
+    public String addEmployee(@ModelAttribute Employee employee, @RequestParam String password, Model model) {
+        try {
+            employeeService.createEmployee(employee, password);
+            return "redirect:/employees";
+        } catch (Exception e) {
+            model.addAttribute("error", "Lỗi khi thêm nhân viên: " + e.getMessage());
+            return "shop/add-employee";
+        }
+    }
+
+    @GetMapping("/employees/edit/{id}")
+    public String editEmployeeForm(@PathVariable String id, Model model) {
+        try {
+            Optional<Employee> employee = employeeService.findById(id);
+            if (employee.isPresent()) {
+                model.addAttribute("employee", employee.get());
+                return "shop/edit-employee";
+            } else {
+                return "redirect:/shop/employees?error=Employee not found";
+            }
+        } catch (Exception e) {
+            return "redirect:/shop/employees?error=Unable to load employee: " + e.getMessage();
+        }
+    }
+
+        @PostMapping("/employees/edit/{id}")
+    public String updateEmployee(@PathVariable String id, @ModelAttribute Employee employee, Model model) {
+        try {
+            employee.setUserId(id);
+            employeeService.updateEmployee(employee);
+            return "redirect:/employees";
+        } catch (Exception e) {
+            model.addAttribute("error", "Lỗi khi cập nhật nhân viên: " + e.getMessage());
+            return "redirect:/employees";
+        }
+    }
+
+    @PostMapping("/employees/delete/{id}")
+    public String deleteEmployee(@PathVariable String id) {
+        try {
+            employeeService.deleteEmployee(id);
+            return "redirect:/shop/employees?success=Employee deleted successfully";
+        } catch (Exception e) {
+            return "redirect:/shop/employees?error=Unable to delete employee: " + e.getMessage();
+        }
+    }
+
     @GetMapping("/products")
     public String products(Model model) {
         try {
@@ -75,6 +129,62 @@ public class ShopWebController {
         return "shop/products";
     }
 
+    @GetMapping("/products/add")
+    public String addProductForm(Model model) {
+        model.addAttribute("product", new Product());
+        return "shop/add-product";
+    }
+
+    @PostMapping("/products/add")
+    public String addProduct(@ModelAttribute Product product, Model model) {
+        try {
+            productService.createProduct(product);
+            return "redirect:/shop/products?success=Product added successfully";
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to add product: " + e.getMessage());
+            model.addAttribute("product", product);
+            return "shop/add-product";
+        }
+    }
+
+    @GetMapping("/products/edit/{id}")
+    public String editProductForm(@PathVariable Long id, Model model) {
+        try {
+            Optional<Product> product = productService.findById(id);
+            if (product.isPresent()) {
+                model.addAttribute("product", product.get());
+                return "shop/edit-product";
+            } else {
+                return "redirect:/shop/products?error=Product not found";
+            }
+        } catch (Exception e) {
+            return "redirect:/shop/products?error=Unable to load product: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/products/edit/{id}")
+    public String updateProduct(@PathVariable Long id, @ModelAttribute Product product, Model model) {
+        try {
+            product.setProductId(id);
+            productService.updateProduct(product);
+            return "redirect:/shop/products?success=Product updated successfully";
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to update product: " + e.getMessage());
+            model.addAttribute("product", product);
+            return "shop/edit-product";
+        }
+    }
+
+    @PostMapping("/products/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        try {
+            productService.deleteProduct(id);
+            return "redirect:/shop/products?success=Product deleted successfully";
+        } catch (Exception e) {
+            return "redirect:/shop/products?error=Unable to delete product: " + e.getMessage();
+        }
+    }
+
     @GetMapping("/customers")
     public String customers(Model model) {
         try {
@@ -84,6 +194,62 @@ public class ShopWebController {
             model.addAttribute("error", "Unable to load customers: " + e.getMessage());
         }
         return "shop/customers";
+    }
+
+    @GetMapping("/customers/add")
+    public String addCustomerForm(Model model) {
+        model.addAttribute("customer", new Customer());
+        return "shop/add-customer";
+    }
+
+    @PostMapping("/customers/add")
+    public String addCustomer(@ModelAttribute Customer customer, @RequestParam String password, Model model) {
+        try {
+            customerService.createCustomer(customer, password);
+            return "redirect:/shop/customers?success=Customer added successfully";
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to add customer: " + e.getMessage());
+            model.addAttribute("customer", customer);
+            return "shop/add-customer";
+        }
+    }
+
+    @GetMapping("/customers/edit/{id}")
+    public String editCustomerForm(@PathVariable String id, Model model) {
+        try {
+            Optional<Customer> customer = customerService.findById(id);
+            if (customer.isPresent()) {
+                model.addAttribute("customer", customer.get());
+                return "shop/edit-customer";
+            } else {
+                return "redirect:/shop/customers?error=Customer not found";
+            }
+        } catch (Exception e) {
+            return "redirect:/shop/customers?error=Unable to load customer: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/customers/edit/{id}")
+    public String updateCustomer(@PathVariable String id, @ModelAttribute Customer customer, Model model) {
+        try {
+            customer.setUserId(id);
+            customerService.updateCustomer(customer);
+            return "redirect:/shop/customers?success=Customer updated successfully";
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to update customer: " + e.getMessage());
+            model.addAttribute("customer", customer);
+            return "shop/edit-customer";
+        }
+    }
+
+    @PostMapping("/customers/delete/{id}")
+    public String deleteCustomer(@PathVariable String id) {
+        try {
+            customerService.deleteCustomer(id);
+            return "redirect:/shop/customers?success=Customer deleted successfully";
+        } catch (Exception e) {
+            return "redirect:/shop/customers?error=Unable to delete customer: " + e.getMessage();
+        }
     }
 
     @GetMapping("/api/dashboard-stats")

@@ -154,20 +154,20 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a th:href="@{'/shop/employees/edit/' + ${employee.userId}}" 
-                                               class="btn btn-sm btn-outline-primary">
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Edit Employee">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a th:href="@{'/shop/employees/view/' + ${employee.userId}}" 
-                                               class="btn btn-sm btn-outline-info">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                            <a th:href="@{'/shop/employees/delete/' + ${employee.userId}}" 
-                                               class="btn btn-sm btn-outline-danger"
-                                               data-action="delete" 
-                                               data-type="employee" 
-                                               data-id="${employee.userId}">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
+                                            <form th:action="@{'/shop/employees/delete/' + ${employee.userId}}" 
+                                                  method="post" 
+                                                  style="display: inline;"
+                                                  onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                                                <button type="submit" 
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        title="Delete Employee">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
