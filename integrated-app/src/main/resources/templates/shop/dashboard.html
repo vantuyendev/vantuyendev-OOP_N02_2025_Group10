@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Shop Management System - Dashboard</title>
+    <title th:text="#{app.title} + ' - ' + #{dashboard.title}">Shop Management System - Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -19,21 +19,35 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="navbar-brand" href="/shop/">
-                    <i class="bi bi-shop me-2"></i>Shop Management System
+                    <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Shop Management System</span>
                 </a>
                 <div class="navbar-nav d-flex flex-row">
                     <a class="nav-link" href="/shop/">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        <i class="bi bi-speedometer2 me-1"></i><span th:text="#{nav.dashboard}">Dashboard</span>
                     </a>
                     <a class="nav-link" href="/shop/employees">
-                        <i class="bi bi-people me-1"></i>Employees
+                        <i class="bi bi-people me-1"></i><span th:text="#{nav.employees}">Employees</span>
                     </a>
                     <a class="nav-link" href="/shop/products">
-                        <i class="bi bi-box me-1"></i>Products
+                        <i class="bi bi-box me-1"></i><span th:text="#{nav.products}">Products</span>
                     </a>
                     <a class="nav-link" href="/shop/customers">
-                        <i class="bi bi-person-hearts me-1"></i>Customers
+                        <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Customers</span>
                     </a>
+                    <!-- Language Switcher -->
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-translate me-1"></i><span th:text="#{language}">Language</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="?lang=vi">
+                                <i class="bi bi-flag me-2"></i><span th:text="#{language.vietnamese}">Tiếng Việt</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="?lang=en">
+                                <i class="bi bi-flag me-2"></i><span th:text="#{language.english}">English</span>
+                            </a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,8 +57,8 @@
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="h2 mb-1">Dashboard</h1>
-                <p class="text-muted">Welcome back! Here's what's happening with your shop.</p>
+                <h1 class="h2 mb-1" th:text="#{dashboard.title}">Dashboard</h1>
+                <p class="text-muted" th:text="#{app.welcome}">Welcome back! Here's what's happening with your shop.</p>
             </div>
             <div>
                 <span class="badge bg-success">System Online</span>
@@ -64,9 +78,9 @@
                     <i class="bi bi-people"></i>
                 </div>
                 <div class="stat-number" id="employee-count" th:text="${employeeCount ?: 0}">0</div>
-                <div class="stat-label">Total Employees</div>
+                <div class="stat-label" th:text="#{dashboard.total.employees}">Total Employees</div>
                 <a href="/shop/employees" class="btn-modern btn-primary mt-3">
-                    <i class="bi bi-eye me-1"></i>View Employees
+                    <i class="bi bi-eye me-1"></i><span th:text="#{nav.employees}">View Employees</span>
                 </a>
             </div>
             
@@ -75,9 +89,9 @@
                     <i class="bi bi-box"></i>
                 </div>
                 <div class="stat-number" id="product-count" th:text="${productCount ?: 0}">0</div>
-                <div class="stat-label">Total Products</div>
+                <div class="stat-label" th:text="#{dashboard.total.products}">Total Products</div>
                 <a href="/shop/products" class="btn-modern btn-success mt-3">
-                    <i class="bi bi-eye me-1"></i>View Products
+                    <i class="bi bi-eye me-1"></i><span th:text="#{nav.products}">View Products</span>
                 </a>
             </div>
             
@@ -86,9 +100,9 @@
                     <i class="bi bi-person-hearts"></i>
                 </div>
                 <div class="stat-number" id="customer-count" th:text="${customerCount ?: 0}">0</div>
-                <div class="stat-label">Total Customers</div>
+                <div class="stat-label" th:text="#{dashboard.total.customers}">Total Customers</div>
                 <a href="/shop/customers" class="btn-modern btn-warning mt-3">
-                    <i class="bi bi-eye me-1"></i>View Customers
+                    <i class="bi bi-eye me-1"></i><span th:text="#{nav.customers}">View Customers</span>
                 </a>
             </div>
         </div>
@@ -167,13 +181,13 @@
                     <div class="card-body">
                         <div class="d-grid gap-2">
                             <a href="/shop/employees/add" class="btn-modern btn-primary">
-                                <i class="bi bi-person-plus me-2"></i>Add New Employee
+                                <i class="bi bi-person-plus me-2"></i><span th:text="#{employee.add}">Add New Employee</span>
                             </a>
                             <a href="/shop/products/add" class="btn-modern btn-success">
-                                <i class="bi bi-plus-circle me-2"></i>Add New Product
+                                <i class="bi bi-plus-circle me-2"></i><span th:text="#{product.add}">Add New Product</span>
                             </a>
                             <a href="/shop/customers/add" class="btn-modern btn-warning">
-                                <i class="bi bi-person-plus-fill me-2"></i>Add New Customer
+                                <i class="bi bi-person-plus-fill me-2"></i><span th:text="#{customer.add}">Add New Customer</span>
                             </a>
                         </div>
                         

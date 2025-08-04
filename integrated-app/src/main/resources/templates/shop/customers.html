@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Shop Management System - Customers</title>
+    <title th:text="#{app.title} + ' - ' + #{customer.title}">Shop Management System - Customers</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -19,21 +19,35 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="navbar-brand" href="/shop/">
-                    <i class="bi bi-shop me-2"></i>Shop Management System
+                    <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Shop Management System</span>
                 </a>
                 <div class="navbar-nav d-flex flex-row">
                     <a class="nav-link" href="/shop/">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        <i class="bi bi-speedometer2 me-1"></i><span th:text="#{nav.dashboard}">Dashboard</span>
                     </a>
                     <a class="nav-link" href="/shop/employees">
-                        <i class="bi bi-people me-1"></i>Employees
+                        <i class="bi bi-people me-1"></i><span th:text="#{nav.employees}">Employees</span>
                     </a>
                     <a class="nav-link" href="/shop/products">
-                        <i class="bi bi-box me-1"></i>Products
+                        <i class="bi bi-box me-1"></i><span th:text="#{nav.products}">Products</span>
                     </a>
                     <a class="nav-link active" href="/shop/customers">
-                        <i class="bi bi-person-hearts me-1"></i>Customers
+                        <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Customers</span>
                     </a>
+                    <!-- Language Switcher -->
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-translate me-1"></i><span th:text="#{language}">Language</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="?lang=vi">
+                                <i class="bi bi-flag me-2"></i><span th:text="#{language.vietnamese}">Tiếng Việt</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="?lang=en">
+                                <i class="bi bi-flag me-2"></i><span th:text="#{language.english}">English</span>
+                            </a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
