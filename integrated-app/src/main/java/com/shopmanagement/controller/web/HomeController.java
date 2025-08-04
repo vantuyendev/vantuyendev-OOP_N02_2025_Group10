@@ -27,7 +27,7 @@ public class HomeController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("title", "Dashboard - Shop Management System");
-        return "dashboard";
+        return "shop/dashboard";
     }
     
     /**
@@ -45,7 +45,7 @@ public class HomeController {
     @GetMapping("/products")
     public String products(Model model) {
         model.addAttribute("title", "Quản lý sản phẩm - Shop Management System");
-        return "products";
+        return "shop/products";
     }
     
     /**
@@ -54,7 +54,7 @@ public class HomeController {
     @GetMapping("/customers")
     public String customers(Model model) {
         model.addAttribute("title", "Quản lý khách hàng - Shop Management System");
-        return "customers";
+        return "shop/customers";
     }
     
     /**
@@ -63,7 +63,7 @@ public class HomeController {
     @GetMapping("/employees")
     public String employees(Model model) {
         model.addAttribute("title", "Quản lý nhân viên - Shop Management System");
-        return "employees";
+        return "shop/employees";
     }
     
     /**

@@ -13,7 +13,7 @@ public class AddEmployeeActivity extends JFrame implements ActionListener {
 	private ViewEmployeeActivity activity;
 	private JButton buttonLogout, buttonBack, buttonAdd, buttonEdit, buttonDelete, buttonRandom;
 	private JLabel title, header, employeeIdLabel, employeeNameLabel, roleLabel, employeePhoneLabel, salaryLabel;
-	private JComboBox roleCB;
+	private JComboBox<String> roleCB;
 	private JTextField employeeIdTF, employeeNameTF, salaryTF, employeePhoneTF1, employeePhoneTF2, passwordTF;
 	private Random r;
 	
@@ -121,7 +121,7 @@ public class AddEmployeeActivity extends JFrame implements ActionListener {
 		employeePhoneTF2.setFont(Theme.FONT_INPUT);
 		panel.add(employeePhoneTF2);
 		
-		roleCB = new JComboBox(Employee.roles);
+		roleCB = new JComboBox<>(Employee.roles);
 		roleCB.setBounds(180, 340, 160, 30);
 		roleCB.setFont(Theme.FONT_INPUT);
 		panel.add(roleCB);

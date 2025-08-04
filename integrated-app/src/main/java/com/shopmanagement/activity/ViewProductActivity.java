@@ -15,7 +15,7 @@ public class ViewProductActivity extends JFrame implements ActionListener {
 	private JFrame activity;
 	private Employee employee;
 	private JScrollPane frame;
-	JComboBox byWhatCB;
+	JComboBox<String> byWhatCB;
 	JTable table;
 	private JButton buttonLogout, buttonBack, buttonCheck, buttonAddProduct;
 	private JLabel title, header, keywordLabel;
@@ -68,7 +68,7 @@ public class ViewProductActivity extends JFrame implements ActionListener {
 		keywordTF.setFont(Theme.FONT_INPUT);
 		panel.add(keywordTF);
 		
-		byWhatCB = new JComboBox(new Object[]{"By ID", "By Name"});
+		byWhatCB = new JComboBox<>(new String[]{"By ID", "By Name"});
 		byWhatCB.setBounds(400, 140, 100,30);
 		byWhatCB.setFont(Theme.FONT_INPUT);
 		panel.add(byWhatCB);
@@ -161,7 +161,7 @@ public class ViewProductActivity extends JFrame implements ActionListener {
 		keywordTF.setFont(Theme.FONT_INPUT);
 		panel.add(keywordTF);
 		
-		byWhatCB = new JComboBox(new Object[]{"By ID", "By Name"});
+		byWhatCB = new JComboBox<>(new String[]{"By ID", "By Name"});
 		byWhatCB.setBounds(400, 140, 100,30);
 		byWhatCB.setFont(Theme.FONT_INPUT);
 		panel.add(byWhatCB);
