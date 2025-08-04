@@ -90,8 +90,8 @@ public class ShopManagementApplication {
         applicationContext = SpringApplication.run(ShopManagementApplication.class, args);
         
         System.out.println("Web application started successfully!");
-        System.out.println("Access the application at: http://localhost:3000");
-        System.out.println("Shop dashboard: http://localhost:3000/shop/");
+        System.out.println("Access the application at: http://localhost:8080");
+        System.out.println("Shop dashboard: http://localhost:8080/shop/");
     }
     
     /**

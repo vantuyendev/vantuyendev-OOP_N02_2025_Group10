@@ -36,6 +36,11 @@ public class ShopWebController {
 
     @GetMapping("/")
     public String home(Model model) {
+        return dashboard(model);
+    }
+    
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
         try {
             // Get basic statistics for dashboard
             List<Employee> employees = employeeService.findAll();

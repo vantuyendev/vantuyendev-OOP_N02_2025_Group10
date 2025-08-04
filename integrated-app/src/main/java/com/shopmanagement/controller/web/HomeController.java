@@ -18,7 +18,7 @@ public class HomeController {
      */
     @GetMapping
     public String home() {
-        return "redirect:/dashboard";
+        return "redirect:/shop/dashboard";
     }
     
     /**
@@ -26,8 +26,7 @@ public class HomeController {
      */
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        model.addAttribute("title", "Dashboard - Shop Management System");
-        return "shop/dashboard";
+        return "redirect:/shop/dashboard";
     }
     
     /**

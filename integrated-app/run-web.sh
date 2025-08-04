@@ -25,7 +25,7 @@ fi
 
 echo "🌐 Shop Management System Web Mode started!"
 echo "📍 Access the application at:"
-echo "   Dashboard: http://localhost:3000/shop/dashboard"
-echo "   Employees: http://localhost:3000/shop/employees"
-echo "   Products:  http://localhost:3000/shop/products"
-echo "   Customers: http://localhost:3000/shop/customers"
+echo "   Dashboard: http://localhost:8080/shop/dashboard"
+echo "   Employees: http://localhost:8080/shop/employees"
+echo "   Products:  http://localhost:8080/shop/products"
+echo "   Customers: http://localhost:8080/shop/customers"
