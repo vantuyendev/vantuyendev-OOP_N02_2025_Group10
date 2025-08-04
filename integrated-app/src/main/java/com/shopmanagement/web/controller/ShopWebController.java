@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Controller
@@ -82,6 +84,28 @@ public class ShopWebController {
             model.addAttribute("error", "Unable to load customers: " + e.getMessage());
         }
         return "shop/customers";
+    }
+
+    @GetMapping("/api/dashboard-stats")
+    @ResponseBody
+    public Map<String, Object> getDashboardStats() {
+        Map<String, Object> stats = new HashMap<>();
+        try {
+            List<Employee> employees = employeeService.findAll();
+            List<Product> products = productService.findAll();
+            List<Customer> customers = customerService.findAll();
+            
+            stats.put("employeeCount", employees.size());
+            stats.put("productCount", products.size());
+            stats.put("customerCount", customers.size());
+            stats.put("status", "success");
+            stats.put("timestamp", new java.util.Date());
+            
+        } catch (Exception e) {
+            stats.put("error", "Unable to load dashboard data: " + e.getMessage());
+            stats.put("status", "error");
+        }
+        return stats;
     }
 
     @GetMapping("/login")
