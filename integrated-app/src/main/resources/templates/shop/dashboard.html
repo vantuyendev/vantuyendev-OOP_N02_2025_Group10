@@ -61,7 +61,7 @@
                 <p class="text-muted" th:text="#{app.welcome}">Welcome back! Here's what's happening with your shop.</p>
             </div>
             <div>
-                <span class="badge bg-success">System Online</span>
+                <span class="badge bg-success" th:text="#{dashboard.system.online}">System Online</span>
             </div>
         </div>
         
@@ -80,7 +80,7 @@
                 <div class="stat-number" id="employee-count" th:text="${employeeCount ?: 0}">0</div>
                 <div class="stat-label" th:text="#{dashboard.total.employees}">Total Employees</div>
                 <a href="/shop/employees" class="btn-modern btn-primary mt-3">
-                    <i class="bi bi-eye me-1"></i><span th:text="#{nav.employees}">View Employees</span>
+                    <i class="bi bi-eye me-1"></i><span th:text="#{button.view} + ' ' + #{nav.employees}">View Employees</span>
                 </a>
             </div>
             
@@ -91,7 +91,7 @@
                 <div class="stat-number" id="product-count" th:text="${productCount ?: 0}">0</div>
                 <div class="stat-label" th:text="#{dashboard.total.products}">Total Products</div>
                 <a href="/shop/products" class="btn-modern btn-success mt-3">
-                    <i class="bi bi-eye me-1"></i><span th:text="#{nav.products}">View Products</span>
+                    <i class="bi bi-eye me-1"></i><span th:text="#{button.view} + ' ' + #{nav.products}">View Products</span>
                 </a>
             </div>
             
@@ -102,7 +102,7 @@
                 <div class="stat-number" id="customer-count" th:text="${customerCount ?: 0}">0</div>
                 <div class="stat-label" th:text="#{dashboard.total.customers}">Total Customers</div>
                 <a href="/shop/customers" class="btn-modern btn-warning mt-3">
-                    <i class="bi bi-eye me-1"></i><span th:text="#{nav.customers}">View Customers</span>
+                    <i class="bi bi-eye me-1"></i><span th:text="#{button.view} + ' ' + #{nav.customers}">View Customers</span>
                 </a>
             </div>
         </div>
@@ -113,56 +113,56 @@
                 <div class="content-card">
                     <div class="card-header">
                         <h5 class="card-title">
-                            <i class="bi bi-graph-up me-2"></i>System Overview
+                            <i class="bi bi-graph-up me-2"></i><span th:text="#{dashboard.system.overview}">System Overview</span>
                         </h5>
                     </div>
                     <div class="card-body">
-                        <p class="mb-4">This is a modern shop management system with both web and desktop interfaces.</p>
+                        <p class="mb-4" th:text="#{dashboard.system.description}">This is a modern shop management system with both web and desktop interfaces.</p>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <h6 class="fw-bold text-primary mb-3">
-                                    <i class="bi bi-globe me-1"></i>Web Features
+                                    <i class="bi bi-globe me-1"></i><span th:text="#{dashboard.web.features}">Web Features</span>
                                 </h6>
                                 <ul class="list-unstyled">
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Responsive dashboard with real-time stats
+                                        <span th:text="#{dashboard.responsive.dashboard}">Responsive dashboard with real-time stats</span>
                                     </li>
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Employee management system
+                                        <span th:text="#{dashboard.employee.management.description}">Employee management system</span>
                                     </li>
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Product inventory tracking
+                                        <span th:text="#{dashboard.product.inventory}">Product inventory tracking</span>
                                     </li>
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Customer relationship management
+                                        <span th:text="#{dashboard.customer.database}">Customer relationship management</span>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
                                 <h6 class="fw-bold text-success mb-3">
-                                    <i class="bi bi-desktop me-1"></i>Desktop Features
+                                    <i class="bi bi-desktop me-1"></i><span th:text="#{dashboard.desktop.features}">Desktop Features</span>
                                 </h6>
                                 <ul class="list-unstyled">
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Full desktop application with modern UI
+                                        <span th:text="#{dashboard.native.application}">Full desktop application with modern UI</span>
                                     </li>
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Advanced management capabilities
+                                        <span th:text="#{dashboard.advanced.reporting}">Advanced management capabilities</span>
                                     </li>
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Local desktop integration
+                                        <span th:text="#{dashboard.offline.capabilities}">Local desktop integration</span>
                                     </li>
                                     <li class="mb-2">
                                         <i class="bi bi-check-circle text-success me-2"></i>
-                                        Offline functionality support
+                                        <span th:text="#{dashboard.offline.capabilities}">Offline functionality support</span>
                                     </li>
                                 </ul>
                             </div>
@@ -175,7 +175,7 @@
                 <div class="content-card">
                     <div class="card-header">
                         <h5 class="card-title">
-                            <i class="bi bi-lightning me-2"></i>Quick Actions
+                            <i class="bi bi-lightning me-2"></i><span th:text="#{dashboard.quick.actions}">Quick Actions</span>
                         </h5>
                     </div>
                     <div class="card-body">
@@ -193,10 +193,10 @@
                         
                         <hr class="my-4">
                         
-                        <h6 class="fw-bold mb-3">System Information</h6>
+                        <h6 class="fw-bold mb-3" th:text="#{dashboard.system.information}">System Information</h6>
                         <div class="small text-muted">
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Version:</span>
+                                <span th:text="#{system.version} + ':'">Version:</span>
                                 <span class="fw-bold">1.0.0</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
@@ -204,7 +204,7 @@
                                 <span class="fw-bold">Spring Boot 2.7.18</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Database:</span>
+                                <span th:text="#{system.database} + ':'">Database:</span>
                                 <span class="fw-bold">MySQL</span>
                             </div>
                             <div class="d-flex justify-content-between">
@@ -227,10 +227,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-0 text-muted">&copy; 2025 Shop Management System. All rights reserved.</p>
+                    <p class="mb-0 text-muted" th:text="#{footer.copyright}">&copy; 2025 Shop Management System. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <p class="mb-0 text-muted">Powered by Spring Boot & Modern Web Technologies</p>
+                    <p class="mb-0 text-muted" th:text="#{footer.powered.by}">Powered by Spring Boot & Modern Web Technologies</p>
                 </div>
             </div>
         </div>

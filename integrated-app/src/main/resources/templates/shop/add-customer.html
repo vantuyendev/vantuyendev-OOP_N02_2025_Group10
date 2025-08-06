@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Shop Management System - Add Customer</title>
+    <title th:text="#{app.title} + ' - ' + #{customer.add}">Shop Management System - Add Customer</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -19,7 +19,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="navbar-brand" href="/shop/">
-                    <i class="bi bi-shop me-2"></i>Shop Management System
+                    <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Shop Management System</span>
                 </a>
                 <div class="navbar-nav d-flex flex-row">
                     <a class="nav-link" href="/shop/">
@@ -43,7 +43,7 @@
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="h2 mb-1">Add New Customer</h1>
+                <h1 class="h2 mb-1" th:text="#{customer.add}">Add New Customer</h1>
                 <p class="text-muted">Add a new customer to your database</p>
             </div>
             <div>
@@ -126,7 +126,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-0 text-muted">&copy; 2025 Shop Management System. All rights reserved.</p>
+                    <p class="mb-0 text-muted" th:text="#{footer.copyright}">&copy; 2025 Shop Management System. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-end">
                     <p class="mb-0 text-muted">Powered by Spring Boot & Modern Web Technologies</p>

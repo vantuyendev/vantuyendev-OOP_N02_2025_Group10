@@ -62,7 +62,7 @@
             </div>
             <div>
                 <a href="/shop/customers/add" class="btn-modern btn-primary">
-                    <i class="bi bi-person-plus me-2"></i>Add New Customer
+                    <i class="bi bi-person-plus me-2"></i><span th:text="#{customer.add}">Add New Customer</span>
                 </a>
             </div>
         </div>
@@ -89,7 +89,7 @@
         <div class="content-card">
             <div class="card-header">
                 <h5 class="card-title">
-                    <i class="bi bi-person-hearts me-2"></i>All Customers
+                    <i class="bi bi-person-hearts me-2"></i><span th:text="#{table.all} + ' ' + #{nav.customers}">All Customers</span>
                 </h5>
             </div>
             <div class="card-body">
@@ -103,7 +103,7 @@
                                     <th>Email</th>
                                     <th>Phone Number</th>
                                     <th>Address</th>
-                                    <th>Actions</th>
+                                    <th th:text="#{table.actions}">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -174,7 +174,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-0 text-muted">&copy; 2025 Shop Management System. All rights reserved.</p>
+                    <p class="mb-0 text-muted" th:text="#{footer.copyright}">&copy; 2025 Shop Management System. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-end">
                     <p class="mb-0 text-muted">Powered by Spring Boot & Modern Web Technologies</p>
