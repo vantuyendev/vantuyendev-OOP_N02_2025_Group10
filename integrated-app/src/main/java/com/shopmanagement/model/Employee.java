@@ -112,7 +112,6 @@ public class Employee extends User {
 			System.out.println("statement created");
 			rs = st.executeQuery(query);//getting result
 			System.out.println("results received");
-			boolean flag = false;
 			while(rs.next()) {
 				this.employeeName = rs.getString("full_name");
 				this.phoneNumber = rs.getString("phone");

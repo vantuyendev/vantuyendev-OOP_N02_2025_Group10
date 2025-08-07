@@ -74,7 +74,6 @@ public abstract class User {
 			
 			if(rs.next()) {
                 String userId = rs.getString("userId");
-                String password = rs.getString("password");
 				int status = rs.getInt("status");
 				System.out.println("Found user: " + userId + " with status: " + status);
 				result = status;

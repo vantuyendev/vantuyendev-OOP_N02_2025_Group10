@@ -1,11 +1,10 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.text.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 /**
  * ManageProduct - Giao diện quản lý sản phẩm
@@ -16,9 +15,9 @@ public class ManageProduct extends JFrame implements ActionListener {
 	private JPanel panel;
 	ViewProductActivity prev;
 	private Product product;
-	private JButton buttonBack, buttonEdit, buttonDelete, buttonSell, buttonSubmit;
-	private JLabel title, header, productIdLabel, productNameLabel, productQtLabel, productPriceLabel, userIdLabel;
-	private JTextField productIdTF, productNameTF, productQtTF, productPriceTF, userIdTF;
+	private JButton buttonEdit, buttonDelete, buttonSell, buttonSubmit;
+	private JLabel productIdLabel, productNameLabel, productQtLabel, productPriceLabel, userIdLabel;
+	private JTextField productNameTF, productQtTF, productPriceTF, userIdTF;
 	
 	/**
 	 * Constructor khởi tạo giao diện quản lý sản phẩm
