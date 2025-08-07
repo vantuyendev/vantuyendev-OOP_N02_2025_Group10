@@ -1,15 +1,11 @@
 package com.shopmanagement.model;
 
-import java.lang.*;
-import java.util.*;
 import java.sql.*;
 import javax.swing.table.*;
-import java.awt.*;
 import java.text.*;
 import java.time.*;
 import java.time.format.*;
 import com.shopmanagement.util.*;
-import com.shopmanagement.activity.*;
 import javax.swing.*;
 
 /**

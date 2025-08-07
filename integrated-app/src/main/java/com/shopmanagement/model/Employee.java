@@ -1,12 +1,9 @@
 package com.shopmanagement.model;
 
-import java.lang.*;
 import java.sql.*;
-import java.text.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import com.shopmanagement.util.*;
-import com.shopmanagement.activity.*;
 
 /**
  * Class Employee - đại diện cho nhân viên trong hệ thống

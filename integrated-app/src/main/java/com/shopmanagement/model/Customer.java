@@ -1,7 +1,5 @@
 package com.shopmanagement.model;
 
-import java.lang.*;
-import java.util.*;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.table.*;

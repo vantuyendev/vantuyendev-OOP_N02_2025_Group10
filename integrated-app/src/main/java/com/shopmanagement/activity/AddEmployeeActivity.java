@@ -1,17 +1,17 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import java.awt.event.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 public class AddEmployeeActivity extends JFrame implements ActionListener {
 	private JPanel panel;
 	private ViewEmployeeActivity activity;
-	private JButton buttonLogout, buttonBack, buttonAdd, buttonEdit, buttonDelete, buttonRandom;
+	private JButton buttonLogout, buttonBack, buttonAdd, buttonRandom;
 	private JLabel title, header, employeeIdLabel, employeeNameLabel, roleLabel, employeePhoneLabel, salaryLabel;
 	private JComboBox<String> roleCB;
 	private JTextField employeeIdTF, employeeNameTF, salaryTF, employeePhoneTF1, employeePhoneTF2, passwordTF;

@@ -1,20 +1,19 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.text.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 public class ManageEmployee extends JFrame implements ActionListener {
 	private JPanel panel;
 	ViewEmployeeActivity prev;
 	private Employee employee;
-	private JButton buttonBack, buttonEdit, buttonDelete;
-	private JLabel title, header, userIdLabel, employeeNameLabel, phoneNumberLabel, roleLabel, salaryLabel;
-	private JTextField userIdTF, employeeNameTF, phoneNumberTF, phoneCodeTF, salaryTF;
-	private JComboBox roleCB;
+	private JButton buttonEdit, buttonDelete;
+	private JLabel userIdLabel, employeeNameLabel, phoneNumberLabel, roleLabel, salaryLabel;
+	private JTextField employeeNameTF, phoneNumberTF, phoneCodeTF, salaryTF;
+	private JComboBox<String> roleCB;
 	
 	public ManageEmployee(String eid, ViewEmployeeActivity prev) {
 		super("Manage Employee");
@@ -73,7 +72,7 @@ public class ManageEmployee extends JFrame implements ActionListener {
 		phoneNumberTF.setFont(Theme.FONT_INPUT);
 		panel.add(phoneNumberTF);
 		
-		roleCB = new JComboBox(Employee.roles);
+		roleCB = new JComboBox<>(Employee.roles);
 		roleCB.setBounds(160, 140, 160, 30);
 		roleCB.setSelectedIndex(employee.getRole().equals("Manager") ? 1 : 0);
 		roleCB.setFont(Theme.FONT_INPUT);

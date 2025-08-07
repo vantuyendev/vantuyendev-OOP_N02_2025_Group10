@@ -1,18 +1,17 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 public class ManageCustomer extends JFrame implements ActionListener {
 	private JPanel panel;
 	ViewCustomerActivity prev;
 	private Customer customer;
-	private JButton buttonBack, buttonEdit, buttonDelete;
-	private JLabel title, header, userIdLabel, customerNameLabel, phoneNumberLabel, addressLabel;
-	private JTextField userIdTF, customerNameTF, phoneNumberTF, phoneCodeTF, addressTF;
+	private JButton buttonEdit, buttonDelete;
+	private JLabel userIdLabel, customerNameLabel, phoneNumberLabel, addressLabel;
+	private JTextField customerNameTF, phoneNumberTF, phoneCodeTF, addressTF;
 	
 	public ManageCustomer(String cid, ViewCustomerActivity prev) {
 		super("Manage Customer");

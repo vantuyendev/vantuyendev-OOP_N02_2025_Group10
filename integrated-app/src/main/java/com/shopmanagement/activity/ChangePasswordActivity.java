@@ -1,10 +1,9 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 public class ChangePasswordActivity extends JFrame implements ActionListener {
 	private User user;
