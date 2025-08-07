@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
     
     /**
-     * Trang chủ - redirect đến dashboard
+     * Trang chủ - redirect đến shop login
      */
     @GetMapping
     public String home() {
-        return "redirect:/shop/dashboard";
+        return "redirect:/shop/login";
     }
     
     /**
@@ -34,8 +34,7 @@ public class HomeController {
      */
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("title", "Đăng nhập - Shop Management System");
-        return "login";
+        return "redirect:/shop/login";
     }
     
     /**
