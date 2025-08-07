@@ -300,4 +300,27 @@ public class ShopWebController {
             return "shop/login";
         }
     }
+
+    @GetMapping("/search")
+    public String search() {
+        return "shop/search";
+    }
+
+    @GetMapping("/statistics")
+    public String statistics(Model model) {
+        try {
+            // Get statistics data for the charts
+            List<Employee> employees = employeeService.findAll();
+            List<Product> products = productService.findAll();
+            List<Customer> customers = customerService.findAll();
+            
+            model.addAttribute("employeeCount", employees.size());
+            model.addAttribute("productCount", products.size());
+            model.addAttribute("customerCount", customers.size());
+            
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load statistics: " + e.getMessage());
+        }
+        return "shop/statistics";
+    }
 }

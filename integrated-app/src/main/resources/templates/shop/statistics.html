@@ -1,0 +1,509 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{app.title} + ' - Statistics'">Shop Management System - Statistics</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="modern-navbar">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="/shop/">
+                    <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Shop Management System</span>
+                </a>
+                <div class="navbar-nav d-flex flex-row">
+                    <a class="nav-link" href="/shop/">
+                        <i class="bi bi-speedometer2 me-1"></i><span th:text="#{nav.dashboard}">Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="/shop/employees">
+                        <i class="bi bi-people me-1"></i><span th:text="#{nav.employees}">Employees</span>
+                    </a>
+                    <a class="nav-link" href="/shop/products">
+                        <i class="bi bi-box me-1"></i><span th:text="#{nav.products}">Products</span>
+                    </a>
+                    <a class="nav-link" href="/shop/customers">
+                        <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Customers</span>
+                    </a>
+                    <a class="nav-link" href="/search">
+                        <i class="bi bi-search me-1"></i>Search
+                    </a>
+                    <a class="nav-link active" href="/statistics">
+                        <i class="bi bi-bar-chart me-1"></i>Statistics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        <!-- Page Header -->
+        <div class="page-header mb-4">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="page-title">
+                        <i class="bi bi-bar-chart text-primary me-2"></i>System Statistics
+                    </h1>
+                    <p class="page-subtitle">Comprehensive analytics and insights for your shop management system</p>
+                </div>
+                <div class="col-auto">
+                    <button class="btn-modern btn-primary" onclick="refreshData()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4" id="summaryCards">
+            <div class="col-md-3">
+                <div class="card modern-card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-people display-4 text-primary mb-2"></i>
+                        <h3 class="counter" id="totalEmployees">0</h3>
+                        <p class="text-muted mb-0">Total Employees</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card modern-card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-box display-4 text-success mb-2"></i>
+                        <h3 class="counter" id="totalProducts">0</h3>
+                        <p class="text-muted mb-0">Total Products</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card modern-card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-person-hearts display-4 text-warning mb-2"></i>
+                        <h3 class="counter" id="totalCustomers">0</h3>
+                        <p class="text-muted mb-0">Total Customers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card modern-card text-center">
+                    <div class="card-body">
+                        <i class="bi bi-currency-dollar display-4 text-info mb-2"></i>
+                        <h3 class="counter" id="inventoryValue">$0</h3>
+                        <p class="text-muted mb-0">Inventory Value</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <!-- Department Distribution -->
+            <div class="col-md-6">
+                <div class="card modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-building me-2"></i>Employees by Department
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="departmentChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Categories -->
+            <div class="col-md-6">
+                <div class="card modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-tags me-2"></i>Products by Category
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoryChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Status Row -->
+        <div class="row mb-4">
+            <!-- Stock Status -->
+            <div class="col-md-6">
+                <div class="card modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-graph-up me-2"></i>Stock Status
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="stockChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee Roles -->
+            <div class="col-md-6">
+                <div class="card modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-person-badge me-2"></i>Employee Roles
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="rolesChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Tables -->
+        <div class="row">
+            <!-- Low Stock Products -->
+            <div class="col-md-6">
+                <div class="card modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-exclamation-triangle text-warning me-2"></i>Low Stock Products
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="lowStockTable" class="table-responsive">
+                            <div class="text-center">
+                                <i class="bi bi-hourglass-split"></i> Loading...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Additions -->
+            <div class="col-md-6">
+                <div class="card modern-card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-clock-history text-info me-2"></i>System Overview
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h4 class="text-success" id="inStockCount">-</h4>
+                                <small class="text-muted">In Stock</small>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-danger" id="outOfStockCount">-</h4>
+                                <small class="text-muted">Out of Stock</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <a href="/shop/products/add" class="btn btn-sm btn-success">
+                                <i class="bi bi-plus-circle me-1"></i>Add Product
+                            </a>
+                            <a href="/shop/employees/add" class="btn btn-sm btn-primary">
+                                <i class="bi bi-person-plus me-1"></i>Add Employee
+                            </a>
+                            <a href="/shop/customers/add" class="btn btn-sm btn-warning">
+                                <i class="bi bi-person-plus-fill me-1"></i>Add Customer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">&copy; 2025 Shop Management System. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="mb-0 text-muted">Statistics & Analytics Module</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+    
+    <script>
+        let charts = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+        });
+        
+        async function loadStatistics() {
+            try {
+                // Load all statistics
+                await Promise.all([
+                    loadEmployeeStats(),
+                    loadProductStats(),
+                    loadCustomerStats()
+                ]);
+                
+                // Create charts after data is loaded
+                createCharts();
+                
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+        
+        async function loadEmployeeStats() {
+            try {
+                const response = await fetch('/api/employees/statistics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('totalEmployees').textContent = stats.totalEmployees;
+                    
+                    // Department chart data
+                    window.departmentData = stats.departmentDistribution || {};
+                    window.roleData = stats.roleDistribution || {};
+                }
+            } catch (error) {
+                console.error('Error loading employee stats:', error);
+            }
+        }
+        
+        async function loadProductStats() {
+            try {
+                const response = await fetch('/api/products/statistics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('totalProducts').textContent = stats.totalProducts;
+                    document.getElementById('inventoryValue').textContent = '$' + (stats.totalInventoryValue || 0).toLocaleString();
+                    document.getElementById('inStockCount').textContent = stats.inStockCount || 0;
+                    document.getElementById('outOfStockCount').textContent = stats.outOfStockCount || 0;
+                    
+                    // Category and stock data
+                    window.categoryData = stats.categoryDistribution || {};
+                    window.stockData = {
+                        inStock: stats.inStockCount || 0,
+                        outOfStock: stats.outOfStockCount || 0,
+                        lowStock: stats.lowStockCount || 0
+                    };
+                }
+                
+                // Load low stock products
+                const lowStockResponse = await fetch('/api/products/low-stock?threshold=10');
+                const lowStockData = await lowStockResponse.json();
+                
+                if (lowStockData.success) {
+                    displayLowStockTable(lowStockData.data);
+                }
+                
+            } catch (error) {
+                console.error('Error loading product stats:', error);
+            }
+        }
+        
+        async function loadCustomerStats() {
+            try {
+                const response = await fetch('/api/customers/statistics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('totalCustomers').textContent = stats.totalCustomers;
+                }
+            } catch (error) {
+                console.error('Error loading customer stats:', error);
+            }
+        }
+        
+        function createCharts() {
+            // Department Chart
+            if (window.departmentData) {
+                createDepartmentChart();
+            }
+            
+            // Category Chart
+            if (window.categoryData) {
+                createCategoryChart();
+            }
+            
+            // Stock Chart
+            if (window.stockData) {
+                createStockChart();
+            }
+            
+            // Roles Chart
+            if (window.roleData) {
+                createRolesChart();
+            }
+        }
+        
+        function createDepartmentChart() {
+            const ctx = document.getElementById('departmentChart').getContext('2d');
+            const data = window.departmentData;
+            
+            charts.department = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createCategoryChart() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            const data = window.categoryData;
+            
+            charts.category = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: [
+                            '#36A2EB', '#4BC0C0', '#FFCE56', '#FF6384', '#9966FF', '#FF9F40'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createStockChart() {
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            const data = window.stockData;
+            
+            charts.stock = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+                    datasets: [{
+                        label: 'Products',
+                        data: [data.inStock, data.lowStock, data.outOfStock],
+                        backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createRolesChart() {
+            const ctx = document.getElementById('rolesChart').getContext('2d');
+            const data = window.roleData;
+            
+            charts.roles = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{
+                        data: Object.values(data),
+                        backgroundColor: [
+                            '#FF6384', '#4BC0C0', '#FFCE56', '#36A2EB', '#9966FF'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function displayLowStockTable(products) {
+            const tableDiv = document.getElementById('lowStockTable');
+            
+            if (products.length === 0) {
+                tableDiv.innerHTML = '<div class="text-center text-success"><i class="bi bi-check-circle"></i> All products are well-stocked!</div>';
+                return;
+            }
+            
+            let html = '<table class="table table-sm table-hover">';
+            html += '<thead><tr><th>Product</th><th>Stock</th></tr></thead><tbody>';
+            
+            products.slice(0, 5).forEach(product => {
+                html += '<tr>';
+                html += '<td>' + product.productName + '</td>';
+                html += '<td><span class="badge bg-warning">' + product.quantity + '</span></td>';
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            
+            if (products.length > 5) {
+                html += '<div class="text-center"><small class="text-muted">+ ' + (products.length - 5) + ' more products</small></div>';
+            }
+            
+            tableDiv.innerHTML = html;
+        }
+        
+        function refreshData() {
+            // Destroy existing charts
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            charts = {};
+            
+            // Reload data
+            loadStatistics();
+        }
+    </script>
+</body>
+</html>

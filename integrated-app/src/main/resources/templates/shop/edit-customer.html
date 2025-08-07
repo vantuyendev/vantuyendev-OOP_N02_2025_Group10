@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{app.title} + ' - Edit Customer'">Shop Management System - Edit Customer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="modern-navbar">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="/shop/">
+                    <i class="bi bi-shop me-2"></i>Shop Management System
+                </a>
+                <div class="navbar-nav d-flex flex-row">
+                    <a class="nav-link" href="/shop/">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="/shop/employees">
+                        <i class="bi bi-people me-1"></i>Employees
+                    </a>
+                    <a class="nav-link" href="/shop/products">
+                        <i class="bi bi-box me-1"></i>Products
+                    </a>
+                    <a class="nav-link active" href="/shop/customers">
+                        <i class="bi bi-person-hearts me-1"></i>Customers
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        <!-- Page Header -->
+        <div class="page-header mb-4">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h1 class="page-title">
+                        <i class="bi bi-person-gear text-primary me-2"></i>Edit Customer
+                    </h1>
+                    <p class="page-subtitle">Update customer information and contact details</p>
+                </div>
+                <div class="col-auto">
+                    <a href="/shop/customers" class="btn-modern btn-outline">
+                        <i class="bi bi-arrow-left me-1"></i>Back to Customers
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card modern-card">
+                    <div class="card-body p-4">
+                        <!-- Error Alert -->
+                        <div th:if="${error}" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div th:text="${error}">Error message</div>
+                        </div>
+
+                        <form th:action="@{'/shop/customers/edit/' + ${customer.userId}}" method="post" th:object="${customer}" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="userId" th:field="*{userId}" readonly>
+                                        <label for="userId">
+                                            <i class="bi bi-person-badge me-1"></i>Customer ID
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="customerName" th:field="*{customerName}" required>
+                                        <label for="customerName">
+                                            <i class="bi bi-person me-1"></i>Customer Name
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid full name.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" class="form-control" id="email" th:field="*{email}">
+                                        <label for="email">
+                                            <i class="bi bi-envelope me-1"></i>Email Address
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid email address.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required>
+                                        <label for="phoneNumber">
+                                            <i class="bi bi-telephone me-1"></i>Phone Number
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Please provide a valid phone number.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-floating mb-4">
+                                <textarea class="form-control" id="address" th:field="*{address}" style="height: 100px"></textarea>
+                                <label for="address">
+                                    <i class="bi bi-geo-alt me-1"></i>Address
+                                </label>
+                            </div>
+                            
+                            <!-- Customer Preferences Section -->
+                            <div class="card border-info mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><i class="bi bi-heart me-1"></i>Customer Preferences</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="newsletter">
+                                                <label class="form-check-label" for="newsletter">
+                                                    Subscribe to newsletter
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="checkbox" id="smsNotifications">
+                                                <label class="form-check-label" for="smsNotifications">
+                                                    Receive SMS notifications
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="notes" placeholder="Special notes or preferences" style="height: 60px"></textarea>
+                                        <label for="notes">Notes (Optional)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Contact History Section -->
+                            <div class="card border-secondary mb-4">
+                                <div class="card-header bg-secondary text-white">
+                                    <h6 class="mb-0"><i class="bi bi-clock-history me-1"></i>Contact Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <small class="text-muted">Customer since:</small>
+                                            <p class="mb-2"><strong th:text="${customer.userId != null ? '2024' : 'New Customer'}">2024</strong></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="text-muted">Last updated:</small>
+                                            <p class="mb-2"><strong th:text="${#dates.format(#dates.createNow(), 'MMM dd, yyyy')}">Today</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="sendTestEmail()">
+                                            <i class="bi bi-envelope me-1"></i>Send Test Email
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-success" onclick="callCustomer()">
+                                            <i class="bi bi-telephone me-1"></i>Call Customer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/shop/customers" class="btn-modern btn-outline me-md-2">
+                                    <i class="bi bi-x-circle me-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn-modern btn-primary">
+                                    <i class="bi bi-check-circle me-2"></i>Update Customer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">&copy; 2025 Shop Management System. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="mb-0 text-muted">Customer Management Module</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form validation
+            'use strict';
+            
+            const forms = document.querySelectorAll('.needs-validation');
+            
+            Array.prototype.slice.call(forms).forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    
+                    form.classList.add('was-validated');
+                }, false);
+            });
+            
+            // Email validation
+            const emailField = document.getElementById('email');
+            emailField.addEventListener('input', function() {
+                const email = this.value;
+                if (email && !isValidEmail(email)) {
+                    this.setCustomValidity('Please enter a valid email address');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        });
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function sendTestEmail() {
+            const email = document.getElementById('email').value;
+            const customerName = document.getElementById('fullName').value;
+            
+            if (!email) {
+                alert('Please enter an email address first');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Simulate sending email
+            if (confirm(`Send a test email to ${customerName} at ${email}?`)) {
+                alert('Test email sent successfully! (This is a demo feature)');
+            }
+        }
+        
+        function callCustomer() {
+            const phone = document.getElementById('phoneNumber').value;
+            const customerName = document.getElementById('fullName').value;
+            
+            if (!phone) {
+                alert('Please enter a phone number first');
+                return;
+            }
+            
+            // Simulate phone call
+            if (confirm(`Call ${customerName} at ${phone}?`)) {
+                alert('Initiating call... (This is a demo feature)');
+            }
+        }
+    </script>
+</body>
+</html>

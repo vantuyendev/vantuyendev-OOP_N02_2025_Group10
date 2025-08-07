@@ -70,8 +70,8 @@ public class HomeController {
      */
     @GetMapping("/statistics")
     public String statistics(Model model) {
-        model.addAttribute("title", "Thống kê - Shop Management System");
-        return "statistics";
+        model.addAttribute("title", "Statistics - Shop Management System");
+        return "shop/statistics";
     }
     
     /**
@@ -81,5 +81,14 @@ public class HomeController {
     public String settings(Model model) {
         model.addAttribute("title", "Cài đặt - Shop Management System");
         return "settings";
+    }
+    
+    /**
+     * Trang tìm kiếm nâng cao
+     */
+    @GetMapping("/search")
+    public String search(Model model) {
+        model.addAttribute("title", "Advanced Search - Shop Management System");
+        return "shop/search";
     }
 }

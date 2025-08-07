@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{app.title} + ' - Login'">Shop Management System - Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .login-logo {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+        
+        .form-floating > .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-floating > .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .demo-accounts {
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-account {
+            background: white;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+        
+        .demo-account:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+        
+        .demo-account code {
+            background: none;
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card login-card">
+                    <!-- Logo and Title -->
+                    <div class="text-center mb-4">
+                        <i class="bi bi-shop login-logo"></i>
+                        <h2 class="fw-bold mb-2" th:text="#{app.title}">Shop Management System</h2>
+                        <p class="text-muted" th:text="#{login.subtitle}">Please sign in to continue</p>
+                    </div>
+
+                    <!-- Error Alert -->
+                    <div th:if="${error}" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div th:text="${error}">Error message</div>
+                    </div>
+
+                    <!-- Success Alert -->
+                    <div th:if="${success}" class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <div th:text="${success}">Success message</div>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form th:action="@{/shop/login}" method="post" id="loginForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Username" required autofocus>
+                            <label for="username">
+                                <i class="bi bi-person me-1"></i><span th:text="#{login.username}">Username</span>
+                            </label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Password" required>
+                            <label for="password">
+                                <i class="bi bi-lock me-1"></i><span th:text="#{login.password}">Password</span>
+                            </label>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-login">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                <span th:text="#{login.signin}">Sign In</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Demo Accounts -->
+                    <div class="demo-accounts">
+                        <h6 class="fw-bold text-muted mb-3">
+                            <i class="bi bi-info-circle me-1"></i><span th:text="#{login.demo.accounts}">Demo Accounts</span>
+                        </h6>
+                        
+                        <div class="demo-account" onclick="fillLogin('admin', '123456')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong><span th:text="#{login.demo.admin}">Administrator</span></strong>
+                                    <br><small class="text-muted">User: <code>admin</code> | Pass: <code>123456</code></small>
+                                </div>
+                                <i class="bi bi-person-fill-gear text-primary"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-account" onclick="fillLogin('e001', '123456')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong><span th:text="#{login.demo.employee}">Employee</span></strong>
+                                    <br><small class="text-muted">User: <code>e001</code> | Pass: <code>123456</code></small>
+                                </div>
+                                <i class="bi bi-person-badge text-success"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-account" onclick="fillLogin('c001', '123456')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong><span th:text="#{login.demo.customer}">Customer</span></strong>
+                                    <br><small class="text-muted">User: <code>c001</code> | Pass: <code>123456</code></small>
+                                </div>
+                                <i class="bi bi-person-heart text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Links -->
+                    <div class="text-center mt-4">
+                        <div class="small text-muted">
+                            <span th:text="#{login.footer.text}">© 2025 Shop Management System. All rights reserved.</span>
+                        </div>
+                        <div class="mt-2">
+                            <a href="/shop/" class="text-decoration-none me-3">
+                                <i class="bi bi-arrow-left me-1"></i><span th:text="#{login.back.home}">Back to Home</span>
+                            </a>
+                            <a href="/shop/dashboard" class="text-decoration-none">
+                                <i class="bi bi-speedometer2 me-1"></i><span th:text="#{login.view.demo}">View Demo</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Fill login form with demo credentials
+        function fillLogin(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            // Add visual feedback
+            const usernameField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+            
+            usernameField.focus();
+            setTimeout(() => passwordField.focus(), 100);
+            setTimeout(() => usernameField.focus(), 200);
+        }
+        
+        // Form validation and enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            form.addEventListener('submit', function(e) {
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                
+                if (!username || !password) {
+                    e.preventDefault();
+                    alert('Please enter both username and password.');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Signing In...';
+                submitBtn.disabled = true;
+            });
+            
+            // Add Enter key support for demo accounts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.classList.contains('demo-account')) {
+                    e.target.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
