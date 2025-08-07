@@ -29,9 +29,21 @@ INSERT INTO Customer (user_id, customer_name, phone_number, email, address) VALU
 ('CUST005', 'Eva Martinez', '+1-555-0205', 'eva.martinez@email.com', '654 Cedar Blvd, New City, USA');
 
 -- Sample Login Credentials  
+-- Status: 0 = Employee, 1 = Customer
 INSERT INTO Login (user_id, password, status) VALUES
-('EMP001', 'admin123', 1),
-('EMP002', 'manager123', 1),
-('EMP003', 'sales123', 1),
-('EMP004', 'cashier123', 1),
-('EMP005', 'inv123', 1);
+-- Admin account
+('admin', '123456', 0),
+-- Employee accounts
+('e001', '123456', 0),
+('EMP001', 'admin123', 0),
+('EMP002', 'manager123', 0),
+('EMP003', 'sales123', 0),
+('EMP004', 'cashier123', 0),
+('EMP005', 'inv123', 0),
+-- Customer accounts
+('c001', '123456', 1),
+('CUST001', 'password123', 1),
+('CUST002', 'password123', 1),
+('CUST003', 'password123', 1),
+('CUST004', 'password123', 1),
+('CUST005', 'password123', 1);

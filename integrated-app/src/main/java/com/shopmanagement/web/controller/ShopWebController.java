@@ -286,17 +286,26 @@ public class ShopWebController {
 
     @PostMapping("/login")
     public String processLogin(@RequestParam String username, @RequestParam String password, Model model) {
-        // Simple authentication - in a real application, you'd use Spring Security
         try {
-            Optional<Login> loginOpt = loginService.authenticate(username, password);
+            // Validate input
+            if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+                model.addAttribute("error", "Vui lòng nhập tên đăng nhập và mật khẩu");
+                return "shop/login";
+            }
+            
+            // Authenticate user
+            Optional<Login> loginOpt = loginService.authenticate(username.trim(), password.trim());
             if (loginOpt.isPresent()) {
-                return "redirect:/shop/";
+                Login login = loginOpt.get();
+                // Add user info to session or model if needed
+                model.addAttribute("success", "Đăng nhập thành công");
+                return "redirect:/shop/dashboard";
             } else {
-                model.addAttribute("error", "Invalid username or password");
+                model.addAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng");
                 return "shop/login";
             }
         } catch (Exception e) {
-            model.addAttribute("error", "Login error: " + e.getMessage());
+            model.addAttribute("error", "Lỗi hệ thống: " + e.getMessage());
             return "shop/login";
         }
     }

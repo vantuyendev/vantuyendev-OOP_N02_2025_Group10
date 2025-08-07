@@ -107,6 +107,23 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card login-card">
+                    <!-- Language Switcher -->
+                    <div class="text-end mb-3">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-translate me-1"></i><span th:text="#{language}">Language</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/changeLanguage?lang=vi">
+                                    <i class="bi bi-flag me-2"></i><span th:text="#{language.vietnamese}">Tiếng Việt</span>
+                                </a></li>
+                                <li><a class="dropdown-item" href="/changeLanguage?lang=en">
+                                    <i class="bi bi-flag me-2"></i><span th:text="#{language.english}">English</span>
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <!-- Logo and Title -->
                     <div class="text-center mb-4">
                         <i class="bi bi-shop login-logo"></i>
@@ -230,26 +247,82 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('loginForm');
             const submitBtn = form.querySelector('button[type="submit"]');
+            const usernameField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+            
+            // Real-time validation
+            function validateField(field, fieldName) {
+                const value = field.value.trim();
+                const isValid = value.length > 0;
+                
+                if (isValid) {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                } else {
+                    field.classList.remove('is-valid');
+                    field.classList.add('is-invalid');
+                }
+                
+                return isValid;
+            }
+            
+            usernameField.addEventListener('blur', () => validateField(usernameField, 'Username'));
+            passwordField.addEventListener('blur', () => validateField(passwordField, 'Password'));
             
             form.addEventListener('submit', function(e) {
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
+                const username = usernameField.value.trim();
+                const password = passwordField.value.trim();
                 
-                if (!username || !password) {
+                let isValid = true;
+                
+                if (!username) {
+                    usernameField.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    usernameField.classList.remove('is-invalid');
+                }
+                
+                if (!password) {
+                    passwordField.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    passwordField.classList.remove('is-invalid');
+                }
+                
+                if (!isValid) {
                     e.preventDefault();
-                    alert('Please enter both username and password.');
+                    // Show error message
+                    let errorDiv = document.querySelector('.validation-error');
+                    if (!errorDiv) {
+                        errorDiv = document.createElement('div');
+                        errorDiv.className = 'alert alert-danger validation-error';
+                        errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>Vui lòng nhập tên đăng nhập và mật khẩu';
+                        form.insertBefore(errorDiv, form.firstChild);
+                    }
                     return;
                 }
                 
+                // Remove any validation errors
+                const errorDiv = document.querySelector('.validation-error');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+                
                 // Show loading state
-                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Signing In...';
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2 spinner-border spinner-border-sm"></i>Đang đăng nhập...';
                 submitBtn.disabled = true;
+                
+                // Re-enable submit button after 5 seconds in case of slow response
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập';
+                    submitBtn.disabled = false;
+                }, 5000);
             });
             
             // Add Enter key support for demo accounts
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.classList.contains('demo-account')) {
-                    e.target.click();
+                if (e.key === 'Enter' && e.target.closest('.demo-account')) {
+                    e.target.closest('.demo-account').click();
                 }
             });
         });

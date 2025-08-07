@@ -46,7 +46,10 @@ public class LanguageController {
         // Redirect back to the referring page or dashboard if no referer
         String referer = request.getHeader("Referer");
         if (referer != null && !referer.isEmpty()) {
-            return "redirect:" + referer;
+            // Make sure we stay within our application
+            if (referer.contains("/shop/") || referer.contains("/changeLanguage")) {
+                return "redirect:" + referer;
+            }
         }
         
         return "redirect:/shop/dashboard";
