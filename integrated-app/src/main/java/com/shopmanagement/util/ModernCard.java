@@ -24,11 +24,11 @@ public class ModernCard extends JPanel {
         this(title, subtitle, Theme.getPrimaryColor(), false);
     }
     
-    public ModernCard(String title, String subtitle, Color accentColor, boolean isHoverable) {
+    public ModernCard(String title, String subtitle, Color accentColor, boolean hoverable) {
         this.title = title;
         this.subtitle = subtitle;
         this.accentColor = accentColor;
-        this.isHoverable = isHoverable;
+        this.isHoverable = hoverable;
         this.isSelected = false;
         
         initializeCard();

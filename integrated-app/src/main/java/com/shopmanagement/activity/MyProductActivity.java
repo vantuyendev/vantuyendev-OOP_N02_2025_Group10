@@ -15,7 +15,7 @@ public class MyProductActivity extends JFrame implements ActionListener {
 	private JTable table;
 	private JButton buttonLogout, buttonBack;
 	private JLabel title, header;
-	public MyProductActivity(JFrame prev, Customer customer) {
+	public MyProductActivity(JFrame prev, Customer cust) {
 		super("Purchase History");
 		
 		this.setSize(Theme.GUI_WIDTH, Theme.GUI_HEIGHT);
@@ -23,7 +23,7 @@ public class MyProductActivity extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.activity = prev;
-		this.customer = customer;
+		this.customer = cust;
 		
 		panel = new JPanel();
 		panel.setLayout(null);
