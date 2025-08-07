@@ -1,17 +1,16 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.event.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 public class ViewCustomerActivity extends JFrame implements ActionListener {
 	private JPanel panel;
 	private JFrame activity;
-	private Employee employee;
 	private JScrollPane frame;
 	JComboBox<String> byWhatCB;
 	JTable table;

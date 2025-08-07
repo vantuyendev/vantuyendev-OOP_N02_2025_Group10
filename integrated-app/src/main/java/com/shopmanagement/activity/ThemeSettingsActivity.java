@@ -4,20 +4,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.util.*;
 
 public class ThemeSettingsActivity extends JDialog implements ActionListener {
 	private JPanel mainPanel, previewPanel, buttonPanel;
 	private JButton[] themeButtons;
 	private JButton applyButton, cancelButton;
-	private JLabel titleLabel, previewLabel;
+	private JLabel titleLabel;
 	private Theme.ThemeVariant selectedTheme;
 	private Theme.ThemeVariant originalTheme;
-	private JFrame parentFrame;
 	
 	public ThemeSettingsActivity(JFrame parent) {
 		super(parent, "Theme Settings", true);
-		this.parentFrame = parent;
 		this.originalTheme = Theme.getCurrentTheme();
 		this.selectedTheme = originalTheme;
 		

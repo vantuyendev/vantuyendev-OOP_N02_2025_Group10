@@ -13,9 +13,8 @@ public class MyProductActivity extends JFrame implements ActionListener {
 	private JFrame activity;
 	private JScrollPane frame;
 	private JTable table;
-	private JButton buttonLogout, buttonBack, buttonCheck;
-	private JLabel title, header, keywordLabel, productNameLabel, productQtLabel, productPriceLabel;
-	private JTextField keywordTF, productNameTF, productQtTF, productPriceTF;
+	private JButton buttonLogout, buttonBack;
+	private JLabel title, header;
 	public MyProductActivity(JFrame prev, Customer customer) {
 		super("Purchase History");
 		
@@ -80,8 +79,4 @@ public class MyProductActivity extends JFrame implements ActionListener {
 		}
 		else {}
 	}
-	
-	private void jTable_ClickMouseClicked(MouseEvent evt) {                                          
-       
-    }
 }

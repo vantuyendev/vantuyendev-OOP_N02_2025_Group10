@@ -1,13 +1,12 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
-import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import java.awt.event.*;
 import javax.swing.table.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 public class ViewProductActivity extends JFrame implements ActionListener {
 	private JPanel panel;

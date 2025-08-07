@@ -1,12 +1,11 @@
 package com.shopmanagement.activity;
 
-import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 import java.awt.event.*;
-import java.sql.*;
-import com.shopmanagement.model.*; import com.shopmanagement.util.*;;
+import com.shopmanagement.model.*;
+import com.shopmanagement.util.*;
 
 /**
  * SignupActivity - Giao diện đăng ký tài khoản mới

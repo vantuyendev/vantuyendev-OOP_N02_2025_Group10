@@ -5,7 +5,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import com.shopmanagement.util.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.shopmanagement.ShopManagementApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -199,24 +198,5 @@ public class SplashScreen extends JFrame {
                 new LoginActivity().setVisible(true);
             }
         });
-    }
-    
-    // Add click to skip functionality
-    private void addClickToSkip() {
-        mainPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (progressTimer.isRunning()) {
-                    progressTimer.stop();
-                    closeSplashAndOpenLogin();
-                }
-            }
-        });
-        
-        JLabel skipLabel = new JLabel("Click anywhere to skip");
-        skipLabel.setFont(new Font("SansSerif", Font.ITALIC, 9));
-        skipLabel.setForeground(new Color(255, 255, 255, 120));
-        skipLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        mainPanel.add(skipLabel, BorderLayout.NORTH);
     }
 }
