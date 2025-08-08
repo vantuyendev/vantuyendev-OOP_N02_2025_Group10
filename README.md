@@ -180,7 +180,35 @@ spring.thymeleaf.cache=false
 
 ## 🎮 Hướng Dẫn Sử Dụng
 
-### 🌐 Chạy Ứng Dụng Web
+### ☁️ Chạy với Aiven MySQL Cloud (Production)
+
+#### Cách 1: Sử dụng script tự động
+```bash
+# Đặt password Aiven trước
+export MYSQL_PASSWORD='your_actual_aiven_password'
+
+# Chạy ứng dụng
+./start-aiven.sh
+```
+
+#### Cách 2: Chạy thủ công
+```bash
+# Đặt các biến môi trường
+export MYSQL_HOST=mysql-288ed145-tuongvantuyen2006.h.aivencloud.com
+export MYSQL_PORT=16302
+export MYSQL_DB=defaultdb
+export MYSQL_USER=avnadmin
+export MYSQL_PASSWORD='your_actual_aiven_password'
+export SPRING_PROFILES_ACTIVE=mysql
+
+# Chạy ứng dụng web
+mvn -f integrated-app/pom.xml spring-boot:run
+
+# Hoặc chạy desktop mode
+mvn -f integrated-app/pom.xml spring-boot:run -Dspring-boot.run.arguments="--mode=desktop"
+```
+
+### 🌐 Chạy Ứng Dụng Web (Local Development)
 
 #### Cách 1: Sử dụng script nhanh (Khuyến nghị)
 ```bash
