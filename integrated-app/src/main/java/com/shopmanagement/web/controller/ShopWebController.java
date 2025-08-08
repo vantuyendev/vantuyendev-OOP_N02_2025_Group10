@@ -10,13 +10,20 @@ import com.shopmanagement.service.ProductService;
 import com.shopmanagement.service.CustomerService;
 import com.shopmanagement.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/shop")
@@ -113,6 +120,307 @@ public class ShopWebController {
             model.addAttribute("error", "Unable to load products: " + e.getMessage());
         }
         return "shop/products";
+    }
+
+    // ------------------------
+    // Employee - Web actions
+    // ------------------------
+
+    @GetMapping("/employees/add")
+    public String addEmployeeForm(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        // Form uses raw fields; optional: provide defaults
+        model.addAttribute("userSession", userSession);
+        return "shop/add-employee";
+    }
+
+    @PostMapping("/employees/add")
+    public String addEmployeeSubmit(@RequestParam String employeeName,
+                                    @RequestParam String phoneNumber,
+                                    @RequestParam String role,
+                                    @RequestParam String department,
+                                    @RequestParam BigDecimal salary,
+                                    @RequestParam(required = false) String email,
+                                    @RequestParam String password,
+                                    @RequestParam(required = false) String address,
+                                    Model model,
+                                    HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            // Generate a userId for employee if not provided in form
+            String base = (employeeName != null ? employeeName.replaceAll("\\s+", "").toLowerCase() : "emp");
+            String suffix = phoneNumber != null && phoneNumber.length() >= 4 ? phoneNumber.substring(phoneNumber.length() - 4) : UUID.randomUUID().toString().substring(0, 4);
+            String userId = base + suffix;
+
+            // Build employee entity
+            Employee employee = new Employee();
+            employee.setUserId(userId);
+            employee.setEmployeeName(employeeName);
+            employee.setPhoneNumber(phoneNumber);
+            employee.setRole(role);
+            employee.setDepartment(department);
+            employee.setSalary(salary);
+            // Optional fields if present on entity can be set here (email/address not available in current model)
+
+            employeeService.createEmployee(employee, password);
+            return "redirect:/shop/employees";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tạo nhân viên: " + e.getMessage());
+            return "shop/add-employee";
+        }
+    }
+
+    @GetMapping("/employees/edit/{userId}")
+    public String editEmployeeForm(@PathVariable String userId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            Optional<Employee> employeeOpt = employeeService.findById(userId);
+            if (employeeOpt.isPresent()) {
+                model.addAttribute("employee", employeeOpt.get());
+                model.addAttribute("userSession", userSession);
+                return "shop/edit-employee";
+            } else {
+                return "redirect:/shop/employees";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tải thông tin nhân viên: " + e.getMessage());
+            return "shop/employees";
+        }
+    }
+
+    @PostMapping("/employees/edit/{userId}")
+    public String editEmployeeSubmit(@PathVariable String userId,
+                                     @ModelAttribute Employee employee,
+                                     Model model,
+                                     HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            employee.setUserId(userId);
+            employeeService.updateEmployee(employee);
+            return "redirect:/shop/employees";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể cập nhật nhân viên: " + e.getMessage());
+            model.addAttribute("employee", employee);
+            return "shop/edit-employee";
+        }
+    }
+
+    @PostMapping("/employees/delete/{userId}")
+    public String deleteEmployee(@PathVariable String userId, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            employeeService.deleteEmployee(userId);
+        } catch (Exception ignored) {}
+        return "redirect:/shop/employees";
+    }
+
+    // ------------------------
+    // Product - Web actions
+    // ------------------------
+
+    @GetMapping("/products/add")
+    public String addProductForm(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        model.addAttribute("product", new Product());
+        model.addAttribute("userSession", userSession);
+        return "shop/add-product";
+    }
+
+    @PostMapping("/products/add")
+    public String addProductSubmit(@ModelAttribute Product product,
+                                   Model model,
+                                   HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            productService.createProduct(product);
+            return "redirect:/shop/products";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tạo sản phẩm: " + e.getMessage());
+            model.addAttribute("product", product);
+            return "shop/add-product";
+        }
+    }
+
+    @GetMapping("/products/edit/{productId}")
+    public String editProductForm(@PathVariable Long productId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            Optional<Product> productOpt = productService.findById(productId);
+            if (productOpt.isPresent()) {
+                model.addAttribute("product", productOpt.get());
+                model.addAttribute("userSession", userSession);
+                return "shop/edit-product";
+            } else {
+                return "redirect:/shop/products";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tải thông tin sản phẩm: " + e.getMessage());
+            return "shop/products";
+        }
+    }
+
+    @PostMapping("/products/edit/{productId}")
+    public String editProductSubmit(@PathVariable Long productId,
+                                    @ModelAttribute Product product,
+                                    Model model,
+                                    HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            product.setProductId(productId);
+            productService.updateProduct(product);
+            return "redirect:/shop/products";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể cập nhật sản phẩm: " + e.getMessage());
+            model.addAttribute("product", product);
+            return "shop/edit-product";
+        }
+    }
+
+    @PostMapping("/products/delete/{productId}")
+    public String deleteProduct(@PathVariable Long productId, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            productService.deleteProduct(productId);
+        } catch (Exception ignored) {}
+        return "redirect:/shop/products";
+    }
+
+    // ------------------------
+    // Customer - Web actions
+    // ------------------------
+
+    @GetMapping("/customers/add")
+    public String addCustomerForm(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        model.addAttribute("customer", new Customer());
+        model.addAttribute("userSession", userSession);
+        return "shop/add-customer";
+    }
+
+    @PostMapping("/customers/add")
+    public String addCustomerSubmit(@ModelAttribute Customer customer,
+                                    @RequestParam String password,
+                                    Model model,
+                                    HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            customerService.createCustomer(customer, password);
+            return "redirect:/shop/customers";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tạo khách hàng: " + e.getMessage());
+            model.addAttribute("customer", customer);
+            return "shop/add-customer";
+        }
+    }
+
+    @GetMapping("/customers/edit/{userId}")
+    public String editCustomerForm(@PathVariable String userId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            Optional<Customer> customerOpt = customerService.findById(userId);
+            if (customerOpt.isPresent()) {
+                model.addAttribute("customer", customerOpt.get());
+                model.addAttribute("userSession", userSession);
+                return "shop/edit-customer";
+            } else {
+                return "redirect:/shop/customers";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tải thông tin khách hàng: " + e.getMessage());
+            return "shop/customers";
+        }
+    }
+
+    @PostMapping("/customers/edit/{userId}")
+    public String editCustomerSubmit(@PathVariable String userId,
+                                     @ModelAttribute Customer customer,
+                                     Model model,
+                                     HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            customer.setUserId(userId);
+            customerService.updateCustomer(customer);
+            return "redirect:/shop/customers";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể cập nhật khách hàng: " + e.getMessage());
+            model.addAttribute("customer", customer);
+            return "shop/edit-customer";
+        }
+    }
+
+    @PostMapping("/customers/delete/{userId}")
+    public String deleteCustomer(@PathVariable String userId, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+
+        try {
+            customerService.deleteCustomer(userId);
+        } catch (Exception ignored) {}
+        return "redirect:/shop/customers";
+    }
+
+    // ------------------------
+    // Lightweight stats API for dashboard.js
+    // ------------------------
+    @GetMapping("/api/dashboard-stats")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> dashboardStats(HttpSession session) {
+        Map<String, Object> res = new HashMap<>();
+        try {
+            long employeeCount = employeeService.count();
+            long productCount = productService.count();
+            long customerCount = customerService.count();
+            res.put("employeeCount", employeeCount);
+            res.put("productCount", productCount);
+            res.put("customerCount", customerCount);
+            return ResponseEntity.ok(res);
+        } catch (Exception e) {
+            res.put("error", e.getMessage());
+            return ResponseEntity.internalServerError().body(res);
+        }
     }
 
     @GetMapping("/customers")
@@ -229,7 +537,8 @@ public class ShopWebController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/shop/login?message=Đăng xuất thành công";
+    String msg = URLEncoder.encode("Đăng xuất thành công", StandardCharsets.UTF_8);
+    return "redirect:/shop/login?message=" + msg;
     }
     
     @GetMapping("/profile")
