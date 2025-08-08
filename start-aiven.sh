@@ -1,23 +1,33 @@
 #!/bin/bash
 
+#!/bin/bash
+
 # Shop Management System - Aiven MySQL Startup Script
 echo "Starting Shop Management System with Aiven MySQL..."
 
-# Set Aiven MySQL connection environment variables
-export MYSQL_HOST="mysql-288ed145-tuongvantuyen2006.h.aivencloud.com"
-export MYSQL_PORT="16302"
-export MYSQL_DB="defaultdb"
-export MYSQL_USER="avnadmin"
-export MYSQL_SSL_MODE="REQUIRED"
-
-# Ask for password securely or use environment variable
-if [ -z "$MYSQL_PASSWORD" ]; then
-    echo -n "Enter Aiven MySQL password: "
-    read -s MYSQL_PASSWORD
-    export MYSQL_PASSWORD
-    echo
+# Load environment variables from .env file if it exists
+if [ -f .env ]; then
+    echo "Loading environment variables from .env file..."
+    export $(cat .env | xargs)
 else
-    echo "Using MYSQL_PASSWORD from environment variable"
+    echo "No .env file found. Using manual configuration..."
+    
+    # Set Aiven MySQL connection environment variables
+    export MYSQL_HOST="mysql-288ed145-tuongvantuyen2006.h.aivencloud.com"
+    export MYSQL_PORT="16302"
+    export MYSQL_DB="defaultdb"
+    export MYSQL_USER="avnadmin"
+    export MYSQL_SSL_MODE="REQUIRED"
+    
+    # Ask for password securely or use environment variable
+    if [ -z "$MYSQL_PASSWORD" ]; then
+        echo -n "Enter Aiven MySQL password: "
+        read -s MYSQL_PASSWORD
+        export MYSQL_PASSWORD
+        echo
+    else
+        echo "Using MYSQL_PASSWORD from environment variable"
+    fi
 fi
 
 # Set Spring profile to mysql
