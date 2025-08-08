@@ -45,3 +45,6 @@ mvnw.cmd
 # Application properties (if contains sensitive data)
 # application-local.properties
 # application-dev.properties
+
+# Environment variables file
+.env

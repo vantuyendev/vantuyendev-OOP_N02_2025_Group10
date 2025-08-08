@@ -129,7 +129,35 @@ Dự án đã được tái cấu trúc theo các nguyên tắc Spring Boot tố
 - **RAM**: Tối thiểu 4GB
 - **Ổ cứng**: 1GB dung lượng trống
 
-### 🗄️ Thiết Lập Cơ Sở Dữ Liệu
+### 🗄️ Thiết Lập Cơ Sở Dữ liệu
+
+#### ☁️ Aiven MySQL Cloud (Production - Khuyến nghị)
+
+1. **Thiết lập biến môi trường**:
+   ```bash
+   # Copy file example
+   cp .env.example .env
+   
+   # Chỉnh sửa .env với thông tin Aiven thực tế
+   nano .env
+   ```
+
+2. **Chạy với Aiven MySQL**:
+   ```bash
+   # Sử dụng script tự động
+   export MYSQL_PASSWORD='your_actual_aiven_password'
+   ./start-aiven.sh
+   
+   # Hoặc thiết lập thủ công
+   export MYSQL_HOST=mysql-288ed145-tuongvantuyen2006.h.aivencloud.com
+   export MYSQL_PORT=16302
+   export MYSQL_DB=defaultdb
+   export MYSQL_USER=avnadmin
+   export MYSQL_PASSWORD='your_password'
+   export SPRING_PROFILES_ACTIVE=mysql
+   ```
+
+#### 🏠 MySQL Local (Development)
 
 1. **Cài đặt MySQL Server**:
    ```bash
@@ -162,7 +190,7 @@ Dự án đã được tái cấu trúc theo các nguyên tắc Spring Boot tố
 Chỉnh sửa file `src/main/resources/application.properties`:
 
 ```properties
-# Database Configuration
+# Database Configuration (Local MySQL)
 spring.datasource.url=jdbc:mysql://localhost:3306/shopmanagement?useSSL=false&allowPublicKeyRetrieval=true
 spring.datasource.username=shopmanager
 spring.datasource.password=password123
