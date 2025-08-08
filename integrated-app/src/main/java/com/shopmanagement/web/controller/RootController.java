@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RootController {
     
     /**
-     * Redirect root URL to shop login
+     * Redirect alternative start URL to shop login
+     * Note: Root path "/" is handled by HomeController to avoid ambiguity.
      */
-    @GetMapping("/")
+    @GetMapping("/start")
     public String root() {
         return "redirect:/shop/login";
     }
     
     /**
-     * Handle error page
+     * Custom app error landing (avoid conflicting with Spring Boot default /error)
      */
-    @GetMapping("/error")
+    @GetMapping("/app-error")
     public String error() {
         return "redirect:/shop/login";
     }
