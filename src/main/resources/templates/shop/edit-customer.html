@@ -14,26 +14,40 @@
     <link href="/css/modern-dashboard.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Modern Navigation -->
-    <nav class="modern-navbar">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <a class="navbar-brand" href="/shop/">
-                    <i class="bi bi-shop me-2"></i>Shop Management System
-                </a>
-                <div class="navbar-nav d-flex flex-row">
-                    <a class="nav-link" href="/shop/">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                    </a>
-                    <a class="nav-link" href="/shop/employees">
-                        <i class="bi bi-people me-1"></i>Employees
-                    </a>
-                    <a class="nav-link" href="/shop/products">
-                        <i class="bi bi-box me-1"></i>Products
-                    </a>
-                    <a class="nav-link active" href="/shop/customers">
-                        <i class="bi bi-person-hearts me-1"></i>Customers
-                    </a>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-shop me-2"></i>
+                <span class="navbar-brand mb-0 h1" th:text="#{nav.title}">Shop Management</span>
+            </div>
+            
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shop/dashboard" th:text="#{nav.dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                        <a class="nav-link" href="/shop/employees" th:text="#{nav.employees}">Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shop/products" th:text="#{nav.products}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/shop/customers" th:text="#{nav.customers}">Customers</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="nav-link" href="/shop/search" th:text="#{nav.search}">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shop/statistics" th:text="#{nav.statistics}">Statistics</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <span class="navbar-text me-3" th:text="'Welcome, ' + ${userSession.name}">Welcome, User</span>
+                    <a href="/shop/profile" class="btn btn-outline-light btn-sm me-2" th:text="#{nav.profile}">Profile</a>
+                    <a href="/shop/logout" class="btn btn-outline-light btn-sm" th:text="#{nav.logout}">Logout</a>
                 </div>
             </div>
         </div>

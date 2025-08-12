@@ -37,43 +37,40 @@
     </style>
 </head>
 <body>
-    <!-- Employee Navigation -->
-    <nav class="modern-navbar employee-header">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h4 class="mb-0">
-                        <i class="bi bi-person-badge me-2"></i>
-                        <span>Employee Dashboard</span>
-                        <span class="permission-badge ms-2">EMPLOYEE ACCESS</span>
-                    </h4>
-                    <p class="mb-0 small">
-                        Chào mừng, <span th:text="${userSession.name}">Employee</span> 
-                        - <span th:text="${userSession.role}">Role</span>
-                        (<span th:text="${userSession.department}">Department</span>)
-                    </p>
-                </div>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-shop me-2"></i>
+                <span class="navbar-brand mb-0 h1" th:text="#{nav.title}">Shop Management</span>
+            </div>
+            
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/shop/dashboard" th:text="#{nav.dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                        <a class="nav-link" href="/shop/employees" th:text="#{nav.employees}">Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shop/products" th:text="#{nav.products}">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shop/customers" th:text="#{nav.customers}">Customers</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="nav-link" href="/shop/search" th:text="#{nav.search}">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shop/statistics" th:text="#{nav.statistics}">Statistics</a>
+                    </li>
+                </ul>
+                
                 <div class="d-flex align-items-center">
-                    <!-- Language Switcher -->
-                    <div class="dropdown me-3">
-                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-translate me-1"></i><span th:text="#{language}">Language</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/changeLanguage?lang=vi">
-                                <i class="bi bi-flag me-2"></i><span th:text="#{language.vietnamese}">Tiếng Việt</span>
-                            </a></li>
-                            <li><a class="dropdown-item" href="/changeLanguage?lang=en">
-                                <i class="bi bi-flag me-2"></i><span th:text="#{language.english}">English</span>
-                            </a></li>
-                        </ul>
-                    </div>
-                    <a href="/shop/profile" class="btn btn-outline-light btn-sm me-2">
-                        <i class="bi bi-person me-1"></i>Profile
-                    </a>
-                    <a href="/shop/logout" class="btn btn-light btn-sm">
-                        <i class="bi bi-box-arrow-right me-1"></i>Logout
-                    </a>
+                    <span class="navbar-text me-3" th:text="'Welcome, ' + ${userSession.name}">Welcome, User</span>
+                    <a href="/shop/profile" class="btn btn-outline-light btn-sm me-2" th:text="#{nav.profile}">Profile</a>
+                    <a href="/shop/logout" class="btn btn-outline-light btn-sm" th:text="#{nav.logout}">Logout</a>
                 </div>
             </div>
         </div>

@@ -20,12 +20,12 @@ public class InternationalizationConfig implements WebMvcConfigurer {
 
     /**
      * Configure locale resolver to use session-based locale storage
-     * Default locale is Vietnamese (vi_VN)
+     * Default locale is Vietnamese (vi)
      */
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(new Locale("vi", "VN"));
+        sessionLocaleResolver.setDefaultLocale(new Locale("vi"));
         return sessionLocaleResolver;
     }
 

@@ -21,30 +21,44 @@
                 <a class="navbar-brand" href="/shop/">
                     <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Shop Management System</span>
                 </a>
-                <div class="navbar-nav d-flex flex-row">
-                    <a class="nav-link" href="/shop/">
-                        <i class="bi bi-speedometer2 me-1"></i><span th:text="#{nav.dashboard}">Dashboard</span>
+                <div class="navbar-nav d-flex flex-row align-items-center">
+                    <a class="nav-link me-2" href="/shop/">
+                        <i class="bi bi-speedometer2 me-1"></i><span th:text="#{nav.dashboard}">Bảng Điều Khiển</span>
                     </a>
-                    <a class="nav-link" href="/shop/employees">
-                        <i class="bi bi-people me-1"></i><span th:text="#{nav.employees}">Employees</span>
+                    <a class="nav-link me-2" href="/shop/employees">
+                        <i class="bi bi-people me-1"></i><span th:text="#{nav.employees}">Quản Lý Nhân Viên</span>
                     </a>
-                    <a class="nav-link" href="/shop/products">
-                        <i class="bi bi-box me-1"></i><span th:text="#{nav.products}">Products</span>
+                    <a class="nav-link me-2" href="/shop/products">
+                        <i class="bi bi-box me-1"></i><span th:text="#{nav.products}">Quản Lý Sản Phẩm</span>
                     </a>
-                    <a class="nav-link active" href="/shop/customers">
-                        <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Customers</span>
+                    <a class="nav-link active me-2" href="/shop/customers">
+                        <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Quản Lý Khách Hàng</span>
                     </a>
-                    <!-- Language Switcher -->
-                    <div class="dropdown">
+                    <a class="nav-link me-2" href="/shop/inventory">
+                        <i class="bi bi-boxes me-1"></i><span th:text="#{nav.inventory}">Quản Lý Kho Hàng</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/orders">
+                        <i class="bi bi-cart-check me-1"></i><span th:text="#{nav.orders}">Quản Lý Đơn Hàng</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/reports">
+                        <i class="bi bi-graph-up me-1"></i><span th:text="#{nav.reports}">Báo Cáo Thống Kê</span>
+                    </a>
+                    
+                    <!-- User menu dropdown -->
+                    <div class="dropdown ms-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-translate me-1"></i><span th:text="#{language}">Language</span>
+                            <i class="bi bi-person-circle me-1"></i>Tài Khoản
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="?lang=vi">
-                                <i class="bi bi-flag me-2"></i><span th:text="#{language.vietnamese}">Tiếng Việt</span>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/shop/profile">
+                                <i class="bi bi-person me-2"></i><span th:text="#{nav.profile}">Thông Tin Cá Nhân</span>
                             </a></li>
-                            <li><a class="dropdown-item" href="?lang=en">
-                                <i class="bi bi-flag me-2"></i><span th:text="#{language.english}">English</span>
+                            <li><a class="dropdown-item" href="/shop/settings">
+                                <i class="bi bi-gear me-2"></i><span th:text="#{nav.settings}">Cài Đặt Hệ Thống</span>
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/shop/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i><span th:text="#{nav.logout}">Đăng Xuất</span>
                             </a></li>
                         </ul>
                     </div>
