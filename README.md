@@ -2,23 +2,28 @@
 
 ![Java](https://img.shields.io/badge/Java-11+-orange.svg)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen.svg)
-![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)
+![MySQL](https://img.shields.io/badge/MySQL-8.0%20Aiven%20Cloud-blue.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.6+-red.svg)
+![Gradle](https://img.shields.io/badge/Gradle-7.6+-green.svg)
 
-Đây là hệ thống quản lý cửa hàng toàn diện được xây dựng bằng Spring Boot, hỗ trợ cả giao diện web hiện đại và ứng dụng desktop GUI truyền thống trong cùng một ứng dụng.
+Đây là hệ thống quản lý cửa hàng toàn diện được xây dựng bằng Spring Boot với tích hợp cloud database Aiven MySQL, hỗ trợ cả giao diện web hiện đại và ứng dụng desktop GUI truyền thống trong cùng một ứng dụng.
 
 ## 📋 Giới Thiệu Dự Án
 
 Hệ thống quản lý cửa hàng được thiết kế để giúp các chủ cửa hàng quản lý hoạt động kinh doanh một cách hiệu quả. Dự án cung cấp hai giao diện sử dụng:
 
-- **🌐 Giao diện Web**: Truy cập từ bất kỳ thiết bị nào có trình duyệt
+- **🌐 Giao diện Web**: Truy cập từ bất kỳ thiết bị nào có trình duyệt với tính năng responsive
 - **🖥️ Ứng dụng Desktop**: Giao diện Swing với tính năng đầy đủ
+- **☁️ Cloud Database**: Tích hợp Aiven MySQL cho hiệu suất cao và bảo mật
+- **🔒 Role-based Access**: Hệ thống phân quyền Admin/Employee/Customer
+- **📊 Real-time Analytics**: Dashboard thống kê và báo cáo trực quan
+- **🌍 Multi-language**: Hỗ trợ tiếng Việt và tiếng Anh
 
 ### 🎯 Mục Tiêu Dự Án
-- Quản lý thông tin nhân viên, sản phẩm và khách hàng
-- Cung cấp dashboard thống kê trực quan
-- Hỗ trợ đa nền tảng (web và desktop)
-- Bảo mật thông tin với hệ thống đăng nhập
+- Quản lý toàn diện sản phẩm, khách hàng, nhân viên và đơn hàng
+- Đồng bộ dữ liệu real-time với cloud database
+- Cung cấp dashboard analytics và reporting
+- Đảm bảo bảo mật và scalability cho production
 - Giao diện thân thiện và dễ sử dụng
 
 ## ✨ Tính Năng Chính

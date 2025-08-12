@@ -29,6 +29,12 @@ logs/
 # Build artifacts
 target/
 dist/
+build/
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
 
 # Spring Boot specific
 !**/src/main/**/target/
@@ -48,3 +54,6 @@ mvnw.cmd
 
 # Environment variables file
 .env
+
+# Files with sensitive passwords
+set-mysql-password.sh
