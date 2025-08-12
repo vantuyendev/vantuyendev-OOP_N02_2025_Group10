@@ -58,8 +58,8 @@ public abstract class User {
 		pass = pass.trim();
 		
 		System.out.println("Checking login for user: '" + uid + "' with password: '" + pass + "'");
-        try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+		try {
+			Class.forName("org.h2.Driver");
 			System.out.println("driver loaded");
 			con = DriverManager.getConnection(Database.HOST_URI, Database.USER, Database.PASSWORD);
 			System.out.println("connection done");
@@ -108,7 +108,7 @@ public abstract class User {
         Statement st = null;
 		System.out.println(query);
         try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("org.h2.Driver");
 			System.out.println("driver loaded");
 			con = DriverManager.getConnection(Database.HOST_URI, Database.USER, Database.PASSWORD);
 			System.out.println("connection done");//connection with database established

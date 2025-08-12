@@ -51,7 +51,23 @@ public class LoginController {
                 response.put("message", "Đăng nhập thành công");
                 response.put("userId", login.getUserId());
                 response.put("status", login.getStatus());
-                response.put("userType", login.getStatus() == 0 ? "Employee" : "Customer");
+                
+                // Xác định loại người dùng
+                String userType;
+                switch (login.getStatus()) {
+                    case 0:
+                        userType = "Employee";
+                        break;
+                    case 1:
+                        userType = "Customer";
+                        break;
+                    case 2:
+                        userType = "Admin";
+                        break;
+                    default:
+                        userType = "Unknown";
+                }
+                response.put("userType", userType);
                 return ResponseEntity.ok(response);
             } else {
                 response.put("success", false);

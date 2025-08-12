@@ -22,7 +22,7 @@ public class LoginActivity extends JFrame implements ActionListener {
     private JButton loginButton, exitButton;
     
     public LoginActivity() {
-        super("Shop Management System - Login");
+        super("Hệ Thống Quản Lý Cửa Hàng - Đăng Nhập");
         initializeComponents();
         layoutComponents();
         setupWindow();
@@ -31,8 +31,8 @@ public class LoginActivity extends JFrame implements ActionListener {
     private void initializeComponents() {
         usernameField = new JTextField(20);
         passwordField = new JPasswordField(20);
-        loginButton = new JButton("Login");
-        exitButton = new JButton("Exit");
+        loginButton = new JButton("Đăng nhập");
+        exitButton = new JButton("Thoát");
         
         loginButton.addActionListener(this);
         exitButton.addActionListener(this);
@@ -46,7 +46,7 @@ public class LoginActivity extends JFrame implements ActionListener {
         
         // Header panel
         JPanel headerPanel = new JPanel(new FlowLayout());
-        JLabel titleLabel = new JLabel("Shop Management System");
+        JLabel titleLabel = new JLabel("Hệ Thống Quản Lý Cửa Hàng");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headerPanel.add(titleLabel);
         
@@ -56,13 +56,13 @@ public class LoginActivity extends JFrame implements ActionListener {
         gbc.insets = new Insets(10, 10, 10, 10);
         
         gbc.gridx = 0; gbc.gridy = 0;
-        formPanel.add(new JLabel("Username:"), gbc);
+        formPanel.add(new JLabel("Tên đăng nhập:"), gbc);
         
         gbc.gridx = 1; gbc.gridy = 0;
         formPanel.add(usernameField, gbc);
         
         gbc.gridx = 0; gbc.gridy = 1;
-        formPanel.add(new JLabel("Password:"), gbc);
+        formPanel.add(new JLabel("Mật khẩu:"), gbc);
         
         gbc.gridx = 1; gbc.gridy = 1;
         formPanel.add(passwordField, gbc);
@@ -99,14 +99,14 @@ public class LoginActivity extends JFrame implements ActionListener {
         String password = new String(passwordField.getPassword());
         
         if (username.isEmpty() || password.isEmpty()) {
-            DesktopUtils.showErrorMessage(this, "Please enter both username and password.", "Login Error");
+            DesktopUtils.showErrorMessage(this, "Vui lòng nhập tên đăng nhập và mật khẩu.", "Lỗi Đăng Nhập");
             return;
         }
         
         try {
             // Basic authentication check
             int status = User.checkStatus(username, password);
-            if (status == 0 || status == 1) {
+            if (status >= 0) { // 0: Employee, 1: Customer, 2: Admin
                 // Login successful
                 this.setVisible(false);
                 this.dispose();
@@ -120,10 +120,10 @@ public class LoginActivity extends JFrame implements ActionListener {
                     new DashboardActivity().setVisible(true);
                 }
             } else {
-                DesktopUtils.showErrorMessage(this, "Invalid username or password.", "Login Error");
+                DesktopUtils.showErrorMessage(this, "Tên đăng nhập hoặc mật khẩu không đúng.", "Lỗi Đăng Nhập");
             }
         } catch (Exception ex) {
-            DesktopUtils.showErrorMessage(this, "Login error: " + ex.getMessage(), "Error");
+            DesktopUtils.showErrorMessage(this, "Lỗi đăng nhập: " + ex.getMessage(), "Lỗi");
             ex.printStackTrace();
         }
     }
