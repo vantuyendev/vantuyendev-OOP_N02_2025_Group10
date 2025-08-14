@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản Lý Cửa Hàng Tạp Hóa - Mua Hàng</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <!-- Gradient Background -->
+    <div class="dashboard-background"></div>
+    
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="dashboard-brand">
+                        <a href="/shop/customer-dashboard" style="color: inherit; text-decoration: none;">
+                            <i class="bi bi-shop"></i>
+                            <span>Quản Lý Cửa Hàng Tạp Hóa</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <h1 class="dashboard-title">Mua Hàng Trực Tuyến</h1>
+                </div>
+                <div class="col-auto">
+                    <div class="user-info">
+                        <a href="/shop/cart" class="btn btn-outline-light btn-sm me-2">
+                            <i class="bi bi-cart me-1"></i>Giỏ Hàng <span class="badge bg-warning text-dark" id="cartCount">0</span>
+                        </a>
+                        <span class="me-3" th:text="'Welcome, ' + ${userSession?.name ?: 'Customer'}">Welcome, Customer</span>
+                        <a href="/shop/logout" class="btn btn-outline-light btn-sm">Đăng Xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Product Categories -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="feature-card" onclick="filterCategory('all')" style="cursor: pointer;">
+                    <div class="feature-icon">
+                        <i class="bi bi-grid"></i>
+                    </div>
+                    <h4>Tất Cả</h4>
+                    <p>Xem tất cả sản phẩm</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card" onclick="filterCategory('drinks')" style="cursor: pointer;">
+                    <div class="feature-icon">
+                        <i class="bi bi-cup-straw"></i>
+                    </div>
+                    <h4>Đồ Uống</h4>
+                    <p>Nước ngọt, nước suối</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card" onclick="filterCategory('snacks')" style="cursor: pointer;">
+                    <div class="feature-icon">
+                        <i class="bi bi-emoji-smile"></i>
+                    </div>
+                    <h4>Snacks</h4>
+                    <p>Bánh kẹo, đồ ăn vặt</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card" onclick="filterCategory('food')" style="cursor: pointer;">
+                    <div class="feature-icon">
+                        <i class="bi bi-basket"></i>
+                    </div>
+                    <h4>Thực Phẩm</h4>
+                    <p>Bánh mì, cơm hộp</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="content-card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="bi bi-bag-heart me-2"></i>Sản Phẩm Có Sẵn
+                </h5>
+                <div class="search-box">
+                    <input type="text" class="form-control search-input" 
+                           id="productSearch" 
+                           placeholder="Tìm kiếm sản phẩm...">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" id="productsContainer">
+                    <!-- Sample Products -->
+                    <div class="col-md-4 mb-4 product-item" data-category="drinks">
+                        <div class="card h-100 product-card">
+                            <img src="https://via.placeholder.com/300x200/667eea/ffffff?text=Coca+Cola" class="card-img-top" alt="Coca Cola">
+                            <div class="card-body">
+                                <h5 class="card-title">Nước Ngọt Coca Cola</h5>
+                                <p class="card-text">Lon 330ml - Hương vị cổ điển</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success mb-0">15,000 VNĐ</span>
+                                    <small class="text-muted">Còn: 50 lon</small>
+                                </div>
+                                <div class="mt-3 d-flex align-items-center">
+                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('product1')">-</button>
+                                        <input type="number" class="form-control text-center" id="qty-product1" value="1" min="1" max="50">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('product1')">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm flex-fill" onclick="addToCart('product1', 'Nước Ngọt Coca Cola', 15000)">
+                                        <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 product-item" data-category="drinks">
+                        <div class="card h-100 product-card">
+                            <img src="https://via.placeholder.com/300x200/764ba2/ffffff?text=Nuoc+Suoi" class="card-img-top" alt="Nước Suối">
+                            <div class="card-body">
+                                <h5 class="card-title">Nước Suối Lavie</h5>
+                                <p class="card-text">Chai 500ml - Tinh khiết tự nhiên</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success mb-0">8,000 VNĐ</span>
+                                    <small class="text-muted">Còn: 100 chai</small>
+                                </div>
+                                <div class="mt-3 d-flex align-items-center">
+                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('product2')">-</button>
+                                        <input type="number" class="form-control text-center" id="qty-product2" value="1" min="1" max="100">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('product2')">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm flex-fill" onclick="addToCart('product2', 'Nước Suối Lavie', 8000)">
+                                        <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 product-item" data-category="snacks">
+                        <div class="card h-100 product-card">
+                            <img src="https://via.placeholder.com/300x200/4ecdc4/ffffff?text=Banh+Mi" class="card-img-top" alt="Bánh Mì">
+                            <div class="card-body">
+                                <h5 class="card-title">Bánh Mì Sandwich</h5>
+                                <p class="card-text">Bánh mì kẹp thịt, rau củ tươi</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success mb-0">25,000 VNĐ</span>
+                                    <small class="text-muted">Còn: 20 chiếc</small>
+                                </div>
+                                <div class="mt-3 d-flex align-items-center">
+                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('product3')">-</button>
+                                        <input type="number" class="form-control text-center" id="qty-product3" value="1" min="1" max="20">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('product3')">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm flex-fill" onclick="addToCart('product3', 'Bánh Mì Sandwich', 25000)">
+                                        <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 product-item" data-category="snacks">
+                        <div class="card h-100 product-card">
+                            <img src="https://via.placeholder.com/300x200/ff9a9e/ffffff?text=Banh+Keo" class="card-img-top" alt="Bánh Kẹo">
+                            <div class="card-body">
+                                <h5 class="card-title">Kẹo Alpenliebe</h5>
+                                <p class="card-text">Gói 10 viên - Vị sữa dâu</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success mb-0">12,000 VNĐ</span>
+                                    <small class="text-muted">Còn: 80 gói</small>
+                                </div>
+                                <div class="mt-3 d-flex align-items-center">
+                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('product4')">-</button>
+                                        <input type="number" class="form-control text-center" id="qty-product4" value="1" min="1" max="80">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('product4')">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm flex-fill" onclick="addToCart('product4', 'Kẹo Alpenliebe', 12000)">
+                                        <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 product-item" data-category="food">
+                        <div class="card h-100 product-card">
+                            <img src="https://via.placeholder.com/300x200/a18cd1/ffffff?text=Com+Hop" class="card-img-top" alt="Cơm Hộp">
+                            <div class="card-body">
+                                <h5 class="card-title">Cơm Hộp Thịt Nướng</h5>
+                                <p class="card-text">Cơm + thịt nướng + rau củ</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success mb-0">35,000 VNĐ</span>
+                                    <small class="text-muted">Còn: 15 hộp</small>
+                                </div>
+                                <div class="mt-3 d-flex align-items-center">
+                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('product5')">-</button>
+                                        <input type="number" class="form-control text-center" id="qty-product5" value="1" min="1" max="15">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('product5')">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm flex-fill" onclick="addToCart('product5', 'Cơm Hộp Thịt Nướng', 35000)">
+                                        <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 product-item" data-category="drinks">
+                        <div class="card h-100 product-card">
+                            <img src="https://via.placeholder.com/300x200/fbc2eb/ffffff?text=Tra+Dao" class="card-img-top" alt="Trà Đào">
+                            <div class="card-body">
+                                <h5 class="card-title">Trà Đào C2</h5>
+                                <p class="card-text">Chai 455ml - Vị trà đào thơm mát</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="h5 text-success mb-0">18,000 VNĐ</span>
+                                    <small class="text-muted">Còn: 30 chai</small>
+                                </div>
+                                <div class="mt-3 d-flex align-items-center">
+                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity('product6')">-</button>
+                                        <input type="number" class="form-control text-center" id="qty-product6" value="1" min="1" max="30">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity('product6')">+</button>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm flex-fill" onclick="addToCart('product6', 'Trà Đào C2', 18000)">
+                                        <i class="bi bi-cart-plus me-1"></i>Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="row mt-4">
+            <div class="col text-center">
+                <a href="/shop/customer-dashboard" class="btn-modern btn-outline me-3">
+                    <i class="bi bi-arrow-left me-2"></i>Về Dashboard
+                </a>
+                <a href="/shop/cart" class="btn-modern btn-primary">
+                    <i class="bi bi-cart me-2"></i>Xem Giỏ Hàng (<span id="cartCount2">0</span>)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartCount2').textContent = count;
+        }
+        
+        function increaseQuantity(productId) {
+            const input = document.getElementById('qty-' + productId);
+            const max = parseInt(input.getAttribute('max'));
+            if (parseInt(input.value) < max) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+        
+        function decreaseQuantity(productId) {
+            const input = document.getElementById('qty-' + productId);
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+        
+        function addToCart(productId, productName, price) {
+            const quantity = parseInt(document.getElementById('qty-' + productId).value);
+            
+            const existingItemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += quantity;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    quantity: quantity
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            // Show success message
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="bi bi-check me-1"></i>Đã thêm!';
+            button.classList.add('btn-success');
+            button.classList.remove('btn-primary');
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.classList.add('btn-primary');
+                button.classList.remove('btn-success');
+            }, 1500);
+        }
+        
+        function filterCategory(category) {
+            const products = document.querySelectorAll('.product-item');
+            
+            products.forEach(product => {
+                if (category === 'all' || product.getAttribute('data-category') === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+        
+        // Search functionality
+        document.getElementById('productSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const products = document.querySelectorAll('.product-item');
+            
+            products.forEach(product => {
+                const productName = product.querySelector('.card-title').textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+        
+        // Initialize cart count on page load
+        updateCartCount();
+    </script>
+</body>
+</html>

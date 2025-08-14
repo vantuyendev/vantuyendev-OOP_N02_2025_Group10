@@ -95,7 +95,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -220,18 +220,18 @@
     <nav class="main-header">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="navbar-brand" href="/shop/">
+                <a class="navbar-brand" href="/shop/dashboard">
                     <i class="bi bi-shop me-2"></i>Quản Lý Cửa Hàng Tạp Hóa
                 </a>
                 <div class="navbar-nav d-flex flex-row align-items-center">
-                    <a class="nav-link" href="/shop/">
+                    <a class="nav-link" href="/shop/dashboard">
                         <i class="bi bi-house me-1"></i>Trang Chủ
                     </a>
                     <a class="nav-link" href="/shop/products">
                         <i class="bi bi-box me-1"></i>Sản Phẩm
                     </a>
-                    <a class="nav-link" href="/shop/search">
-                        <i class="bi bi-search me-1"></i>Tìm Kiếm
+                    <a class="nav-link" href="/shop/shop">
+                        <i class="bi bi-cart me-1"></i>Mua Hàng
                     </a>
                     
                     <!-- User menu dropdown -->
@@ -241,10 +241,6 @@
                             <span th:text="${userSession.name} ?: 'Customer'">Customer</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/shop/profile">
-                                <i class="bi bi-person me-2"></i>Thông Tin Cá Nhân
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/shop/logout">
                                 <i class="bi bi-box-arrow-right me-2"></i>Đăng Xuất
                             </a></li>
@@ -279,24 +275,34 @@
                     <a href="/shop/products" class="feature-button btn-primary">XEM NGAY</a>
                 </div>
 
-                <!-- Tìm Kiếm -->
-                <div class="feature-card" onclick="location.href='/shop/search'">
+                <!-- Mua Hàng -->
+                <div class="feature-card" onclick="location.href='/shop/shop'">
                     <div class="feature-icon search-products">
-                        <i class="bi bi-search"></i>
+                        <i class="bi bi-cart-plus"></i>
                     </div>
-                    <h3 class="feature-title">Tìm Kiếm Sản Phẩm</h3>
-                    <p class="feature-description">Tìm kiếm nhanh các sản phẩm theo tên, danh mục hoặc mô tả.</p>
-                    <a href="/shop/search" class="feature-button btn-warning">TÌM KIẾM</a>
+                    <h3 class="feature-title">Mua Hàng</h3>
+                    <p class="feature-description">Chọn sản phẩm, thêm vào giỏ hàng và thanh toán trực tuyến.</p>
+                    <a href="/shop/shop" class="feature-button btn-warning">MUA NGAY</a>
                 </div>
 
-                <!-- Thông Tin Cá Nhân -->
-                <div class="feature-card" onclick="location.href='/shop/profile'">
+                <!-- Giỏ Hàng -->
+                <div class="feature-card" onclick="location.href='/shop/cart'">
                     <div class="feature-icon my-profile">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="bi bi-cart"></i>
                     </div>
-                    <h3 class="feature-title">Thông Tin Cá Nhân</h3>
-                    <p class="feature-description">Quản lý thông tin tài khoản và cập nhật dữ liệu cá nhân.</p>
-                    <a href="/shop/profile" class="feature-button btn-purple">QUẢN LÝ</a>
+                    <h3 class="feature-title">Giỏ Hàng</h3>
+                    <p class="feature-description">Xem sản phẩm đã chọn và thực hiện thanh toán.</p>
+                    <a href="/shop/cart" class="feature-button btn-purple">XEM GIỎ HÀNG</a>
+                </div>
+
+                <!-- Lịch Sử Mua Hàng -->
+                <div class="feature-card" onclick="location.href='/shop/orders'">
+                    <div class="feature-icon view-products">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <h3 class="feature-title">Lịch Sử Mua Hàng</h3>
+                    <p class="feature-description">Xem lại các đơn hàng đã mua và trạng thái giao hàng.</p>
+                    <a href="/shop/orders" class="feature-button btn-success">XEM LỊCH SỬ</a>
                 </div>
             </div>
 
@@ -304,9 +310,9 @@
             <div class="text-center mt-5">
                 <div class="alert alert-light d-inline-block" role="alert" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: none;">
                     <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Thông tin dành cho khách hàng</h5>
-                    <p>Với tài khoản khách hàng, bạn có thể xem thông tin sản phẩm và tìm kiếm.</p>
+                    <p>Với tài khoản khách hàng, bạn có thể xem sản phẩm, mua hàng và theo dõi đơn hàng.</p>
                     <hr>
-                    <p class="mb-0"><small>Để mua hàng hoặc được hỗ trợ thêm, vui lòng liên hệ với <strong>nhân viên bán hàng</strong>.</small></p>
+                    <p class="mb-0"><small>Hãy trải nghiệm các tính năng <strong>mua hàng trực tuyến</strong> của chúng tôi!</small></p>
                 </div>
             </div>
         </div>

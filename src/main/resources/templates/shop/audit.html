@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản Lý Cửa Hàng Tạp Hóa - Nhật Ký Hệ Thống</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <!-- Gradient Background -->
+    <div class="dashboard-background"></div>
+    
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="dashboard-brand">
+                        <a href="/shop/dashboard" style="color: inherit; text-decoration: none;">
+                            <i class="bi bi-shop"></i>
+                            <span>Quản Lý Cửa Hàng Tạp Hóa</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <h1 class="dashboard-title">Nhật Ký Hệ Thống</h1>
+                </div>
+                <div class="col-auto">
+                    <div class="user-info">
+                        <span class="me-3" th:text="'Welcome, ' + ${userSession?.name ?: 'Admin'}">Welcome, Admin</span>
+                        <a href="/shop/logout" class="btn btn-outline-light btn-sm">Đăng Xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <h4>Đăng Nhập</h4>
+                    <p class="h3 text-primary" th:text="${loginCount ?: '24'}">24</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);">
+                        <i class="bi bi-cart-check"></i>
+                    </div>
+                    <h4>Đơn Hàng</h4>
+                    <p class="h3 text-success" th:text="${orderCount ?: '15'}">15</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <h4>Sản Phẩm</h4>
+                    <p class="h3 text-warning" th:text="${productCount ?: '8'}">8</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <h4>Lỗi</h4>
+                    <p class="h3 text-danger" th:text="${errorCount ?: '2'}">2</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Audit Log Table -->
+        <div class="content-card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="bi bi-journal-text me-2"></i>Nhật Ký Hoạt Động
+                </h5>
+                <div class="search-box">
+                    <input type="text" class="form-control search-input" 
+                           data-target="#auditTable" 
+                           placeholder="Tìm kiếm nhật ký...">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="modern-table" id="auditTable">
+                        <thead>
+                            <tr>
+                                <th><i class="bi bi-clock me-1"></i>Thời Gian</th>
+                                <th><i class="bi bi-person me-1"></i>Người Dùng</th>
+                                <th><i class="bi bi-activity me-1"></i>Hoạt Động</th>
+                                <th><i class="bi bi-info-circle me-1"></i>Chi Tiết</th>
+                                <th><i class="bi bi-geo-alt me-1"></i>IP Address</th>
+                                <th><i class="bi bi-flag me-1"></i>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-08-14 10:30:15</td>
+                                <td>
+                                    <span class="badge bg-primary">Admin</span>
+                                    admin@shop.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>
+                                    Đăng nhập hệ thống
+                                </td>
+                                <td>Đăng nhập thành công từ trình duyệt Chrome</td>
+                                <td>192.168.1.100</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 10:25:42</td>
+                                <td>
+                                    <span class="badge bg-info">Customer</span>
+                                    customer@email.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-cart-plus me-1"></i>
+                                    Thêm sản phẩm vào giỏ hàng
+                                </td>
+                                <td>Thêm sản phẩm "Nước ngọt Coca Cola" x2</td>
+                                <td>192.168.1.105</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 10:20:18</td>
+                                <td>
+                                    <span class="badge bg-primary">Admin</span>
+                                    admin@shop.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-plus-circle me-1"></i>
+                                    Thêm sản phẩm mới
+                                </td>
+                                <td>Thêm sản phẩm "Bánh mì sandwich"</td>
+                                <td>192.168.1.100</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 10:15:33</td>
+                                <td>
+                                    <span class="badge bg-info">Customer</span>
+                                    customer2@email.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-credit-card me-1"></i>
+                                    Thanh toán đơn hàng
+                                </td>
+                                <td>Thanh toán đơn hàng #ORD001 - 150,000 VNĐ</td>
+                                <td>192.168.1.110</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 10:10:25</td>
+                                <td>
+                                    <span class="badge bg-info">Customer</span>
+                                    test@email.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Đăng nhập thất bại
+                                </td>
+                                <td>Sai mật khẩu - Lần thử thứ 3</td>
+                                <td>192.168.1.120</td>
+                                <td><span class="badge bg-danger">Thất bại</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 10:05:11</td>
+                                <td>
+                                    <span class="badge bg-primary">Admin</span>
+                                    admin@shop.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-pencil me-1"></i>
+                                    Cập nhật sản phẩm
+                                </td>
+                                <td>Cập nhật giá sản phẩm "Nước suối Lavie"</td>
+                                <td>192.168.1.100</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 09:58:47</td>
+                                <td>
+                                    <span class="badge bg-info">Customer</span>
+                                    newcustomer@email.com
+                                </td>
+                                <td>
+                                    <i class="bi bi-person-plus me-1"></i>
+                                    Đăng ký tài khoản
+                                </td>
+                                <td>Tạo tài khoản khách hàng mới</td>
+                                <td>192.168.1.115</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-08-14 09:55:22</td>
+                                <td>
+                                    <span class="badge bg-warning">System</span>
+                                    auto-backup
+                                </td>
+                                <td>
+                                    <i class="bi bi-database me-1"></i>
+                                    Sao lưu dữ liệu
+                                </td>
+                                <td>Sao lưu tự động cơ sở dữ liệu</td>
+                                <td>127.0.0.1</td>
+                                <td><span class="badge bg-success">Thành công</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="row mt-4">
+            <div class="col text-center">
+                <a href="/shop/admin-dashboard" class="btn-modern btn-outline">
+                    <i class="bi bi-arrow-left me-2"></i>Về Admin Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script>
+        // Auto-refresh every 30 seconds
+        setInterval(function() {
+            location.reload();
+        }, 30000);
+        
+        // Real-time clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleString('vi-VN');
+            document.title = 'Nhật Ký Hệ Thống - ' + timeString;
+        }
+        
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

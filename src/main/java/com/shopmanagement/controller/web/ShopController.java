@@ -49,13 +49,6 @@ public class ShopController {
         return "shop/customers";
     }
     
-    // Employees management
-    @GetMapping("/employees")
-    public String employees(Model model) {
-        model.addAttribute("title", "Quản lý nhân viên - Shop Management System");
-        return "shop/employees";
-    }
-    
     // Statistics page
     @GetMapping("/statistics")
     public String statistics(Model model) {
@@ -89,12 +82,5 @@ public class ShopController {
     public String addProduct(Model model) {
         model.addAttribute("title", "Thêm sản phẩm - Shop Management System");
         return "shop/add-product";
-    }
-    
-    // Add employee page
-    @GetMapping("/add-employee")
-    public String addEmployee(Model model) {
-        model.addAttribute("title", "Thêm nhân viên - Shop Management System");
-        return "shop/add-employee";
     }
 }

@@ -20,9 +20,8 @@ import java.awt.event.ActionListener;
 public class DashboardActivity extends JFrame implements ActionListener {
     
     private JMenuBar menuBar;
-    private JMenu productMenu, employeeMenu, customerMenu, settingsMenu;
+    private JMenu productMenu, customerMenu, settingsMenu;
     private JMenuItem manageProducts, addProduct, viewProducts;
-    private JMenuItem manageEmployees, addEmployee, viewEmployees;
     private JMenuItem manageCustomers, addCustomer, viewCustomers;
     private JMenuItem changePassword, themeSettings, logout;
     
@@ -51,16 +50,6 @@ public class DashboardActivity extends JFrame implements ActionListener {
         productMenu.add(addProduct);
         productMenu.add(viewProducts);
         
-        // Employee Menu
-        employeeMenu = new JMenu("Employees");
-        manageEmployees = new JMenuItem("Manage Employees");
-        addEmployee = new JMenuItem("Add Employee");
-        viewEmployees = new JMenuItem("View Employees");
-        
-        employeeMenu.add(manageEmployees);
-        employeeMenu.add(addEmployee);
-        employeeMenu.add(viewEmployees);
-        
         // Customer Menu
         customerMenu = new JMenu("Customers");
         manageCustomers = new JMenuItem("Manage Customers");
@@ -84,7 +73,6 @@ public class DashboardActivity extends JFrame implements ActionListener {
         
         // Add menus to menu bar
         menuBar.add(productMenu);
-        menuBar.add(employeeMenu);
         menuBar.add(customerMenu);
         menuBar.add(settingsMenu);
         
@@ -108,9 +96,9 @@ public class DashboardActivity extends JFrame implements ActionListener {
         
         // Add some placeholder statistics panels
         statsPanel.add(createStatCard("Total Products", "0"));
-        statsPanel.add(createStatCard("Total Employees", "0"));
         statsPanel.add(createStatCard("Total Customers", "0"));
         statsPanel.add(createStatCard("Active Sessions", "1"));
+        statsPanel.add(createStatCard("System Status", "Online"));
         
         mainPanel.add(welcomePanel, BorderLayout.NORTH);
         mainPanel.add(statsLabel, BorderLayout.CENTER);
@@ -135,11 +123,6 @@ public class DashboardActivity extends JFrame implements ActionListener {
         manageProducts.addActionListener(this);
         addProduct.addActionListener(this);
         viewProducts.addActionListener(this);
-        
-        // Employee menu actions
-        manageEmployees.addActionListener(this);
-        addEmployee.addActionListener(this);
-        viewEmployees.addActionListener(this);
         
         // Customer menu actions
         manageCustomers.addActionListener(this);
@@ -175,15 +158,6 @@ public class DashboardActivity extends JFrame implements ActionListener {
             case "View Products":
                 openViewProducts();
                 break;
-            case "Manage Employees":
-                openManageEmployees();
-                break;
-            case "Add Employee":
-                openAddEmployee();
-                break;
-            case "View Employees":
-                openViewEmployees();
-                break;
             case "Manage Customers":
                 openManageCustomers();
                 break;
@@ -216,18 +190,6 @@ public class DashboardActivity extends JFrame implements ActionListener {
     
     private void openViewProducts() {
         DesktopUtils.showInfoMessage(this, "View Products feature will be available soon.", "Info");
-    }
-    
-    private void openManageEmployees() {
-        DesktopUtils.showInfoMessage(this, "Employee Management feature will be available soon.", "Info");
-    }
-    
-    private void openAddEmployee() {
-        DesktopUtils.showInfoMessage(this, "Add Employee feature will be available soon.", "Info");
-    }
-    
-    private void openViewEmployees() {
-        DesktopUtils.showInfoMessage(this, "View Employees feature will be available soon.", "Info");
     }
     
     private void openManageCustomers() {

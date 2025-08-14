@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{app.title} + ' - ' + #{customer.title}">Shop Management System - Customers</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Modern Navigation -->
+    <nav class="modern-navbar">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="/shop/">
+                    <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Shop Management System</span>
+                </a>
+                <div class="navbar-nav d-flex flex-row align-items-center">
+                    <a class="nav-link me-2" href="/shop/">
+                        <i class="bi bi-speedometer2 me-1"></i><span th:text="#{nav.dashboard}">Bảng Điều Khiển</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/employees">
+                        <i class="bi bi-people me-1"></i><span th:text="#{nav.employees}">Quản Lý Nhân Viên</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/products">
+                        <i class="bi bi-box me-1"></i><span th:text="#{nav.products}">Quản Lý Sản Phẩm</span>
+                    </a>
+                    <a class="nav-link active me-2" href="/shop/customers">
+                        <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Quản Lý Khách Hàng</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/inventory">
+                        <i class="bi bi-boxes me-1"></i><span th:text="#{nav.inventory}">Quản Lý Kho Hàng</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/orders">
+                        <i class="bi bi-cart-check me-1"></i><span th:text="#{nav.orders}">Quản Lý Đơn Hàng</span>
+                    </a>
+                    <a class="nav-link me-2" href="/shop/reports">
+                        <i class="bi bi-graph-up me-1"></i><span th:text="#{nav.reports}">Báo Cáo Thống Kê</span>
+                    </a>
+                    
+                    <!-- User menu dropdown -->
+                    <div class="dropdown ms-3">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>Tài Khoản
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/shop/profile">
+                                <i class="bi bi-person me-2"></i><span th:text="#{nav.profile}">Thông Tin Cá Nhân</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="/shop/settings">
+                                <i class="bi bi-gear me-2"></i><span th:text="#{nav.settings}">Cài Đặt Hệ Thống</span>
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/shop/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i><span th:text="#{nav.logout}">Đăng Xuất</span>
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 mb-1">Customer Management</h1>
+                <p class="text-muted">Manage your customer relationships and data</p>
+            </div>
+            <div>
+                <a href="/shop/customers/add" class="btn-modern btn-primary">
+                    <i class="bi bi-person-plus me-2"></i><span th:text="#{customer.add}">Add New Customer</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Alerts -->
+        <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            <span th:text="${param.success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${param.error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${error}"></span>
+        </div>
+        
+        <!-- Customers Table -->
+        <div class="content-card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="bi bi-person-hearts me-2"></i><span th:text="#{table.all} + ' ' + #{nav.customers}">All Customers</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${customers != null and not #lists.isEmpty(customers)}">
+                    <div class="table-responsive">
+                        <table class="modern-table" id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Phone Number</th>
+                                    <th>Address</th>
+                                    <th th:text="#{table.actions}">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="customer : ${customers}">
+                                    <td>
+                                        <span class="badge bg-secondary" th:text="${customer.userId}"></span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-person-circle me-2 text-primary"></i>
+                                            <span class="fw-medium" th:text="${customer.customerName}"></span>
+                                        </div>
+                                    </td>
+                                    <td th:text="${customer.email}"></td>
+                                    <td th:text="${customer.phoneNumber}"></td>
+                                    <td>
+                                        <span class="text-truncate" style="max-width: 200px; display: inline-block;" 
+                                              th:text="${customer.address}" 
+                                              th:title="${customer.address}"></span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a th:href="@{'/shop/customers/edit/' + ${customer.userId}}" 
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="Edit Customer">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <form th:action="@{'/shop/customers/delete/' + ${customer.userId}}" 
+                                                  method="post" 
+                                                  style="display: inline;"
+                                                  onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                                <button type="submit" 
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        title="Delete Customer">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div th:if="${customers == null or #lists.isEmpty(customers)}">
+                    <div class="text-center py-5">
+                        <i class="bi bi-person-hearts display-1 text-muted mb-3"></i>
+                        <h4 class="text-muted mb-3">No Customers Found</h4>
+                        <p class="text-muted mb-4">It looks like you haven't added any customers yet.</p>
+                        <a href="/shop/customers/add" class="btn-modern btn-primary">
+                            <i class="bi bi-person-plus me-2"></i>Add First Customer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-4 text-center">
+            <a href="/shop/" class="btn-modern btn-outline">
+                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted" th:text="#{footer.copyright}">&copy; 2025 Shop Management System. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="mb-0 text-muted">Powered by Spring Boot & Modern Web Technologies</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

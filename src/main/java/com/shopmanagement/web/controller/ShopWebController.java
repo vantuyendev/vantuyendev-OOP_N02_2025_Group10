@@ -1,11 +1,9 @@
 package com.shopmanagement.web.controller;
 
-import com.shopmanagement.entity.Employee;
 import com.shopmanagement.entity.Product;
 import com.shopmanagement.entity.Customer;
 import com.shopmanagement.entity.Login;
 import com.shopmanagement.model.UserSession;
-import com.shopmanagement.service.EmployeeService;
 import com.shopmanagement.service.ProductService;
 import com.shopmanagement.service.CustomerService;
 import com.shopmanagement.service.LoginService;
@@ -18,20 +16,15 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/shop")
 public class ShopWebController {
 
-    @Autowired
-    private EmployeeService employeeService;
-    
     @Autowired
     private ProductService productService;
     
@@ -57,11 +50,9 @@ public class ShopWebController {
         
         try {
             // Get basic statistics for dashboard
-            List<Employee> employees = employeeService.findAll();
             List<Product> products = productService.findAll();
             List<Customer> customers = customerService.findAll();
             
-            model.addAttribute("employeeCount", employees.size());
             model.addAttribute("productCount", products.size());
             model.addAttribute("customerCount", customers.size());
             model.addAttribute("userSession", userSession);
@@ -69,8 +60,6 @@ public class ShopWebController {
             // Redirect to appropriate dashboard based on user type
             if (userSession.isAdmin()) {
                 return "shop/admin-dashboard";
-            } else if (userSession.isEmployee()) {
-                return "shop/employee-dashboard";
             } else if (userSession.isCustomer()) {
                 return "shop/customer-dashboard";
             }
@@ -80,29 +69,6 @@ public class ShopWebController {
         }
         
         return "shop/dashboard";
-    }
-
-    @GetMapping("/employees")
-    public String employees(Model model, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) {
-            return "redirect:/shop/login";
-        }
-        
-        // Only admin and employees can access employee management
-        if (!userSession.isAdmin() && !userSession.isEmployee()) {
-            model.addAttribute("error", "Bạn không có quyền truy cập trang này");
-            return "redirect:/shop/dashboard";
-        }
-        
-        try {
-            List<Employee> employees = employeeService.findAll();
-            model.addAttribute("employees", employees);
-            model.addAttribute("userSession", userSession);
-        } catch (Exception e) {
-            model.addAttribute("error", "Unable to load employees: " + e.getMessage());
-        }
-        return "shop/employees";
     }
 
     @GetMapping("/products")
@@ -123,113 +89,6 @@ public class ShopWebController {
     }
 
     // ------------------------
-    // Employee - Web actions
-    // ------------------------
-
-    @GetMapping("/employees/add")
-    public String addEmployeeForm(Model model, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
-
-        // Form uses raw fields; optional: provide defaults
-        model.addAttribute("userSession", userSession);
-        return "shop/add-employee";
-    }
-
-    @PostMapping("/employees/add")
-    public String addEmployeeSubmit(@RequestParam String employeeName,
-                                    @RequestParam String phoneNumber,
-                                    @RequestParam String role,
-                                    @RequestParam String department,
-                                    @RequestParam BigDecimal salary,
-                                    @RequestParam(required = false) String email,
-                                    @RequestParam String password,
-                                    @RequestParam(required = false) String address,
-                                    Model model,
-                                    HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
-
-        try {
-            // Generate a userId for employee if not provided in form
-            String base = (employeeName != null ? employeeName.replaceAll("\\s+", "").toLowerCase() : "emp");
-            String suffix = phoneNumber != null && phoneNumber.length() >= 4 ? phoneNumber.substring(phoneNumber.length() - 4) : UUID.randomUUID().toString().substring(0, 4);
-            String userId = base + suffix;
-
-            // Build employee entity
-            Employee employee = new Employee();
-            employee.setUserId(userId);
-            employee.setEmployeeName(employeeName);
-            employee.setPhoneNumber(phoneNumber);
-            employee.setRole(role);
-            employee.setDepartment(department);
-            employee.setSalary(salary);
-            // Optional fields if present on entity can be set here (email/address not available in current model)
-
-            employeeService.createEmployee(employee, password);
-            return "redirect:/shop/employees";
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể tạo nhân viên: " + e.getMessage());
-            return "shop/add-employee";
-        }
-    }
-
-    @GetMapping("/employees/edit/{userId}")
-    public String editEmployeeForm(@PathVariable String userId, Model model, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
-
-        try {
-            Optional<Employee> employeeOpt = employeeService.findById(userId);
-            if (employeeOpt.isPresent()) {
-                model.addAttribute("employee", employeeOpt.get());
-                model.addAttribute("userSession", userSession);
-                return "shop/edit-employee";
-            } else {
-                return "redirect:/shop/employees";
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể tải thông tin nhân viên: " + e.getMessage());
-            return "shop/employees";
-        }
-    }
-
-    @PostMapping("/employees/edit/{userId}")
-    public String editEmployeeSubmit(@PathVariable String userId,
-                                     @ModelAttribute Employee employee,
-                                     Model model,
-                                     HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
-
-        try {
-            employee.setUserId(userId);
-            employeeService.updateEmployee(employee);
-            return "redirect:/shop/employees";
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể cập nhật nhân viên: " + e.getMessage());
-            model.addAttribute("employee", employee);
-            return "shop/edit-employee";
-        }
-    }
-
-    @PostMapping("/employees/delete/{userId}")
-    public String deleteEmployee(@PathVariable String userId, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
-
-        try {
-            employeeService.deleteEmployee(userId);
-        } catch (Exception ignored) {}
-        return "redirect:/shop/employees";
-    }
-
-    // ------------------------
     // Product - Web actions
     // ------------------------
 
@@ -237,7 +96,7 @@ public class ShopWebController {
     public String addProductForm(Model model, HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         model.addAttribute("product", new Product());
         model.addAttribute("userSession", userSession);
@@ -250,7 +109,7 @@ public class ShopWebController {
                                    HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             productService.createProduct(product);
@@ -266,7 +125,7 @@ public class ShopWebController {
     public String editProductForm(@PathVariable Long productId, Model model, HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             Optional<Product> productOpt = productService.findById(productId);
@@ -290,7 +149,7 @@ public class ShopWebController {
                                     HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             product.setProductId(productId);
@@ -307,7 +166,7 @@ public class ShopWebController {
     public String deleteProduct(@PathVariable Long productId, HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             productService.deleteProduct(productId);
@@ -323,7 +182,7 @@ public class ShopWebController {
     public String addCustomerForm(Model model, HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         model.addAttribute("customer", new Customer());
         model.addAttribute("userSession", userSession);
@@ -337,7 +196,7 @@ public class ShopWebController {
                                     HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             customerService.createCustomer(customer, password);
@@ -353,7 +212,7 @@ public class ShopWebController {
     public String editCustomerForm(@PathVariable String userId, Model model, HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             Optional<Customer> customerOpt = customerService.findById(userId);
@@ -377,7 +236,7 @@ public class ShopWebController {
                                      HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             customer.setUserId(userId);
@@ -394,7 +253,7 @@ public class ShopWebController {
     public String deleteCustomer(@PathVariable String userId, HttpSession session) {
         UserSession userSession = (UserSession) session.getAttribute("userSession");
         if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin() && !userSession.isEmployee()) return "redirect:/shop/dashboard";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
 
         try {
             customerService.deleteCustomer(userId);
@@ -410,10 +269,8 @@ public class ShopWebController {
     public ResponseEntity<Map<String, Object>> dashboardStats(HttpSession session) {
         Map<String, Object> res = new HashMap<>();
         try {
-            long employeeCount = employeeService.count();
             long productCount = productService.count();
             long customerCount = customerService.count();
-            res.put("employeeCount", employeeCount);
             res.put("productCount", productCount);
             res.put("customerCount", customerCount);
             return ResponseEntity.ok(res);
@@ -496,24 +353,6 @@ public class ShopWebController {
             userSession.setName("Administrator");
             userSession.setRole("System Administrator");
             userSession.setDepartment("IT");
-        } else if (login.getStatus() == 0) { // Employee
-            userSession.setUserType("EMPLOYEE");
-            try {
-                Optional<Employee> empOpt = employeeService.findById(login.getUserId());
-                if (empOpt.isPresent()) {
-                    Employee emp = empOpt.get();
-                    userSession.setName(emp.getEmployeeName());
-                    userSession.setRole(emp.getRole());
-                    userSession.setDepartment(emp.getDepartment());
-                    userSession.setPhone(emp.getPhoneNumber());
-                } else {
-                    userSession.setName("Employee");
-                    userSession.setRole("Staff");
-                }
-            } catch (Exception e) {
-                userSession.setName("Employee");
-                userSession.setRole("Staff");
-            }
         } else { // Customer
             userSession.setUserType("CUSTOMER");
             try {
@@ -572,11 +411,9 @@ public class ShopWebController {
         
         try {
             // Get statistics data for the charts
-            List<Employee> employees = employeeService.findAll();
             List<Product> products = productService.findAll();
             List<Customer> customers = customerService.findAll();
             
-            model.addAttribute("employeeCount", employees.size());
             model.addAttribute("productCount", products.size());
             model.addAttribute("customerCount", customers.size());
             model.addAttribute("userSession", userSession);

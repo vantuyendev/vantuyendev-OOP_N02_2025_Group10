@@ -2,7 +2,6 @@ package com.shopmanagement.desktop.ui;
 
 import com.shopmanagement.desktop.ui.components.ModernCardButton;
 import com.shopmanagement.desktop.ui.components.StatisticsPanel;
-import com.shopmanagement.service.EmployeeService;
 import com.shopmanagement.service.ProductService;
 import com.shopmanagement.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ import java.awt.event.WindowEvent;
 public class ModernDashboardFrame extends JFrame {
     
     @Autowired
-    private EmployeeService employeeService;
-    
-    @Autowired
     private ProductService productService;
     
     @Autowired
@@ -39,7 +35,6 @@ public class ModernDashboardFrame extends JFrame {
     private JPanel actionPanel;
     private JPanel footerPanel;
     
-    private StatisticsPanel employeeStats;
     private StatisticsPanel productStats;
     private StatisticsPanel customerStats;
     
@@ -141,11 +136,9 @@ public class ModernDashboardFrame extends JFrame {
             new Color(100, 116, 139)));
         
         // Initialize statistics panels
-        employeeStats = new StatisticsPanel("👥", "Total Employees", 0, new Color(59, 130, 246));
         productStats = new StatisticsPanel("📦", "Total Products", 0, new Color(34, 197, 94));
         customerStats = new StatisticsPanel("👤", "Total Customers", 0, new Color(168, 85, 247));
         
-        statisticsPanel.add(employeeStats);
         statisticsPanel.add(productStats);
         statisticsPanel.add(customerStats);
     }
@@ -161,12 +154,6 @@ public class ModernDashboardFrame extends JFrame {
             new Color(100, 116, 139)));
         
         // Create modern card buttons
-        ModernCardButton employeesCard = new ModernCardButton(
-            "👥", "Employee Management", 
-            "Add, edit, and manage your workforce", 
-            new Color(59, 130, 246));
-        employeesCard.setClickAction(() -> openEmployeeManagement());
-        
         ModernCardButton productsCard = new ModernCardButton(
             "📦", "Product Management", 
             "Manage your inventory and products", 
@@ -185,7 +172,7 @@ public class ModernDashboardFrame extends JFrame {
             new Color(245, 158, 11));
         reportsCard.setClickAction(() -> openReports());
         
-        actionPanel.add(employeesCard);
+        // Add components to action panel (2x2 grid)
         actionPanel.add(productsCard);
         actionPanel.add(customersCard);
         actionPanel.add(reportsCard);
@@ -281,11 +268,9 @@ public class ModernDashboardFrame extends JFrame {
     private void loadStatistics() {
         SwingUtilities.invokeLater(() -> {
             try {
-                int employeeCount = employeeService != null ? employeeService.findAll().size() : 0;
                 int productCount = productService != null ? productService.findAll().size() : 0;
                 int customerCount = customerService != null ? customerService.findAll().size() : 0;
                 
-                employeeStats.updateValue(employeeCount);
                 productStats.updateValue(productCount);
                 customerStats.updateValue(customerCount);
                 
@@ -296,9 +281,8 @@ public class ModernDashboardFrame extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         switch (step) {
-                            case 0: employeeStats.startAnimation(); break;
-                            case 1: productStats.startAnimation(); break;
-                            case 2: customerStats.startAnimation(); delayTimer.stop(); break;
+                            case 0: productStats.startAnimation(); break;
+                            case 1: customerStats.startAnimation(); delayTimer.stop(); break;
                         }
                         step++;
                     }
@@ -312,13 +296,6 @@ public class ModernDashboardFrame extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
             }
         });
-    }
-    
-    private void openEmployeeManagement() {
-        JOptionPane.showMessageDialog(this, 
-            "Employee Management module will be opened here.", 
-            "Employee Management", 
-            JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void openProductManagement() {

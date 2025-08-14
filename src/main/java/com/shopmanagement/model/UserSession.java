@@ -5,8 +5,8 @@ package com.shopmanagement.model;
  */
 public class UserSession {
     private String userId;
-    private String userType;  // ADMIN, EMPLOYEE, CUSTOMER
-    private Integer status;   // 0: Employee, 1: Customer
+    private String userType;  // ADMIN, CUSTOMER
+    private Integer status;   // 1: Customer
     private String name;
     private String role;
     private String department;
@@ -93,7 +93,7 @@ public class UserSession {
     }
     
     public boolean isEmployee() {
-        return status != null && status == 0;
+        return false; // No employees in system
     }
     
     public boolean isCustomer() {

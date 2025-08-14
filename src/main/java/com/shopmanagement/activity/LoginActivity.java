@@ -106,7 +106,7 @@ public class LoginActivity extends JFrame implements ActionListener {
         try {
             // Basic authentication check
             int status = User.checkStatus(username, password);
-            if (status >= 0) { // 0: Employee, 1: Customer, 2: Admin
+            if (status >= 0) { // 1: Customer, 2: Admin
                 // Login successful
                 this.setVisible(false);
                 this.dispose();

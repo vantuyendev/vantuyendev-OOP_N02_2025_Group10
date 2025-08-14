@@ -13,133 +13,158 @@
     <!-- Custom CSS -->
     <link href="/css/modern-dashboard.css" rel="stylesheet">
 </head>
-<body>
-    <!-- Top Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<body class="dashboard-body">
+    <!-- Gradient Background -->
+    <div class="dashboard-background"></div>
+    
+    <!-- Header -->
+    <header class="dashboard-header">
         <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-shop me-2"></i>
-                <span class="navbar-brand mb-0 h1" th:text="#{nav.title}">Shop Management</span>
-            </div>
-            
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/dashboard" th:text="#{nav.dashboard}">Dashboard</a>
-                    </li>
-                    <li class="nav-item" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
-                        <a class="nav-link" href="/shop/employees" th:text="#{nav.employees}">Employees</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/products" th:text="#{nav.products}">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/customers" th:text="#{nav.customers}">Customers</a>
-                    </li>
-                    <li class="nav-item ms-3">
-                        <a class="nav-link active" href="/shop/search" th:text="#{nav.search}">Search</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/statistics" th:text="#{nav.statistics}">Statistics</a>
-                    </li>
-                </ul>
-                
-                <div class="d-flex align-items-center">
-                    <span class="navbar-text me-3" th:text="'Welcome, ' + ${userSession.name}">Welcome, User</span>
-                    <a href="/shop/profile" class="btn btn-outline-light btn-sm me-2" th:text="#{nav.profile}">Profile</a>
-                    <a href="/shop/logout" class="btn btn-outline-light btn-sm" th:text="#{nav.logout}">Logout</a>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="dashboard-brand">
+                        <i class="bi bi-shop"></i>
+                        <span>Quản Lý Cửa Hàng Tạp Hóa</span>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <h1 class="dashboard-title">Tìm Kiếm Nâng Cao</h1>
+                </div>
+                <div class="col-auto">
+                    <div class="user-info">
+                        <span class="me-3" th:text="'Welcome, ' + ${userSession?.name ?: 'User'}">Welcome, User</span>
+                        <a href="/shop/profile" class="btn btn-outline-light btn-sm me-2">Hồ Sơ</a>
+                        <a href="/shop/logout" class="btn btn-outline-light btn-sm">Đăng Xuất</a>
+                    </div>
                 </div>
             </div>
+        </div>
+    </header>
+                        </div>
         </div>
     </nav>
 
     <div class="container dashboard-container">
         <!-- Page Header -->
-        <div class="page-header mb-4">
+        <div class="container-fluid py-5">
             <div class="row align-items-center">
                 <div class="col">
                     <h1 class="page-title">
-                        <i class="bi bi-search text-primary me-2"></i>Advanced Search
+                        <i class="bi bi-search text-primary me-2"></i>Tìm Kiếm Nâng Cao
                     </h1>
-                    <p class="page-subtitle">Search across employees, products, and customers with advanced filters</p>
+                    <p class="page-subtitle">Tìm kiếm nhân viên, sản phẩm và khách hàng với bộ lọc nâng cao</p>
                 </div>
                 <div class="col-auto">
-                    <a href="/shop/" class="btn-modern btn-outline">
-                        <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                    <a href="/shop/dashboard" class="btn-modern btn-outline">
+                        <i class="bi bi-arrow-left me-1"></i>Về Dashboard
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Search Tabs -->
-        <div class="card modern-card">
-            <div class="card-body">
-                <ul class="nav nav-pills mb-4" id="searchTabs" role="tablist">
+    <!-- Main Content -->
+    <div class="container main-container">
+        <!-- Search Features -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="feature-card" onclick="showSearchTab('employees')">
+                    <div class="feature-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3>Tìm Nhân Viên</h3>
+                    <p>Tìm kiếm thông tin nhân viên theo tên, chức vụ, phòng ban</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card" onclick="showSearchTab('products')">
+                    <div class="feature-icon">
+                        <i class="bi bi-box"></i>
+                    </div>
+                    <h3>Tìm Sản Phẩm</h3>
+                    <p>Tìm kiếm sản phẩm theo tên, danh mục, giá cả</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card" onclick="showSearchTab('customers')">
+                    <div class="feature-icon">
+                        <i class="bi bi-person-hearts"></i>
+                    </div>
+                    <h3>Tìm Khách Hàng</h3>
+                    <p>Tìm kiếm khách hàng theo tên, số điện thoại, địa chỉ</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Content -->
+        <div class="content-card">
+            <div class="card-header">
+                <ul class="nav nav-pills" id="searchTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="employees-tab" data-bs-toggle="pill" 
                                 data-bs-target="#employees-search" type="button" role="tab">
-                            <i class="bi bi-people me-1"></i>Employees
+                            <i class="bi bi-people me-1"></i>Nhân Viên
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="products-tab" data-bs-toggle="pill" 
                                 data-bs-target="#products-search" type="button" role="tab">
-                            <i class="bi bi-box me-1"></i>Products
+                            <i class="bi bi-box me-1"></i>Sản Phẩm
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="customers-tab" data-bs-toggle="pill" 
                                 data-bs-target="#customers-search" type="button" role="tab">
-                            <i class="bi bi-person-hearts me-1"></i>Customers
+                            <i class="bi bi-person-hearts me-1"></i>Khách Hàng
                         </button>
                     </li>
                 </ul>
-
+            </div>
+            <div class="card-body">
                 <div class="tab-content" id="searchTabsContent">
                     <!-- Employees Search -->
                     <div class="tab-pane fade show active" id="employees-search" role="tabpanel">
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="emp-name" placeholder="Employee Name">
-                                    <label for="emp-name"><i class="bi bi-person me-1"></i>Employee Name</label>
+                                    <input type="text" class="form-control" id="emp-name" placeholder="Tên nhân viên">
+                                    <label for="emp-name"><i class="bi bi-person me-1"></i>Tên Nhân Viên</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <select class="form-control" id="emp-role">
-                                        <option value="">All Roles</option>
+                                        <option value="">Tất cả chức vụ</option>
                                         <option value="Admin">Admin</option>
-                                        <option value="Manager">Manager</option>
-                                        <option value="Sales">Sales</option>
-                                        <option value="Cashier">Cashier</option>
+                                        <option value="Manager">Quản lý</option>
+                                        <option value="Sales">Bán hàng</option>
+                                        <option value="Cashier">Thu ngân</option>
                                     </select>
-                                    <label for="emp-role"><i class="bi bi-briefcase me-1"></i>Role</label>
+                                    <label for="emp-role"><i class="bi bi-briefcase me-1"></i>Chức Vụ</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <select class="form-control" id="emp-department">
-                                        <option value="">All Departments</option>
-                                        <option value="Sales">Sales</option>
-                                        <option value="Management">Management</option>
-                                        <option value="Customer Service">Customer Service</option>
-                                        <option value="Inventory">Inventory</option>
-                                        <option value="Finance">Finance</option>
+                                        <option value="">Tất cả phòng ban</option>
+                                        <option value="Sales">Bán hàng</option>
+                                        <option value="Management">Quản lý</option>
+                                        <option value="Customer Service">Chăm sóc khách hàng</option>
+                                        <option value="Inventory">Kho</option>
+                                        <option value="Finance">Tài chính</option>
                                         <option value="IT">IT</option>
                                     </select>
-                                    <label for="emp-department"><i class="bi bi-building me-1"></i>Department</label>
+                                    <label for="emp-department"><i class="bi bi-building me-1"></i>Phòng Ban</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="number" class="form-control" id="emp-min-salary" placeholder="Min Salary">
-                                    <label for="emp-min-salary"><i class="bi bi-currency-dollar me-1"></i>Min Salary</label>
+                                    <input type="number" class="form-control" id="emp-min-salary" placeholder="Lương tối thiểu">
+                                    <label for="emp-min-salary"><i class="bi bi-currency-dollar me-1"></i>Lương Tối Thiểu</label>
                                 </div>
                             </div>
                         </div>
                         <button type="button" class="btn-modern btn-primary" onclick="searchEmployees()">
-                            <i class="bi bi-search me-1"></i>Search Employees
+                            <i class="bi bi-search me-1"></i>Tìm Nhân Viên
                         </button>
                         <div id="employees-results" class="mt-4"></div>
                     </div>
@@ -149,14 +174,14 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="prod-name" placeholder="Product Name">
-                                    <label for="prod-name"><i class="bi bi-box me-1"></i>Product Name</label>
+                                    <input type="text" class="form-control" id="prod-name" placeholder="Tên sản phẩm">
+                                    <label for="prod-name"><i class="bi bi-box me-1"></i>Tên Sản Phẩm</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="prod-category" placeholder="Category">
-                                    <label for="prod-category"><i class="bi bi-tags me-1"></i>Category</label>
+                                    <input type="text" class="form-control" id="prod-category" placeholder="Danh mục">
+                                    <label for="prod-category"><i class="bi bi-tags me-1"></i>Danh Mục</label>
                                 </div>
                             </div>
                             <div class="col-md-6">

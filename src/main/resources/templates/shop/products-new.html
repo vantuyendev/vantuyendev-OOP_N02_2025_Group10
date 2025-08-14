@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Quản Lý Cửa Hàng Tạp Hóa - Khách Hàng</title>
+    <title>Quản Lý Cửa Hàng Tạp Hóa - Sản Phẩm</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -151,10 +151,10 @@
                     <a class="nav-link" href="/shop/">
                         <i class="bi bi-house me-1"></i>Trang Chủ
                     </a>
-                    <a class="nav-link" href="/shop/products">
+                    <a class="nav-link active" href="/shop/products">
                         <i class="bi bi-box me-1"></i>Sản Phẩm
                     </a>
-                    <a class="nav-link active" href="/shop/customers" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                    <a class="nav-link" href="/shop/customers" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
                         <i class="bi bi-person-hearts me-1"></i>Khách Hàng
                     </a>
                     <a class="nav-link" href="/shop/employees" th:if="${userSession != null and userSession.admin}">
@@ -197,17 +197,17 @@
         <div class="container">
             <!-- Page Title -->
             <div class="page-title">
-                <h1><i class="bi bi-person-hearts me-3"></i>Quản Lý Khách Hàng</h1>
-                <p>Xem và quản lý thông tin khách hàng của cửa hàng</p>
+                <h1><i class="bi bi-boxes me-3"></i>Quản Lý Sản Phẩm</h1>
+                <p>Xem và quản lý thông tin sản phẩm trong cửa hàng</p>
             </div>
 
             <!-- Action Buttons -->
             <div class="text-center mb-4" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
-                <a href="/shop/customers/add" class="btn btn-success btn-modern me-3">
-                    <i class="bi bi-person-plus me-2"></i>Thêm Khách Hàng Mới
+                <a href="/shop/products/add" class="btn btn-success btn-modern me-3">
+                    <i class="bi bi-plus-circle me-2"></i>Thêm Sản Phẩm Mới
                 </a>
                 <a href="/shop/search" class="btn btn-info btn-modern">
-                    <i class="bi bi-search me-2"></i>Tìm Kiếm Khách Hàng
+                    <i class="bi bi-search me-2"></i>Tìm Kiếm Sản Phẩm
                 </a>
             </div>
 
@@ -229,58 +229,66 @@
                 <span th:text="${error}"></span>
             </div>
 
-            <!-- Customers Content -->
+            <!-- Products Content -->
             <div class="content-card">
-                <div th:if="${customers != null and not #lists.isEmpty(customers)}">
+                <div th:if="${products != null and not #lists.isEmpty(products)}">
                     <h5 class="mb-4">
-                        <i class="bi bi-person-hearts me-2"></i>Danh Sách Khách Hàng
-                        <span class="badge bg-primary ms-2" th:text="${#lists.size(customers)}">0</span>
+                        <i class="bi bi-box me-2"></i>Danh Sách Sản Phẩm
+                        <span class="badge bg-primary ms-2" th:text="${#lists.size(products)}">0</span>
                     </h5>
                     
                     <div class="table-responsive">
-                        <table class="table" id="customerTable">
+                        <table class="table" id="productTable">
                             <thead>
                                 <tr>
-                                    <th>Mã Khách Hàng</th>
-                                    <th>Tên Khách Hàng</th>
-                                    <th>Email</th>
-                                    <th>Số Điện Thoại</th>
-                                    <th>Địa Chỉ</th>
+                                    <th>Mã Sản Phẩm</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Danh Mục</th>
+                                    <th>Giá</th>
+                                    <th>Số Lượng</th>
+                                    <th>Thương Hiệu</th>
                                     <th th:if="${userSession != null and (userSession.admin or userSession.employee)}">Thao Tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="customer : ${customers}">
+                                <tr th:each="product : ${products}">
                                     <td>
-                                        <span class="badge bg-secondary" th:text="${customer.userId}"></span>
+                                        <span class="badge bg-secondary" th:text="${product.productId}"></span>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <i class="bi bi-person-circle me-2 text-primary"></i>
-                                            <span class="fw-medium" th:text="${customer.customerName}"></span>
+                                            <i class="bi bi-box me-2 text-primary"></i>
+                                            <span class="fw-medium" th:text="${product.productName}"></span>
                                         </div>
                                     </td>
-                                    <td th:text="${customer.email}"></td>
-                                    <td th:text="${customer.phoneNumber}"></td>
                                     <td>
-                                        <span class="text-truncate" style="max-width: 200px; display: inline-block;" 
-                                              th:text="${customer.address}" 
-                                              th:title="${customer.address}"></span>
+                                        <span class="badge bg-info" th:text="${product.category}"></span>
                                     </td>
+                                    <td>
+                                        <span class="fw-bold text-success">
+                                            <span th:text="${#numbers.formatCurrency(product.price)}"></span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge" 
+                                              th:classappend="${product.quantity > 0} ? 'bg-success' : 'bg-danger'"
+                                              th:text="${product.quantity}"></span>
+                                    </td>
+                                    <td th:text="${product.brand}"></td>
                                     <td th:if="${userSession != null and (userSession.admin or userSession.employee)}">
                                         <div class="btn-group" role="group">
-                                            <a th:href="@{'/shop/customers/edit/' + ${customer.userId}}" 
+                                            <a th:href="@{'/shop/products/edit/' + ${product.productId}}" 
                                                class="btn btn-sm btn-outline-primary"
-                                               title="Sửa Khách Hàng">
+                                               title="Sửa Sản Phẩm">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <form th:action="@{'/shop/customers/delete/' + ${customer.userId}}" 
+                                            <form th:action="@{'/shop/products/delete/' + ${product.productId}}" 
                                                   method="post" 
                                                   style="display: inline;"
-                                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
+                                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                                                 <button type="submit" 
                                                         class="btn btn-sm btn-outline-danger"
-                                                        title="Xóa Khách Hàng">
+                                                        title="Xóa Sản Phẩm">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -292,13 +300,13 @@
                     </div>
                 </div>
                 
-                <div th:if="${customers == null or #lists.isEmpty(customers)}">
+                <div th:if="${products == null or #lists.isEmpty(products)}">
                     <div class="text-center py-5">
-                        <i class="bi bi-person-hearts display-1 text-muted mb-3"></i>
-                        <h4 class="text-muted mb-3">Chưa Có Khách Hàng Nào</h4>
-                        <p class="text-muted mb-4">Có vẻ như bạn chưa thêm khách hàng nào vào hệ thống.</p>
-                        <a href="/shop/customers/add" class="btn btn-primary btn-modern" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
-                            <i class="bi bi-person-plus me-2"></i>Thêm Khách Hàng Đầu Tiên
+                        <i class="bi bi-box display-1 text-muted mb-3"></i>
+                        <h4 class="text-muted mb-3">Chưa Có Sản Phẩm Nào</h4>
+                        <p class="text-muted mb-4">Có vẻ như bạn chưa thêm sản phẩm nào vào hệ thống.</p>
+                        <a href="/shop/products/add" class="btn btn-primary btn-modern" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                            <i class="bi bi-plus-circle me-2"></i>Thêm Sản Phẩm Đầu Tiên
                         </a>
                     </div>
                 </div>

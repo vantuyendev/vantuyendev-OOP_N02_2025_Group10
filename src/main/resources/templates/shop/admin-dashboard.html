@@ -147,11 +147,6 @@
             color: white;
         }
         
-        .feature-icon.system-settings {
-            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-            color: white;
-        }
-        
         .feature-icon.audit-logs {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
@@ -265,24 +260,21 @@
     <nav class="main-header">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="navbar-brand" href="/shop/">
+                <a class="navbar-brand" href="/shop/dashboard">
                     <i class="bi bi-shop me-2"></i>Quản Lý Cửa Hàng Tạp Hóa
                 </a>
                 <div class="navbar-nav d-flex flex-row align-items-center">
                     <a class="nav-link" href="/shop/">
                         <i class="bi bi-house me-1"></i>Trang Chủ
                     </a>
-                    <a class="nav-link" href="/shop/employees">
-                        <i class="bi bi-people me-1"></i>Nhân Viên
-                    </a>
                     <a class="nav-link" href="/shop/products">
                         <i class="bi bi-box me-1"></i>Sản Phẩm
                     </a>
-                    <a class="nav-link" href="/shop/customers">
-                        <i class="bi bi-person-hearts me-1"></i>Khách Hàng
-                    </a>
                     <a class="nav-link" href="/shop/statistics">
                         <i class="bi bi-graph-up me-1"></i>Báo Cáo
+                    </a>
+                    <a class="nav-link" href="/shop/audit">
+                        <i class="bi bi-journal-text me-1"></i>Nhật Ký
                     </a>
                     
                     <!-- User menu dropdown -->
@@ -292,13 +284,6 @@
                             <span th:text="${userSession.name} ?: 'Admin'">Admin</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/shop/profile">
-                                <i class="bi bi-person me-2"></i>Thông Tin Cá Nhân
-                            </a></li>
-                            <li><a class="dropdown-item" href="/shop/settings">
-                                <i class="bi bi-gear me-2"></i>Cài Đặt Hệ Thống
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/shop/logout">
                                 <i class="bi bi-box-arrow-right me-2"></i>Đăng Xuất
                             </a></li>
@@ -318,39 +303,19 @@
                     <i class="bi bi-shield-check me-2"></i>Administrator Dashboard
                 </div>
                 <h1><i class="bi bi-person-fill-gear me-3"></i>Bảng Điều Khiển Quản Trị</h1>
-                <p class="subtitle">Quản lý toàn bộ hệ thống, nhân viên, khách hàng và theo dõi hoạt động kinh doanh.</p>
+                <p class="subtitle">Quản lý sản phẩm, xem báo cáo và theo dõi hoạt động hệ thống.</p>
             </div>
 
             <!-- Feature Grid -->
             <div class="feature-grid">
-                <!-- Quản Lý Nhân Viên -->
-                <div class="feature-card" onclick="location.href='/shop/employees'">
-                    <div class="feature-icon manage-employees">
-                        <i class="bi bi-people"></i>
-                    </div>
-                    <h3 class="feature-title">Quản Lý Nhân Viên</h3>
-                    <p class="feature-description">Thêm, sửa, xóa nhân viên. Phân quyền và quản lý tài khoản.</p>
-                    <a href="/shop/employees" class="feature-button btn-primary">QUẢN LÝ</a>
-                </div>
-
                 <!-- Quản Lý Sản Phẩm -->
                 <div class="feature-card" onclick="location.href='/shop/products'">
                     <div class="feature-icon manage-products">
                         <i class="bi bi-boxes"></i>
                     </div>
                     <h3 class="feature-title">Quản Lý Sản Phẩm</h3>
-                    <p class="feature-description">Quản lý kho hàng, danh mục sản phẩm và giá cả.</p>
+                    <p class="feature-description">Thêm, sửa, xóa sản phẩm. Quản lý kho hàng và giá cả.</p>
                     <a href="/shop/products" class="feature-button btn-warning">QUẢN LÝ</a>
-                </div>
-
-                <!-- Quản Lý Khách Hàng -->
-                <div class="feature-card" onclick="location.href='/shop/customers'">
-                    <div class="feature-icon manage-customers">
-                        <i class="bi bi-person-hearts"></i>
-                    </div>
-                    <h3 class="feature-title">Quản Lý Khách Hàng</h3>
-                    <p class="feature-description">Thông tin khách hàng, lịch sử mua hàng và chăm sóc khách hàng.</p>
-                    <a href="/shop/customers" class="feature-button btn-danger">QUẢN LÝ</a>
                 </div>
 
                 <!-- Báo Cáo Thống Kê -->
@@ -363,24 +328,24 @@
                     <a href="/shop/statistics" class="feature-button btn-success">XEM BÁO CÁO</a>
                 </div>
 
-                <!-- Cài Đặt Hệ Thống -->
-                <div class="feature-card" onclick="location.href='/shop/settings'">
-                    <div class="feature-icon system-settings">
-                        <i class="bi bi-gear-fill"></i>
-                    </div>
-                    <h3 class="feature-title">Cài Đặt Hệ Thống</h3>
-                    <p class="feature-description">Cấu hình hệ thống, phân quyền và các thiết lập chung.</p>
-                    <a href="/shop/settings" class="feature-button btn-purple">CÀI ĐẶT</a>
-                </div>
-
                 <!-- Nhật Ký Hệ Thống -->
                 <div class="feature-card" onclick="location.href='/shop/audit'">
                     <div class="feature-icon audit-logs">
                         <i class="bi bi-journal-text"></i>
                     </div>
                     <h3 class="feature-title">Nhật Ký Hệ Thống</h3>
-                    <p class="feature-description">Theo dõi hoạt động người dùng và lịch sử thay đổi dữ liệu.</p>
+                    <p class="feature-description">Theo dõi hoạt động người dùng, lịch sử mua hàng và thay đổi dữ liệu.</p>
                     <a href="/shop/audit" class="feature-button btn-orange">XEM NHẬT KÝ</a>
+                </div>
+
+                <!-- Thêm Sản Phẩm -->
+                <div class="feature-card" onclick="location.href='/shop/products/add'">
+                    <div class="feature-icon manage-employees">
+                        <i class="bi bi-plus-circle"></i>
+                    </div>
+                    <h3 class="feature-title">Thêm Sản Phẩm</h3>
+                    <p class="feature-description">Thêm sản phẩm mới vào danh sách để bán cho khách hàng.</p>
+                    <a href="/shop/products/add" class="feature-button btn-primary">THÊM NGAY</a>
                 </div>
             </div>
         </div>
