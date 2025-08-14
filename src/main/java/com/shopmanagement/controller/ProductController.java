@@ -212,12 +212,12 @@ public class ProductController {
      * API lấy sản phẩm theo category
      * GET /api/products/category/{category}
      */
-    @GetMapping("/category/{category}")
-    public ResponseEntity<Map<String, Object>> getProductsByCategory(@PathVariable String category) {
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<Map<String, Object>> getProductsByCategory(@PathVariable Long categoryId) {
         Map<String, Object> response = new HashMap<>();
         
         try {
-            List<Product> products = productService.findByCategory(category);
+            List<Product> products = productService.findByCategoryId(categoryId);
             
             response.put("success", true);
             response.put("data", products);

@@ -147,9 +147,6 @@ CREATE TABLE IF NOT EXISTS cart (
     FOREIGN KEY (customer_id) REFERENCES customer(user_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
 );
-    FOREIGN KEY (customer_id) REFERENCES customer(user_id) ON DELETE SET NULL,
-    FOREIGN KEY (employee_id) REFERENCES employee(user_id) ON DELETE SET NULL
-);
 
 -- Bảng ORDER_ITEM (theo Entity)
 CREATE TABLE IF NOT EXISTS order_item (
@@ -166,10 +163,8 @@ CREATE TABLE IF NOT EXISTS order_item (
 
 -- Tạo indexes để tối ưu hiệu suất
 CREATE INDEX IF NOT EXISTS idx_login_user_id ON login(user_id);
-CREATE INDEX IF NOT EXISTS idx_product_category ON product(category);
+CREATE INDEX IF NOT EXISTS idx_product_category_id ON product(category_id);
 CREATE INDEX IF NOT EXISTS idx_customer_user_id ON customer(user_id);
-CREATE INDEX IF NOT EXISTS idx_employee_user_id ON employee(user_id);
 CREATE INDEX IF NOT EXISTS idx_orders_customer_id ON orders(customer_id);
-CREATE INDEX IF NOT EXISTS idx_orders_employee_id ON orders(employee_id);
 CREATE INDEX IF NOT EXISTS idx_order_item_order_id ON order_item(order_id);
 CREATE INDEX IF NOT EXISTS idx_order_item_product_id ON order_item(product_id);

@@ -130,15 +130,6 @@ public class ProductService {
     }
     
     /**
-     * Tìm sản phẩm theo category
-     * @param category loại sản phẩm
-     * @return danh sách sản phẩm thuộc category đó
-     */
-    public List<Product> findByCategory(String category) {
-        return productRepository.findByCategory(category);
-    }
-    
-    /**
      * Tìm sản phẩm theo brand
      * @param brand thương hiệu
      * @return danh sách sản phẩm của thương hiệu đó

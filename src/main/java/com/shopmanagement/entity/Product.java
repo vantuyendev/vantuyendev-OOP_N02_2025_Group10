@@ -69,7 +69,7 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
     
-    public Product(String productName, String category, BigDecimal price, Integer quantity) {
+    public Product(String productName, Category category, BigDecimal price, Integer quantity) {
         this();
         this.productName = productName;
         this.category = category;

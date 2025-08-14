@@ -125,6 +125,13 @@ public class OrderService {
     }
     
     /**
+     * Lấy đơn hàng theo ID (alias cho compatibility)
+     */
+    public Optional<Order> findById(Long orderId) {
+        return orderRepository.findById(orderId);
+    }
+    
+    /**
      * Lấy danh sách OrderItem của đơn hàng
      */
     public List<OrderItem> getOrderItems(Long orderId) {
@@ -259,5 +266,12 @@ public class OrderService {
      */
     public Order deliverOrder(Long orderId) {
         return updateOrderStatus(orderId, Order.OrderStatus.DELIVERED);
+    }
+    
+    /**
+     * Đếm tổng số đơn hàng
+     */
+    public long count() {
+        return orderRepository.count();
     }
 }

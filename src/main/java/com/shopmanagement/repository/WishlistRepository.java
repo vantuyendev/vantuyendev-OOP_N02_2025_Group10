@@ -54,9 +54,9 @@ public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
     /**
      * Tìm sản phẩm được yêu thích nhiều nhất
      */
-    @Query("SELECT w.productId, COUNT(w) as count FROM Wishlist w " +
+    @Query("SELECT w.productId, COUNT(w) as wishCount FROM Wishlist w " +
            "GROUP BY w.productId " +
-           "ORDER BY count DESC")
+           "ORDER BY wishCount DESC")
     List<Object[]> findMostWishedProducts();
     
     /**
