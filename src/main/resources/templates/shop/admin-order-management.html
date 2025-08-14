@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn hàng - Shop Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+    <style>
+        .admin-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .admin-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #d1ecf1; color: #0c5460; }
+        .status-processing { background: #cce5ff; color: #004085; }
+        .status-shipped { background: #e7e8ea; color: #383d41; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .status-refunded { background: #ffeaa7; color: #2d3436; }
+        
+        .order-row {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .order-row:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .btn-action {
+            border-radius: 15px;
+            padding: 6px 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        
+        .filter-card {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="container-fluid">
+            <!-- Header với logo có thể click -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="/admin-dashboard" class="text-decoration-none">
+                            <h2 class="text-white mb-0">
+                                <i class="fas fa-store me-2"></i>Shop Management
+                                <small class="text-white-50 ms-2">(Admin)</small>
+                            </h2>
+                        </a>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 bg-transparent">
+                                <li class="breadcrumb-item">
+                                    <a href="/admin-dashboard" class="text-white-50 text-decoration-none">
+                                        <i class="fas fa-home"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active text-white" aria-current="page">
+                                    Quản lý đơn hàng
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card p-3">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0" th:text="${totalOrders}">156</h5>
+                                <small class="text-muted">Tổng đơn hàng</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card p-3">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0" th:text="${pendingCount}">12</h5>
+                                <small class="text-muted">Chờ xử lý</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card p-3">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0" th:text="${confirmedCount}">89</h5>
+                                <small class="text-muted">Đã xác nhận</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card p-3">
+                        <div class="d-flex align-items-center">
+                            <div class="stats-icon" style="background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="ms-3">
+                                <h5 class="mb-0" th:text="${deliveredCount}">134</h5>
+                                <small class="text-muted">Đã giao hàng</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Filter and Actions -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="filter-card p-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <select class="form-select" id="statusFilter">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="PENDING">Chờ xử lý</option>
+                                    <option value="CONFIRMED">Đã xác nhận</option>
+                                    <option value="PROCESSING">Đang xử lý</option>
+                                    <option value="SHIPPED">Đã giao vận</option>
+                                    <option value="DELIVERED">Đã giao hàng</option>
+                                    <option value="CANCELLED">Đã hủy</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control" id="dateFilter" placeholder="Lọc theo ngày">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" id="searchInput" placeholder="Tìm kiếm đơn hàng...">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-primary btn-action" onclick="filterOrders()">
+                                        <i class="fas fa-search me-1"></i>Lọc
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-action" onclick="resetFilter()">
+                                        <i class="fas fa-undo me-1"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="admin-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2 text-primary"></i>
+                        Danh sách đơn hàng
+                    </h5>
+                    <button class="btn btn-success btn-action" onclick="exportOrders()">
+                        <i class="fas fa-download me-2"></i>Xuất Excel
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Ngày đặt</th>
+                                <th>Trạng thái</th>
+                                <th>Tổng tiền</th>
+                                <th>Thanh toán</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr th:each="order : ${allOrders}" class="order-row" th:data-order-id="${order.orderId}">
+                                <td>
+                                    <strong th:text="'#' + ${order.orderId}">#12345</strong>
+                                </td>
+                                <td>
+                                    <span th:text="${order.customer?.fullName ?: order.customerId}">Nguyễn Văn A</span>
+                                    <br>
+                                    <small class="text-muted" th:text="${order.customer?.email ?: ''}">email@example.com</small>
+                                </td>
+                                <td>
+                                    <span th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}">01/01/2024</span>
+                                    <br>
+                                    <small class="text-muted" th:text="${#temporals.format(order.orderDate, 'HH:mm')}">10:30</small>
+                                </td>
+                                <td>
+                                    <select class="form-select form-select-sm status-select" 
+                                            th:data-order-id="${order.orderId}"
+                                            onchange="updateOrderStatus(this)">
+                                        <option value="PENDING" th:selected="${order.status.name() == 'PENDING'}">Chờ xử lý</option>
+                                        <option value="CONFIRMED" th:selected="${order.status.name() == 'CONFIRMED'}">Đã xác nhận</option>
+                                        <option value="PROCESSING" th:selected="${order.status.name() == 'PROCESSING'}">Đang xử lý</option>
+                                        <option value="SHIPPED" th:selected="${order.status.name() == 'SHIPPED'}">Đã giao vận</option>
+                                        <option value="DELIVERED" th:selected="${order.status.name() == 'DELIVERED'}">Đã giao hàng</option>
+                                        <option value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">Đã hủy</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <strong class="text-primary" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                                        500,000 VNĐ
+                                    </strong>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info" th:text="${order.paymentMethod}">COD</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-outline-primary btn-sm btn-action" 
+                                                th:onclick="'viewOrderDetails(' + ${order.orderId} + ')'">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm btn-action dropdown-toggle" 
+                                                data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="#" th:onclick="'printOrder(' + ${order.orderId} + ')'">
+                                                    <i class="fas fa-print me-2"></i>In hóa đơn
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" th:onclick="'sendEmail(' + ${order.orderId} + ')'">
+                                                    <i class="fas fa-envelope me-2"></i>Gửi email
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Orders pagination" class="mt-3">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Update order status
+        function updateOrderStatus(selectElement) {
+            const orderId = selectElement.dataset.orderId;
+            const newStatus = selectElement.value;
+            const originalValue = selectElement.getAttribute('data-original-value') || selectElement.value;
+            
+            Swal.fire({
+                title: 'Xác nhận thay đổi',
+                text: `Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng #${orderId}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#667eea',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'Đang cập nhật...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    const formData = new FormData();
+                    formData.append('orderId', orderId);
+                    formData.append('status', newStatus);
+
+                    fetch('/order/admin/update-status', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            selectElement.setAttribute('data-original-value', newStatus);
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: data.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            throw new Error(data.message || 'Có lỗi xảy ra');
+                        }
+                    })
+                    .catch(error => {
+                        selectElement.value = originalValue;
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#dc3545'
+                        });
+                    });
+                } else {
+                    // Reset to original value
+                    selectElement.value = originalValue;
+                }
+            });
+        }
+
+        function viewOrderDetails(orderId) {
+            window.open(`/order/details/${orderId}`, '_blank');
+        }
+
+        function printOrder(orderId) {
+            Swal.fire({
+                title: 'Tính năng đang phát triển',
+                text: 'Tính năng in hóa đơn sẽ sớm được cập nhật.',
+                icon: 'info'
+            });
+        }
+
+        function sendEmail(orderId) {
+            Swal.fire({
+                title: 'Tính năng đang phát triển',
+                text: 'Tính năng gửi email sẽ sớm được cập nhật.',
+                icon: 'info'
+            });
+        }
+
+        function filterOrders() {
+            const status = document.getElementById('statusFilter').value;
+            const date = document.getElementById('dateFilter').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            
+            const rows = document.querySelectorAll('#ordersTableBody tr');
+            
+            rows.forEach(row => {
+                let show = true;
+                
+                // Filter by status
+                if (status) {
+                    const statusSelect = row.querySelector('.status-select');
+                    if (statusSelect.value !== status) {
+                        show = false;
+                    }
+                }
+                
+                // Filter by date (simplified - you might want to implement better date filtering)
+                if (date) {
+                    const dateCell = row.cells[2].textContent;
+                    if (!dateCell.includes(date)) {
+                        show = false;
+                    }
+                }
+                
+                // Filter by search text
+                if (search) {
+                    const rowText = row.textContent.toLowerCase();
+                    if (!rowText.includes(search)) {
+                        show = false;
+                    }
+                }
+                
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetFilter() {
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dateFilter').value = '';
+            document.getElementById('searchInput').value = '';
+            
+            const rows = document.querySelectorAll('#ordersTableBody tr');
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        }
+
+        function exportOrders() {
+            Swal.fire({
+                title: 'Tính năng đang phát triển',
+                text: 'Tính năng xuất Excel sẽ sớm được cập nhật.',
+                icon: 'info'
+            });
+        }
+
+        // Store original values for status selects
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelects = document.querySelectorAll('.status-select');
+            statusSelects.forEach(select => {
+                select.setAttribute('data-original-value', select.value);
+            });
+        });
+
+        // Auto refresh every 30 seconds
+        setInterval(() => {
+            if (!document.querySelector('.swal2-container')) {
+                location.reload();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán - Shop Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/modern-dashboard.css" rel="stylesheet">
+    <style>
+        .checkout-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .checkout-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .cart-item {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            padding: 12px 20px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-checkout {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 40px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-checkout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .order-summary {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .total-amount {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="container">
+            <!-- Header với logo có thể click -->
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <a href="/dashboard" class="text-decoration-none">
+                        <h2 class="text-white mb-0">
+                            <i class="fas fa-store me-2"></i>Shop Management
+                        </h2>
+                    </a>
+                    <p class="text-white-50 mt-2">Thanh toán đơn hàng</p>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div class="row">
+                <!-- Thông tin đơn hàng -->
+                <div class="col-lg-8 mb-4">
+                    <div class="checkout-card p-4">
+                        <h4 class="mb-4">
+                            <i class="fas fa-shopping-cart me-2 text-primary"></i>
+                            Thông tin đơn hàng
+                        </h4>
+
+                        <!-- Danh sách sản phẩm -->
+                        <div class="mb-4">
+                            <h6 class="text-secondary mb-3">Sản phẩm đã chọn:</h6>
+                            <div th:each="item : ${cartItems}" class="cart-item p-3 mb-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
+                                        <img th:src="${item.product?.image != null ? item.product.image : '/images/no-image.png'}" 
+                                             th:alt="${item.product?.productName}" 
+                                             class="img-fluid rounded" style="max-height: 60px;">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="mb-1" th:text="${item.product?.productName}">Tên sản phẩm</h6>
+                                        <small class="text-muted" th:text="${item.product?.description}">Mô tả sản phẩm</small>
+                                    </div>
+                                    <div class="col-md-2 text-center">
+                                        <span class="fw-bold" th:text="${item.quantity}">1</span>
+                                    </div>
+                                    <div class="col-md-2 text-end">
+                                        <span class="fw-bold text-primary" 
+                                              th:text="${#numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                                            100,000 VNĐ
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form thanh toán -->
+                        <form id="checkoutForm">
+                            <h6 class="text-secondary mb-3">Thông tin giao hàng:</h6>
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label for="shippingAddress" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Địa chỉ giao hàng
+                                    </label>
+                                    <textarea class="form-control" id="shippingAddress" name="shippingAddress" 
+                                              rows="3" required placeholder="Nhập địa chỉ giao hàng chi tiết..."></textarea>
+                                </div>
+                            </div>
+
+                            <h6 class="text-secondary mb-3">Phương thức thanh toán:</h6>
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                        <option value="">Chọn phương thức thanh toán</option>
+                                        <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                                        <option value="BANK_TRANSFER">Chuyển khoản ngân hàng</option>
+                                        <option value="CREDIT_CARD">Thẻ tín dụng</option>
+                                        <option value="E_WALLET">Ví điện tử</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label for="notes" class="form-label">
+                                        <i class="fas fa-sticky-note me-2"></i>Ghi chú (tùy chọn)
+                                    </label>
+                                    <textarea class="form-control" id="notes" name="notes" 
+                                              rows="2" placeholder="Ghi chú thêm cho đơn hàng..."></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tóm tắt đơn hàng -->
+                <div class="col-lg-4">
+                    <div class="order-summary p-4 sticky-top">
+                        <h5 class="mb-4">
+                            <i class="fas fa-file-invoice-dollar me-2"></i>
+                            Tóm tắt đơn hàng
+                        </h5>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tổng sản phẩm:</span>
+                            <span th:text="${#lists.size(cartItems)}">3</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tạm tính:</span>
+                            <span th:text="${#numbers.formatDecimal(cartTotal, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                                500,000 VNĐ
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Phí giao hàng:</span>
+                            <span class="text-success">Miễn phí</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold">Tổng cộng:</span>
+                            <span class="total-amount" th:text="${#numbers.formatDecimal(cartTotal, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                                500,000 VNĐ
+                            </span>
+                        </div>
+
+                        <button type="button" id="submitOrder" class="btn btn-checkout btn-primary w-100 mb-3">
+                            <i class="fas fa-credit-card me-2"></i>
+                            Đặt hàng ngay
+                        </button>
+
+                        <a href="/shop/products" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Tiếp tục mua sắm
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('submitOrder').addEventListener('click', function() {
+            const form = document.getElementById('checkoutForm');
+            const formData = new FormData(form);
+
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Show loading
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang xử lý...';
+            this.disabled = true;
+
+            // Submit order
+            fetch('/order/create', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Đặt hàng thành công!',
+                        text: 'Đơn hàng của bạn đã được tạo thành công.',
+                        icon: 'success',
+                        confirmButtonText: 'Xem đơn hàng',
+                        confirmButtonColor: '#667eea'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/order/my-orders';
+                        }
+                    });
+                } else {
+                    throw new Error(data.message || 'Có lỗi xảy ra');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#dc3545'
+                });
+            })
+            .finally(() => {
+                this.innerHTML = '<i class="fas fa-credit-card me-2"></i>Đặt hàng ngay';
+                this.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
