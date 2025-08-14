@@ -3,10 +3,14 @@ package com.shopmanagement.web.controller;
 import com.shopmanagement.entity.Product;
 import com.shopmanagement.entity.Customer;
 import com.shopmanagement.entity.Login;
+import com.shopmanagement.entity.Cart;
+import com.shopmanagement.entity.Order;
 import com.shopmanagement.model.UserSession;
 import com.shopmanagement.service.ProductService;
 import com.shopmanagement.service.CustomerService;
 import com.shopmanagement.service.LoginService;
+import com.shopmanagement.service.CartService;
+import com.shopmanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +37,12 @@ public class ShopWebController {
     
     @Autowired
     private LoginService loginService;
+    
+    @Autowired
+    private CartService cartService;
+    
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
@@ -390,14 +400,189 @@ public class ShopWebController {
         }
         
         try {
-            // TODO: Implement purchase logic with inventory management
+            String shippingAddress = (String) purchaseData.get("shippingAddress");
+            String paymentMethod = (String) purchaseData.get("paymentMethod");
+            String customerNotes = (String) purchaseData.get("customerNotes");
+            
+            Order order = orderService.createOrderFromCart(userSession.getUserId(), shippingAddress, paymentMethod, customerNotes);
+            
             response.put("success", true);
-            response.put("message", "Purchase completed successfully");
+            response.put("message", "Đặt hàng thành công");
+            response.put("orderId", order.getOrderId());
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", "Purchase failed: " + e.getMessage());
+            response.put("message", "Đặt hàng thất bại: " + e.getMessage());
             return ResponseEntity.status(500).body(response);
+        }
+    }
+    
+    // Cart API endpoints
+    @PostMapping("/api/cart/add")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> addToCart(@RequestBody Map<String, Object> cartData, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        Map<String, Object> response = new HashMap<>();
+        
+        if (userSession == null || !userSession.isCustomer()) {
+            response.put("success", false);
+            response.put("message", "Unauthorized access");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        try {
+            Long productId = Long.valueOf(cartData.get("productId").toString());
+            Integer quantity = Integer.valueOf(cartData.get("quantity").toString());
+            
+            cartService.addToCart(userSession.getUserId(), productId, quantity);
+            
+            response.put("success", true);
+            response.put("message", "Đã thêm vào giỏ hàng");
+            response.put("cartCount", cartService.getCartItemCount(userSession.getUserId()));
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        }
+    }
+    
+    @GetMapping("/api/cart")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getCart(HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        Map<String, Object> response = new HashMap<>();
+        
+        if (userSession == null || !userSession.isCustomer()) {
+            response.put("success", false);
+            response.put("message", "Unauthorized access");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        try {
+            List<Cart> cartItems = cartService.getCartItems(userSession.getUserId());
+            response.put("success", true);
+            response.put("data", cartItems);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+    
+    @PostMapping("/api/cart/update")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateCart(@RequestBody Map<String, Object> cartData, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        Map<String, Object> response = new HashMap<>();
+        
+        if (userSession == null || !userSession.isCustomer()) {
+            response.put("success", false);
+            response.put("message", "Unauthorized access");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        try {
+            Long productId = Long.valueOf(cartData.get("productId").toString());
+            Integer quantity = Integer.valueOf(cartData.get("quantity").toString());
+            
+            cartService.updateCartQuantity(userSession.getUserId(), productId, quantity);
+            
+            response.put("success", true);
+            response.put("message", "Cập nhật giỏ hàng thành công");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        }
+    }
+    
+    @PostMapping("/api/cart/remove")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> removeFromCart(@RequestBody Map<String, Object> cartData, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        Map<String, Object> response = new HashMap<>();
+        
+        if (userSession == null || !userSession.isCustomer()) {
+            response.put("success", false);
+            response.put("message", "Unauthorized access");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        try {
+            Long productId = Long.valueOf(cartData.get("productId").toString());
+            cartService.removeFromCart(userSession.getUserId(), productId);
+            
+            response.put("success", true);
+            response.put("message", "Đã xóa khỏi giỏ hàng");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(400).body(response);
+        }
+    }
+    
+    // Cart page
+    @GetMapping("/cart")
+    public String cart(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isCustomer()) {
+            return "redirect:/shop/login";
+        }
+        
+        model.addAttribute("userSession", userSession);
+        return "shop/cart";
+    }
+    
+    // Orders endpoints
+    @GetMapping("/orders")
+    public String orders(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        try {
+            List<Order> orders;
+            if (userSession.isAdmin()) {
+                orders = orderService.getAllOrders();
+            } else {
+                orders = orderService.getOrdersByUser(userSession.getUserId());
+            }
+            
+            model.addAttribute("orders", orders);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load orders: " + e.getMessage());
+        }
+        
+        return "shop/orders";
+    }
+    
+    @PostMapping("/api/orders/{orderId}/cancel")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> cancelOrder(@PathVariable Long orderId, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        Map<String, Object> response = new HashMap<>();
+        
+        if (userSession == null) {
+            response.put("success", false);
+            response.put("message", "Unauthorized access");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        try {
+            orderService.cancelOrder(orderId, userSession.getUserId());
+            response.put("success", true);
+            response.put("message", "Đã hủy đơn hàng thành công");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(400).body(response);
         }
     }
 }

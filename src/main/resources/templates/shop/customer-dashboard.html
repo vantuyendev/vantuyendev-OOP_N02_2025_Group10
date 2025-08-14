@@ -230,8 +230,14 @@
                     <a class="nav-link" href="/shop/products">
                         <i class="bi bi-box me-1"></i>Sản Phẩm
                     </a>
-                    <a class="nav-link" href="/shop/shop">
-                        <i class="bi bi-cart me-1"></i>Mua Hàng
+                    <a class="nav-link position-relative" href="/shop/cart">
+                        <i class="bi bi-cart me-1"></i>Giỏ hàng
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-badge" style="font-size: 0.6em;">
+                            0
+                        </span>
+                    </a>
+                    <a class="nav-link" href="/shop/orders">
+                        <i class="bi bi-receipt me-1"></i>Đơn hàng
                     </a>
                     
                     <!-- User menu dropdown -->
@@ -332,6 +338,9 @@
     <script>
         // Add click effects to feature cards
         document.addEventListener('DOMContentLoaded', function() {
+            // Load cart count
+            loadCartCount();
+            
             const featureCards = document.querySelectorAll('.feature-card');
             
             featureCards.forEach(card => {
@@ -352,6 +361,25 @@
                 });
             });
         });
+        
+        function loadCartCount() {
+            const cartBadge = document.getElementById('cart-badge');
+            if (!cartBadge) return;
+            
+            fetch('/shop/api/cart')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const totalItems = data.data.reduce((sum, item) => sum + item.quantity, 0);
+                        cartBadge.textContent = totalItems;
+                        cartBadge.style.display = totalItems > 0 ? 'inline' : 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading cart count:', error);
+                    cartBadge.style.display = 'none';
+                });
+        }
     </script>
 </body>
 </html>
