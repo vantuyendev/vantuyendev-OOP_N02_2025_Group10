@@ -66,16 +66,7 @@
     <div class="container main-container">
         <!-- Search Features -->
         <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="feature-card" onclick="showSearchTab('employees')">
-                    <div class="feature-icon">
-                        <i class="bi bi-people"></i>
-                    </div>
-                    <h3>Tìm Nhân Viên</h3>
-                    <p>Tìm kiếm thông tin nhân viên theo tên, chức vụ, phòng ban</p>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="feature-card" onclick="showSearchTab('products')">
                     <div class="feature-icon">
                         <i class="bi bi-box"></i>
@@ -84,7 +75,7 @@
                     <p>Tìm kiếm sản phẩm theo tên, danh mục, giá cả</p>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="feature-card" onclick="showSearchTab('customers')">
                     <div class="feature-icon">
                         <i class="bi bi-person-hearts"></i>
@@ -100,13 +91,7 @@
             <div class="card-header">
                 <ul class="nav nav-pills" id="searchTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="employees-tab" data-bs-toggle="pill" 
-                                data-bs-target="#employees-search" type="button" role="tab">
-                            <i class="bi bi-people me-1"></i>Nhân Viên
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="products-tab" data-bs-toggle="pill" 
+                        <button class="nav-link active" id="products-tab" data-bs-toggle="pill" 
                                 data-bs-target="#products-search" type="button" role="tab">
                             <i class="bi bi-box me-1"></i>Sản Phẩm
                         </button>
@@ -121,56 +106,8 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="searchTabsContent">
-                    <!-- Employees Search -->
-                    <div class="tab-pane fade show active" id="employees-search" role="tabpanel">
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="emp-name" placeholder="Tên nhân viên">
-                                    <label for="emp-name"><i class="bi bi-person me-1"></i>Tên Nhân Viên</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <select class="form-control" id="emp-role">
-                                        <option value="">Tất cả chức vụ</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Manager">Quản lý</option>
-                                        <option value="Sales">Bán hàng</option>
-                                        <option value="Cashier">Thu ngân</option>
-                                    </select>
-                                    <label for="emp-role"><i class="bi bi-briefcase me-1"></i>Chức Vụ</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <select class="form-control" id="emp-department">
-                                        <option value="">Tất cả phòng ban</option>
-                                        <option value="Sales">Bán hàng</option>
-                                        <option value="Management">Quản lý</option>
-                                        <option value="Customer Service">Chăm sóc khách hàng</option>
-                                        <option value="Inventory">Kho</option>
-                                        <option value="Finance">Tài chính</option>
-                                        <option value="IT">IT</option>
-                                    </select>
-                                    <label for="emp-department"><i class="bi bi-building me-1"></i>Phòng Ban</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    <input type="number" class="form-control" id="emp-min-salary" placeholder="Lương tối thiểu">
-                                    <label for="emp-min-salary"><i class="bi bi-currency-dollar me-1"></i>Lương Tối Thiểu</label>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-modern btn-primary" onclick="searchEmployees()">
-                            <i class="bi bi-search me-1"></i>Tìm Nhân Viên
-                        </button>
-                        <div id="employees-results" class="mt-4"></div>
-                    </div>
-
                     <!-- Products Search -->
-                    <div class="tab-pane fade" id="products-search" role="tabpanel">
+                    <div class="tab-pane fade show active" id="products-search" role="tabpanel">
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
@@ -273,47 +210,6 @@
     
     <script>
         // Search functions
-        async function searchEmployees() {
-            const name = document.getElementById('emp-name').value;
-            const role = document.getElementById('emp-role').value;
-            const department = document.getElementById('emp-department').value;
-            const minSalary = document.getElementById('emp-min-salary').value;
-            
-            const resultsDiv = document.getElementById('employees-results');
-            resultsDiv.innerHTML = '<div class="text-center"><i class="bi bi-hourglass-split"></i> Searching...</div>';
-            
-            try {
-                const response = await fetch('/api/employees');
-                const data = await response.json();
-                
-                if (data.success) {
-                    let employees = data.data;
-                    
-                    // Filter results
-                    if (name) {
-                        employees = employees.filter(emp => 
-                            emp.fullName.toLowerCase().includes(name.toLowerCase())
-                        );
-                    }
-                    if (role) {
-                        employees = employees.filter(emp => emp.role === role);
-                    }
-                    if (department) {
-                        employees = employees.filter(emp => emp.department === department);
-                    }
-                    if (minSalary) {
-                        employees = employees.filter(emp => emp.salary >= parseFloat(minSalary));
-                    }
-                    
-                    displayEmployeeResults(employees);
-                } else {
-                    resultsDiv.innerHTML = '<div class="alert alert-danger">Error: ' + data.message + '</div>';
-                }
-            } catch (error) {
-                resultsDiv.innerHTML = '<div class="alert alert-danger">Error loading employees</div>';
-            }
-        }
-        
         async function searchProducts() {
             const name = document.getElementById('prod-name').value;
             const category = document.getElementById('prod-category').value;
@@ -376,32 +272,6 @@
             }
         }
         
-        function displayEmployeeResults(employees) {
-            const resultsDiv = document.getElementById('employees-results');
-            
-            if (employees.length === 0) {
-                resultsDiv.innerHTML = '<div class="alert alert-info">No employees found matching your criteria.</div>';
-                return;
-            }
-            
-            let html = '<div class="card"><div class="card-body"><h5>Search Results (' + employees.length + ')</h5>';
-            html += '<div class="table-responsive"><table class="table table-hover">';
-            html += '<thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Salary</th><th>Actions</th></tr></thead><tbody>';
-            
-            employees.forEach(emp => {
-                html += '<tr>';
-                html += '<td>' + emp.fullName + '</td>';
-                html += '<td><span class="badge bg-info">' + emp.role + '</span></td>';
-                html += '<td>' + emp.department + '</td>';
-                html += '<td>$' + emp.salary.toLocaleString() + '</td>';
-                html += '<td><a href="/shop/employees/edit/' + emp.userId + '" class="btn btn-sm btn-outline-primary">Edit</a></td>';
-                html += '</tr>';
-            });
-            
-            html += '</tbody></table></div></div></div>';
-            resultsDiv.innerHTML = html;
-        }
-        
         function displayProductResults(products) {
             const resultsDiv = document.getElementById('products-results');
             
@@ -453,6 +323,24 @@
             
             html += '</tbody></table></div></div></div>';
             resultsDiv.innerHTML = html;
+        }
+
+        // Tab switching function
+        function showSearchTab(tab) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('show', 'active');
+            });
+            
+            // Activate selected tab
+            const tabElement = document.getElementById(tab + '-tab');
+            const paneElement = document.getElementById(tab + '-search');
+            
+            if (tabElement) tabElement.classList.add('active');
+            if (paneElement) {
+                paneElement.classList.add('show', 'active');
+            }
         }
     </script>
 </body>

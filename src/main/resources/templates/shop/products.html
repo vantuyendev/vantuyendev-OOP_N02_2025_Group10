@@ -240,7 +240,7 @@
                                     <th>Giá</th>
                                     <th>Số Lượng</th>
                                     <th>Thương Hiệu</th>
-                                    <th th:if="${userSession != null and (userSession.admin or userSession.employee)}">Thao Tác</th>
+                                    <th th:if="${userSession != null and userSession.admin}">Thao Tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -268,7 +268,7 @@
                                               th:text="${product.quantity}"></span>
                                     </td>
                                     <td th:text="${product.brand}"></td>
-                                    <td th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                                    <td th:if="${userSession != null and userSession.admin}">
                                         <div class="btn-group" role="group">
                                             <a th:href="@{'/shop/products/edit/' + ${product.productId}}" 
                                                class="btn btn-sm btn-outline-primary"
@@ -298,7 +298,7 @@
                         <i class="bi bi-box display-1 text-muted mb-3"></i>
                         <h4 class="text-muted mb-3">Chưa Có Sản Phẩm Nào</h4>
                         <p class="text-muted mb-4">Có vẻ như bạn chưa thêm sản phẩm nào vào hệ thống.</p>
-                        <a href="/shop/products/add" class="btn btn-primary btn-modern" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                        <a href="/shop/products/add" class="btn btn-primary btn-modern" th:if="${userSession != null and userSession.admin}">
                             <i class="bi bi-plus-circle me-2"></i>Thêm Sản Phẩm Đầu Tiên
                         </a>
                     </div>

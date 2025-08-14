@@ -154,13 +154,13 @@
                     <a class="nav-link" href="/shop/products">
                         <i class="bi bi-box me-1"></i>Sản Phẩm
                     </a>
-                    <a class="nav-link active" href="/shop/customers" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                    <a class="nav-link active" href="/shop/customers" th:if="${userSession != null and userSession.admin}">>
                         <i class="bi bi-person-hearts me-1"></i>Khách Hàng
                     </a>
-                    <a class="nav-link" href="/shop/employees" th:if="${userSession != null and userSession.admin}">
+                    <a class="nav-link" href="/shop/audit" th:if="${userSession != null and userSession.admin}">>
                         <i class="bi bi-people me-1"></i>Nhân Viên
                     </a>
-                    <a class="nav-link" href="/shop/statistics" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                    <a class="nav-link" href="/shop/statistics" th:if="${userSession != null and userSession.admin}">>
                         <i class="bi bi-graph-up me-1"></i>Báo Cáo
                     </a>
                     
@@ -202,7 +202,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="text-center mb-4" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+            <div class="text-center mb-4" th:if="${userSession != null and userSession.admin}">>
                 <a href="/shop/customers/add" class="btn btn-success btn-modern me-3">
                     <i class="bi bi-person-plus me-2"></i>Thêm Khách Hàng Mới
                 </a>
@@ -246,7 +246,7 @@
                                     <th>Email</th>
                                     <th>Số Điện Thoại</th>
                                     <th>Địa Chỉ</th>
-                                    <th th:if="${userSession != null and (userSession.admin or userSession.employee)}">Thao Tác</th>
+                                    <th th:if="${userSession != null and userSession.admin}">Thao Tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -267,23 +267,9 @@
                                               th:text="${customer.address}" 
                                               th:title="${customer.address}"></span>
                                     </td>
-                                    <td th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                                    <td th:if="${userSession != null and userSession.admin}">
                                         <div class="btn-group" role="group">
-                                            <a th:href="@{'/shop/customers/edit/' + ${customer.userId}}" 
-                                               class="btn btn-sm btn-outline-primary"
-                                               title="Sửa Khách Hàng">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <form th:action="@{'/shop/customers/delete/' + ${customer.userId}}" 
-                                                  method="post" 
-                                                  style="display: inline;"
-                                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa khách hàng này?');">
-                                                <button type="submit" 
-                                                        class="btn btn-sm btn-outline-danger"
-                                                        title="Xóa Khách Hàng">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
+                                            <span class="badge bg-info">View Only</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -297,7 +283,7 @@
                         <i class="bi bi-person-hearts display-1 text-muted mb-3"></i>
                         <h4 class="text-muted mb-3">Chưa Có Khách Hàng Nào</h4>
                         <p class="text-muted mb-4">Có vẻ như bạn chưa thêm khách hàng nào vào hệ thống.</p>
-                        <a href="/shop/customers/add" class="btn btn-primary btn-modern" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
+                        <a href="/shop/customers/add" class="btn btn-primary btn-modern" th:if="${userSession != null and userSession.admin}">>
                             <i class="bi bi-person-plus me-2"></i>Thêm Khách Hàng Đầu Tiên
                         </a>
                     </div>

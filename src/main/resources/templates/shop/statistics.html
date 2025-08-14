@@ -66,15 +66,6 @@
             <div class="col-md-3">
                 <div class="card modern-card text-center">
                     <div class="card-body">
-                        <i class="bi bi-people display-4 text-primary mb-2"></i>
-                        <h3 class="counter" id="totalEmployees">0</h3>
-                        <p class="text-muted mb-0">Total Employees</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card modern-card text-center">
-                    <div class="card-body">
                         <i class="bi bi-box display-4 text-success mb-2"></i>
                         <h3 class="counter" id="totalProducts">0</h3>
                         <p class="text-muted mb-0">Total Products</p>
@@ -99,24 +90,17 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="row mb-4">
-            <!-- Department Distribution -->
-            <div class="col-md-6">
-                <div class="card modern-card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-building me-2"></i>Employees by Department
-                        </h5>
-                    </div>
+            <div class="col-md-3">
+                <div class="card modern-card text-center">
                     <div class="card-body">
-                        <canvas id="departmentChart" width="400" height="200"></canvas>
+                        <i class="bi bi-file-text display-4 text-primary mb-2"></i>
+                        <h3 class="counter" id="totalAuditLogs">0</h3>
+                        <p class="text-muted mb-0">Audit Logs</p>
                     </div>
                 </div>
             </div>
-
+        </div>        <!-- Charts Row -->
+        <div class="row mb-4">
             <!-- Product Categories -->
             <div class="col-md-6">
                 <div class="card modern-card">
@@ -130,10 +114,7 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Stock Status Row -->
-        <div class="row mb-4">
             <!-- Stock Status -->
             <div class="col-md-6">
                 <div class="card modern-card">
@@ -144,20 +125,6 @@
                     </div>
                     <div class="card-body">
                         <canvas id="stockChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Employee Roles -->
-            <div class="col-md-6">
-                <div class="card modern-card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-person-badge me-2"></i>Employee Roles
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="rolesChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -207,11 +174,8 @@
                             <a href="/shop/products/add" class="btn btn-sm btn-success">
                                 <i class="bi bi-plus-circle me-1"></i>Add Product
                             </a>
-                            <a href="/shop/employees/add" class="btn btn-sm btn-primary">
-                                <i class="bi bi-person-plus me-1"></i>Add Employee
-                            </a>
-                            <a href="/shop/customers/add" class="btn btn-sm btn-warning">
-                                <i class="bi bi-person-plus-fill me-1"></i>Add Customer
+                            <a href="/shop/audit" class="btn btn-sm btn-info">
+                                <i class="bi bi-file-text me-1"></i>Audit Log
                             </a>
                         </div>
                     </div>
@@ -249,9 +213,9 @@
             try {
                 // Load all statistics
                 await Promise.all([
-                    loadEmployeeStats(),
                     loadProductStats(),
-                    loadCustomerStats()
+                    loadCustomerStats(),
+                    loadAuditStats()
                 ]);
                 
                 // Create charts after data is loaded
@@ -262,21 +226,15 @@
             }
         }
         
-        async function loadEmployeeStats() {
-            try {
-                const response = await fetch('/api/employees/statistics');
-                const data = await response.json();
-                
-                if (data.success) {
-                    const stats = data.data;
-                    document.getElementById('totalEmployees').textContent = stats.totalEmployees;
-                    
-                    // Department chart data
-                    window.departmentData = stats.departmentDistribution || {};
-                    window.roleData = stats.roleDistribution || {};
-                }
-            } catch (error) {
-                console.error('Error loading employee stats:', error);
+        function createCharts() {
+            // Category Chart
+            if (window.categoryData) {
+                createCategoryChart();
+            }
+            
+            // Stock Chart
+            if (window.stockData) {
+                createStockChart();
             }
         }
         
@@ -328,53 +286,22 @@
             }
         }
         
-        function createCharts() {
-            // Department Chart
-            if (window.departmentData) {
-                createDepartmentChart();
-            }
-            
-            // Category Chart
-            if (window.categoryData) {
-                createCategoryChart();
-            }
-            
-            // Stock Chart
-            if (window.stockData) {
-                createStockChart();
-            }
-            
-            // Roles Chart
-            if (window.roleData) {
-                createRolesChart();
+        async function loadAuditStats() {
+            try {
+                const response = await fetch('/api/audit/count');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalAuditLogs').textContent = data.data.totalLogs || 0;
+                }
+            } catch (error) {
+                console.error('Error loading audit stats:', error);
+                document.getElementById('totalAuditLogs').textContent = 0;
             }
         }
         
         function createDepartmentChart() {
-            const ctx = document.getElementById('departmentChart').getContext('2d');
-            const data = window.departmentData;
-            
-            charts.department = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        data: Object.values(data),
-                        backgroundColor: [
-                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
+            // Chart removed as departments no longer needed
         }
         
         function createCategoryChart() {
@@ -436,30 +363,7 @@
         }
         
         function createRolesChart() {
-            const ctx = document.getElementById('rolesChart').getContext('2d');
-            const data = window.roleData;
-            
-            charts.roles = new Chart(ctx, {
-                type: 'polarArea',
-                data: {
-                    labels: Object.keys(data),
-                    datasets: [{
-                        data: Object.values(data),
-                        backgroundColor: [
-                            '#FF6384', '#4BC0C0', '#FFCE56', '#36A2EB', '#9966FF'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
+            // Chart removed as role management no longer needed
         }
         
         function displayLowStockTable(products) {

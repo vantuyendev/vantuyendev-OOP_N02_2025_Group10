@@ -62,8 +62,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/shop/dashboard" th:text="#{nav.dashboard}">Dashboard</a>
                     </li>
-                    <li class="nav-item" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
-                        <a class="nav-link" href="/shop/employees" th:text="#{nav.employees}">Employees</a>
+                    <li class="nav-item" th:if="${userSession != null and userSession.admin}">
+                        <a class="nav-link" href="/shop/audit" th:text="#{nav.audit}">Audit</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/shop/products" th:text="#{nav.products}">Products</a>
@@ -125,9 +125,9 @@
                         
                         <!-- Permission Level Badge -->
                         <div class="mb-3">
-                            <span th:class="'permission-level ' + (${userSession.isAdmin()} ? 'admin-level' : (${userSession.isEmployee()} ? 'employee-level' : 'customer-level'))">
+                            <span th:class="'permission-level ' + (${userSession.isAdmin()} ? 'admin-level' : 'customer-level')">
                                 <i class="bi bi-shield-check me-1"></i>
-                                <span th:text="${userSession.isAdmin()} ? 'ADMINISTRATOR' : (${userSession.isEmployee()} ? 'EMPLOYEE' : 'CUSTOMER'">USER TYPE</span>
+                                <span th:text="${userSession.isAdmin()} ? 'ADMINISTRATOR' : 'CUSTOMER'">USER TYPE</span>
                             </span>
                         </div>
                         
@@ -220,24 +220,13 @@
                             </ul>
                         </div>
                         
-                        <div th:if="${userSession.isEmployee() and not userSession.isAdmin()}">
-                            <h6 class="text-success">Quyền Employee</h6>
-                            <ul class="list-unstyled">
-                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Xem thông tin sản phẩm</li>
-                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Xem thông tin khách hàng</li>
-                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Xem danh sách nhân viên</li>
-                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Tìm kiếm và xem báo cáo</li>
-                                <li><i class="bi bi-x-circle-fill text-danger me-2"></i>Không thể thêm/sửa/xóa dữ liệu</li>
-                            </ul>
-                        </div>
-                        
                         <div th:if="${userSession.isCustomer()}">
                             <h6 style="color: #6f42c1;">Quyền Customer</h6>
                             <ul class="list-unstyled">
                                 <li><i class="bi bi-check-circle-fill text-success me-2"></i>Xem thông tin sản phẩm</li>
                                 <li><i class="bi bi-check-circle-fill text-success me-2"></i>Tìm kiếm sản phẩm</li>
                                 <li><i class="bi bi-check-circle-fill text-success me-2"></i>Quản lý thông tin cá nhân</li>
-                                <li><i class="bi bi-x-circle-fill text-danger me-2"></i>Không thể xem thông tin nhân viên</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Mua hàng và đặt hàng</li>
                                 <li><i class="bi bi-x-circle-fill text-danger me-2"></i>Không thể thay đổi dữ liệu hệ thống</li>
                             </ul>
                         </div>

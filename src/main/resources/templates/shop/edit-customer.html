@@ -27,8 +27,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/shop/dashboard" th:text="#{nav.dashboard}">Dashboard</a>
                     </li>
-                    <li class="nav-item" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
-                        <a class="nav-link" href="/shop/employees" th:text="#{nav.employees}">Employees</a>
+                    <li class="nav-item" th:if="${userSession != null and userSession.admin}">
+                        <a class="nav-link" href="/shop/audit" th:text="#{nav.audit}">Audit</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/shop/products" th:text="#{nav.products}">Products</a>

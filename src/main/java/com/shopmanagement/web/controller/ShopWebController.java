@@ -178,89 +178,6 @@ public class ShopWebController {
     // Customer - Web actions
     // ------------------------
 
-    @GetMapping("/customers/add")
-    public String addCustomerForm(Model model, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
-
-        model.addAttribute("customer", new Customer());
-        model.addAttribute("userSession", userSession);
-        return "shop/add-customer";
-    }
-
-    @PostMapping("/customers/add")
-    public String addCustomerSubmit(@ModelAttribute Customer customer,
-                                    @RequestParam String password,
-                                    Model model,
-                                    HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
-
-        try {
-            customerService.createCustomer(customer, password);
-            return "redirect:/shop/customers";
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể tạo khách hàng: " + e.getMessage());
-            model.addAttribute("customer", customer);
-            return "shop/add-customer";
-        }
-    }
-
-    @GetMapping("/customers/edit/{userId}")
-    public String editCustomerForm(@PathVariable String userId, Model model, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
-
-        try {
-            Optional<Customer> customerOpt = customerService.findById(userId);
-            if (customerOpt.isPresent()) {
-                model.addAttribute("customer", customerOpt.get());
-                model.addAttribute("userSession", userSession);
-                return "shop/edit-customer";
-            } else {
-                return "redirect:/shop/customers";
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể tải thông tin khách hàng: " + e.getMessage());
-            return "shop/customers";
-        }
-    }
-
-    @PostMapping("/customers/edit/{userId}")
-    public String editCustomerSubmit(@PathVariable String userId,
-                                     @ModelAttribute Customer customer,
-                                     Model model,
-                                     HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
-
-        try {
-            customer.setUserId(userId);
-            customerService.updateCustomer(customer);
-            return "redirect:/shop/customers";
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể cập nhật khách hàng: " + e.getMessage());
-            model.addAttribute("customer", customer);
-            return "shop/edit-customer";
-        }
-    }
-
-    @PostMapping("/customers/delete/{userId}")
-    public String deleteCustomer(@PathVariable String userId, HttpSession session) {
-        UserSession userSession = (UserSession) session.getAttribute("userSession");
-        if (userSession == null) return "redirect:/shop/login";
-        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
-
-        try {
-            customerService.deleteCustomer(userId);
-        } catch (Exception ignored) {}
-        return "redirect:/shop/customers";
-    }
-
     // ------------------------
     // Lightweight stats API for dashboard.js
     // ------------------------
@@ -422,5 +339,65 @@ public class ShopWebController {
             model.addAttribute("error", "Unable to load statistics: " + e.getMessage());
         }
         return "shop/statistics";
+    }
+
+    @GetMapping("/audit")
+    public String auditLog(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isAdmin()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        model.addAttribute("userSession", userSession);
+        return "shop/audit";
+    }
+
+    @GetMapping("/shop-interface")
+    public String shopInterface(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isCustomer()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        try {
+            List<Product> products = productService.findAll();
+            model.addAttribute("products", products);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load products: " + e.getMessage());
+        }
+        return "shop/shop";
+    }
+    
+    @PostMapping("/purchase")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> processPurchase(@RequestBody Map<String, Object> purchaseData, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        Map<String, Object> response = new HashMap<>();
+        
+        if (userSession == null || !userSession.isCustomer()) {
+            response.put("success", false);
+            response.put("message", "Unauthorized access");
+            return ResponseEntity.status(401).body(response);
+        }
+        
+        try {
+            // TODO: Implement purchase logic with inventory management
+            response.put("success", true);
+            response.put("message", "Purchase completed successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Purchase failed: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
     }
 }
