@@ -27,10 +27,13 @@ public class Product {
     @Size(max = 100, message = "Tên sản phẩm không được vượt quá 100 ký tự")
     private String productName;
     
-    @Column(name = "category", nullable = false)
-    @NotBlank(message = "Loại sản phẩm không được để trống")
-    @Size(max = 50, message = "Loại sản phẩm không được vượt quá 50 ký tự")
-    private String category;
+    @Column(name = "categoryId")
+    private Long categoryId;
+    
+    // Relationship with Category
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoryId", insertable = false, updatable = false)
+    private Category category;
     
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
     @NotNull(message = "Giá sản phẩm không được để trống")
@@ -97,11 +100,19 @@ public class Product {
         this.productName = productName;
     }
     
-    public String getCategory() {
+    public Long getCategoryId() {
+        return categoryId;
+    }
+    
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+    
+    public Category getCategory() {
         return category;
     }
     
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
     

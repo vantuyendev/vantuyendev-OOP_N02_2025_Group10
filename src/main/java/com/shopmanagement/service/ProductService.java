@@ -86,11 +86,45 @@ public class ProductService {
         return productRepository.findAll();
     }
     
-    /**
-     * Tìm sản phẩm theo tên
-     * @param name tên sản phẩm (tìm kiếm gần đúng)
-     * @return danh sách sản phẩm phù hợp
+        /**
+     * Tìm sản phẩm theo danh mục
      */
+    @Transactional(readOnly = true)
+    public List<Product> findByCategoryId(Long categoryId) {
+        return productRepository.findByCategoryIdAndQuantityGreaterThan(categoryId, 0);
+    }
+    
+    /**
+     * Tìm sản phẩm còn hàng
+     */
+    @Transactional(readOnly = true)
+    public List<Product> findAvailableProducts() {
+        return productRepository.findByQuantityGreaterThan(0);
+    }
+    
+    /**
+     * Tìm sản phẩm sắp hết hàng
+     */
+    @Transactional(readOnly = true)
+    public List<Product> findLowStockProducts(Integer threshold) {
+        return productRepository.findByQuantityLessThanEqual(threshold);
+    }
+    
+    /**
+     * Tìm kiếm sản phẩm theo tên hoặc mô tả
+     */
+    @Transactional(readOnly = true)
+    public List<Product> searchProducts(String keyword) {
+        return productRepository.findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword);
+    }
+    
+    /**
+     * Tìm sản phẩm theo khoảng giá
+     */
+    @Transactional(readOnly = true)
+    public List<Product> findByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
     public List<Product> findByName(String name) {
         return productRepository.findByProductNameContainingIgnoreCase(name);
     }
@@ -132,16 +166,6 @@ public class ProductService {
     }
     
     /**
-     * Tìm sản phẩm theo khoảng giá
-     * @param minPrice giá tối thiểu
-     * @param maxPrice giá tối đa
-     * @return danh sách sản phẩm trong khoảng giá
-     */
-    public List<Product> findByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
-        return productRepository.findByPriceRange(minPrice, maxPrice);
-    }
-    
-    /**
      * Lấy danh sách sản phẩm còn hàng
      * @return danh sách sản phẩm có quantity > 0
      */
@@ -155,15 +179,6 @@ public class ProductService {
      */
     public List<Product> findOutOfStockProducts() {
         return productRepository.findOutOfStockProducts();
-    }
-    
-    /**
-     * Lấy danh sách sản phẩm sắp hết hàng
-     * @param threshold ngưỡng cảnh báo
-     * @return danh sách sản phẩm có quantity <= threshold
-     */
-    public List<Product> findLowStockProducts(Integer threshold) {
-        return productRepository.findLowStockProducts(threshold);
     }
     
     /**

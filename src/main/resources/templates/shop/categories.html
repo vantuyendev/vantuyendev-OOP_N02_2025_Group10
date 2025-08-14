@@ -1,0 +1,313 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản Lý Cửa Hàng - Danh Mục Sản Phẩm</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .main-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
+            color: white;
+        }
+        
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .category-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .category-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .category-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .product-count {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+        
+        .btn-shop {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-shop:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .search-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+        }
+        
+        .no-categories {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        .no-categories i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <h2 class="mb-0">
+                        <i class="bi bi-grid-3x3-gap me-2"></i>
+                        Danh Mục Sản Phẩm
+                    </h2>
+                </div>
+                <div class="col">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="/shop/dashboard" class="text-white-50">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active text-white" aria-current="page">
+                                Danh Mục
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-auto">
+                    <a href="/shop/cart" class="btn btn-outline-light me-2">
+                        <i class="bi bi-cart3 me-1"></i>
+                        Giỏ Hàng
+                        <span class="badge bg-danger ms-1" id="cart-count">0</span>
+                    </a>
+                    <a href="/shop/wishlist" class="btn btn-outline-light">
+                        <i class="bi bi-heart me-1"></i>
+                        Yêu Thích
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Search Section -->
+        <div class="search-container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" 
+                               placeholder="Tìm kiếm danh mục..." id="categorySearch">
+                        <button class="btn btn-shop" type="button" onclick="searchCategories()">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="/shop/products" class="btn btn-shop">
+                        <i class="bi bi-grid me-1"></i>
+                        Tất Cả Sản Phẩm
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="row" id="categoriesContainer">
+            <!-- Categories will be loaded here by JavaScript -->
+        </div>
+
+        <!-- No Categories Message -->
+        <div class="no-categories d-none" id="noCategoriesMessage">
+            <i class="bi bi-grid-3x3-gap"></i>
+            <h3>Không có danh mục nào</h3>
+            <p>Hiện tại chưa có danh mục sản phẩm nào được hiển thị.</p>
+        </div>
+    </div>
+
+    <!-- External JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let categories = [];
+        
+        // Load categories on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+            updateCartCount();
+        });
+        
+        function loadCategories() {
+            fetch('/api/shop/categories')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        categories = data.data;
+                        displayCategories(categories);
+                    } else {
+                        showNoCategories();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading categories:', error);
+                    showNoCategories();
+                });
+        }
+        
+        function displayCategories(categoriesToShow) {
+            const container = document.getElementById('categoriesContainer');
+            const noMessage = document.getElementById('noCategoriesMessage');
+            
+            if (!categoriesToShow || categoriesToShow.length === 0) {
+                showNoCategories();
+                return;
+            }
+            
+            container.innerHTML = '';
+            noMessage.classList.add('d-none');
+            
+            categoriesToShow.forEach(category => {
+                const categoryCard = createCategoryCard(category);
+                container.appendChild(categoryCard);
+            });
+        }
+        
+        function createCategoryCard(category) {
+            const col = document.createElement('div');
+            col.className = 'col-md-4 col-lg-3 mb-4';
+            
+            col.innerHTML = `
+                <div class="category-card h-100">
+                    ${category.imageUrl ? 
+                        `<img src="${category.imageUrl}" alt="${category.categoryName}" class="category-image">` :
+                        `<div class="category-image bg-light d-flex align-items-center justify-content-center">
+                            <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+                         </div>`
+                    }
+                    <h5 class="category-name">${category.categoryName}</h5>
+                    <p class="category-description">${category.description || 'Không có mô tả'}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="product-count">
+                            <i class="bi bi-box me-1"></i>
+                            ${category.productCount || 0} sản phẩm
+                        </span>
+                        <button class="btn btn-shop btn-sm" onclick="viewCategoryProducts(${category.categoryId})">
+                            <i class="bi bi-arrow-right me-1"></i>
+                            Xem
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return col;
+        }
+        
+        function showNoCategories() {
+            document.getElementById('categoriesContainer').innerHTML = '';
+            document.getElementById('noCategoriesMessage').classList.remove('d-none');
+        }
+        
+        function searchCategories() {
+            const searchTerm = document.getElementById('categorySearch').value.toLowerCase();
+            
+            if (!searchTerm.trim()) {
+                displayCategories(categories);
+                return;
+            }
+            
+            const filteredCategories = categories.filter(category => 
+                category.categoryName.toLowerCase().includes(searchTerm) ||
+                (category.description && category.description.toLowerCase().includes(searchTerm))
+            );
+            
+            displayCategories(filteredCategories);
+        }
+        
+        function viewCategoryProducts(categoryId) {
+            window.location.href = `/shop/products?category=${categoryId}`;
+        }
+        
+        // Enter key search
+        document.getElementById('categorySearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCategories();
+            }
+        });
+        
+        function updateCartCount() {
+            // Update cart count from session or API
+            fetch('/api/shop/cart')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('cart-count').textContent = data.count || 0;
+                    }
+                })
+                .catch(error => {
+                    console.log('Not logged in or error getting cart count');
+                });
+        }
+    </script>
+</body>
+</html>

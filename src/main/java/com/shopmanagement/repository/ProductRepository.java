@@ -24,9 +24,34 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByProductNameContainingIgnoreCase(@Param("name") String name);
     
     /**
-     * Tìm sản phẩm theo category
+     * Tìm sản phẩm theo category ID
      */
-    List<Product> findByCategory(String category);
+    List<Product> findByCategoryId(Long categoryId);
+    
+    /**
+     * Tìm sản phẩm theo category ID và còn hàng
+     */
+    List<Product> findByCategoryIdAndQuantityGreaterThan(Long categoryId, Integer quantity);
+    
+    /**
+     * Tìm sản phẩm còn hàng
+     */
+    List<Product> findByQuantityGreaterThan(Integer quantity);
+    
+    /**
+     * Tìm sản phẩm theo khoảng giá
+     */
+    List<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
+    
+    /**
+     * Tìm sản phẩm sắp hết hàng
+     */
+    List<Product> findByQuantityLessThanEqual(Integer threshold);
+    
+    /**
+     * Tìm kiếm sản phẩm theo tên hoặc mô tả
+     */
+    List<Product> findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
     
     /**
      * Tìm sản phẩm theo brand
