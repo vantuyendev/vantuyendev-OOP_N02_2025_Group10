@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{app.title} + ' - Employee Dashboard'">Shop Management System - Employee Dashboard</title>
+    <title>Quản Lý Cửa Hàng Tạp Hóa - Employee Dashboard</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -10,232 +10,360 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
-    <!-- Custom CSS -->
-    <link href="/css/modern-dashboard.css" rel="stylesheet">
-    
     <style>
-        .employee-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
         }
         
-        .employee-card {
-            border-left: 4px solid #28a745;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .main-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
+            color: white;
         }
         
-        .permission-badge {
-            background: linear-gradient(45deg, #28a745, #20c997);
+        .main-header .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .main-header .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .main-header .nav-link:hover {
+            color: white !important;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .main-header .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .main-header .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+        
+        .main-container {
+            padding: 50px 0;
+        }
+        
+        .employee-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .employee-title h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .employee-title .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .employee-badge {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+        
+        .feature-icon.manage-products {
+            background: linear-gradient(135deg, #4f87ff 0%, #3d6eff 100%);
+            color: white;
+        }
+        
+        .feature-icon.manage-customers {
+            background: linear-gradient(135deg, #ffb347 0%, #ff9500 100%);
+            color: white;
+        }
+        
+        .feature-icon.sales-tasks {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+        
+        .feature-icon.view-reports {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .feature-description {
+            color: #6c757d;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .feature-button {
+            background: transparent;
+            border: 2px solid;
+            border-radius: 12px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .feature-button.btn-primary {
+            border-color: #4f87ff;
+            color: #4f87ff;
+        }
+        
+        .feature-button.btn-primary:hover {
+            background: #4f87ff;
+            color: white;
+        }
+        
+        .feature-button.btn-warning {
+            border-color: #ffb347;
+            color: #ff9500;
+        }
+        
+        .feature-button.btn-warning:hover {
+            background: #ffb347;
+            color: white;
+        }
+        
+        .feature-button.btn-danger {
+            border-color: #ff6b6b;
+            color: #ee5a52;
+        }
+        
+        .feature-button.btn-danger:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .feature-button.btn-success {
+            border-color: #4ecdc4;
+            color: #44a08d;
+        }
+        
+        .feature-button.btn-success:hover {
+            background: #4ecdc4;
+            color: white;
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Top Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-shop me-2"></i>
-                <span class="navbar-brand mb-0 h1" th:text="#{nav.title}">Shop Management</span>
-            </div>
-            
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/shop/dashboard" th:text="#{nav.dashboard}">Dashboard</a>
-                    </li>
-                    <li class="nav-item" th:if="${userSession != null and (userSession.admin or userSession.employee)}">
-                        <a class="nav-link" href="/shop/employees" th:text="#{nav.employees}">Employees</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/products" th:text="#{nav.products}">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/customers" th:text="#{nav.customers}">Customers</a>
-                    </li>
-                    <li class="nav-item ms-3">
-                        <a class="nav-link" href="/shop/search" th:text="#{nav.search}">Search</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shop/statistics" th:text="#{nav.statistics}">Statistics</a>
-                    </li>
-                </ul>
-                
-                <div class="d-flex align-items-center">
-                    <span class="navbar-text me-3" th:text="'Welcome, ' + ${userSession.name}">Welcome, User</span>
-                    <a href="/shop/profile" class="btn btn-outline-light btn-sm me-2" th:text="#{nav.profile}">Profile</a>
-                    <a href="/shop/logout" class="btn btn-outline-light btn-sm" th:text="#{nav.logout}">Logout</a>
+    <!-- Header Navigation -->
+    <nav class="main-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="/shop/">
+                    <i class="bi bi-shop me-2"></i>Quản Lý Cửa Hàng Tạp Hóa
+                </a>
+                <div class="navbar-nav d-flex flex-row align-items-center">
+                    <a class="nav-link" href="/shop/">
+                        <i class="bi bi-house me-1"></i>Trang Chủ
+                    </a>
+                    <a class="nav-link" href="/shop/products">
+                        <i class="bi bi-box me-1"></i>Sản Phẩm
+                    </a>
+                    <a class="nav-link" href="/shop/customers">
+                        <i class="bi bi-person-hearts me-1"></i>Khách Hàng
+                    </a>
+                    <a class="nav-link" href="/shop/statistics">
+                        <i class="bi bi-graph-up me-1"></i>Báo Cáo
+                    </a>
+                    
+                    <!-- User menu dropdown -->
+                    <div class="dropdown ms-3">
+                        <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-badge me-1"></i>
+                            <span th:text="${userSession.name} ?: 'Employee'">Employee</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/shop/profile">
+                                <i class="bi bi-person me-2"></i>Thông Tin Cá Nhân
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/shop/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i>Đăng Xuất
+                            </a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Employee Info Card -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card employee-card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-3 text-center">
-                                <i class="bi bi-person-circle text-success" style="font-size: 4rem;"></i>
-                            </div>
-                            <div class="col-md-9">
-                                <h4 th:text="${userSession.name}">Employee Name</h4>
-                                <p class="mb-1"><strong>ID:</strong> <span th:text="${userSession.userId}">EMP001</span></p>
-                                <p class="mb-1"><strong>Role:</strong> <span th:text="${userSession.role}">Staff</span></p>
-                                <p class="mb-1"><strong>Department:</strong> <span th:text="${userSession.department}">Sales</span></p>
-                                <p class="mb-0"><strong>Phone:</strong> <span th:text="${userSession.phone}">+1-555-0101</span></p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="container">
+            <!-- Employee Title -->
+            <div class="employee-title">
+                <div class="employee-badge">
+                    <i class="bi bi-person-badge me-2"></i>Employee Dashboard
                 </div>
+                <h1><i class="bi bi-person-workspace me-3"></i>Bảng Điều Khiển Nhân Viên</h1>
+                <p class="subtitle">Quản lý sản phẩm, phục vụ khách hàng và hỗ trợ công việc hàng ngày.</p>
             </div>
-        </div>
 
-        <!-- Employee Stats -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card employee-card">
-                    <div class="card-body text-center">
-                        <i class="bi bi-box-seam-fill text-warning fs-1"></i>
-                        <h3 class="mt-2" th:text="${productCount ?: 0}">0</h3>
-                        <p class="text-muted">Products Available</p>
-                        <a href="/shop/products" class="btn btn-warning btn-sm">
-                            <i class="bi bi-eye me-1"></i>View Products
-                        </a>
+            <!-- Feature Grid -->
+            <div class="feature-grid">
+                <!-- Quản Lý Sản Phẩm -->
+                <div class="feature-card" onclick="location.href='/shop/products'">
+                    <div class="feature-icon manage-products">
+                        <i class="bi bi-boxes"></i>
                     </div>
+                    <h3 class="feature-title">Quản Lý Sản Phẩm</h3>
+                    <p class="feature-description">Xem thông tin sản phẩm, kiểm tra tồn kho và cập nhật thông tin.</p>
+                    <a href="/shop/products" class="feature-button btn-primary">XEM SẢN PHẨM</a>
                 </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card employee-card">
-                    <div class="card-body text-center">
-                        <i class="bi bi-person-hearts text-info fs-1"></i>
-                        <h3 class="mt-2" th:text="${customerCount ?: 0}">0</h3>
-                        <p class="text-muted">Customers</p>
-                        <a href="/shop/customers" class="btn btn-info btn-sm">
-                            <i class="bi bi-eye me-1"></i>View Customers
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card employee-card">
-                    <div class="card-body text-center">
-                        <i class="bi bi-people text-success fs-1"></i>
-                        <h3 class="mt-2" th:text="${employeeCount ?: 0}">0</h3>
-                        <p class="text-muted">Team Members</p>
-                        <a href="/shop/employees" class="btn btn-success btn-sm">
-                            <i class="bi bi-eye me-1"></i>View Team
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Employee Actions -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-briefcase me-2"></i>Daily Tasks</h5>
+                <!-- Phục Vụ Khách Hàng -->
+                <div class="feature-card" onclick="location.href='/shop/customers'">
+                    <div class="feature-icon manage-customers">
+                        <i class="bi bi-person-hearts"></i>
                     </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            <a href="/shop/products" class="list-group-item list-group-item-action">
-                                <i class="bi bi-box me-2"></i>Manage Product Inventory
-                            </a>
-                            <a href="/shop/customers" class="list-group-item list-group-item-action">
-                                <i class="bi bi-person-heart me-2"></i>Customer Service
-                            </a>
-                            <a href="/shop/search" class="list-group-item list-group-item-action">
-                                <i class="bi bi-search me-2"></i>Search Products/Customers
-                            </a>
-                            <a href="/shop/statistics" class="list-group-item list-group-item-action">
-                                <i class="bi bi-graph-up me-2"></i>View Statistics
-                            </a>
-                        </div>
-                    </div>
+                    <h3 class="feature-title">Phục Vụ Khách Hàng</h3>
+                    <p class="feature-description">Hỗ trợ khách hàng, xem thông tin và lịch sử mua hàng.</p>
+                    <a href="/shop/customers" class="feature-button btn-warning">PHỤC VỤ</a>
                 </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="bi bi-shield-check me-2"></i>Employee Permissions</h5>
+
+                <!-- Công Việc Bán Hàng -->
+                <div class="feature-card" onclick="location.href='/shop/orders'">
+                    <div class="feature-icon sales-tasks">
+                        <i class="bi bi-cart-check"></i>
                     </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item">
-                                <i class="bi bi-check-circle-fill text-success me-2"></i>View Product Inventory
-                            </div>
-                            <div class="list-group-item">
-                                <i class="bi bi-check-circle-fill text-success me-2"></i>View Customer Information
-                            </div>
-                            <div class="list-group-item">
-                                <i class="bi bi-check-circle-fill text-success me-2"></i>View Employee List
-                            </div>
-                            <div class="list-group-item">
-                                <i class="bi bi-x-circle-fill text-danger me-2"></i>Add/Edit/Delete (Admin Only)
-                            </div>
-                            <div class="list-group-item">
-                                <i class="bi bi-check-circle-fill text-success me-2"></i>View Reports & Statistics
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="feature-title">Công Việc Bán Hàng</h3>
+                    <p class="feature-description">Xử lý đơn hàng, thanh toán và giao hàng cho khách.</p>
+                    <a href="/shop/orders" class="feature-button btn-danger">BÁN HÀNG</a>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Quick Navigation -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Quick Access</h5>
+
+                <!-- Xem Báo Cáo -->
+                <div class="feature-card" onclick="location.href='/shop/statistics'">
+                    <div class="feature-icon view-reports">
+                        <i class="bi bi-graph-up"></i>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3 text-center mb-3">
-                                <a href="/shop/products" class="btn btn-outline-warning w-100">
-                                    <i class="bi bi-box d-block fs-3"></i>
-                                    <small>Products</small>
-                                </a>
-                            </div>
-                            <div class="col-md-3 text-center mb-3">
-                                <a href="/shop/customers" class="btn btn-outline-info w-100">
-                                    <i class="bi bi-person-hearts d-block fs-3"></i>
-                                    <small>Customers</small>
-                                </a>
-                            </div>
-                            <div class="col-md-3 text-center mb-3">
-                                <a href="/shop/search" class="btn btn-outline-secondary w-100">
-                                    <i class="bi bi-search d-block fs-3"></i>
-                                    <small>Search</small>
-                                </a>
-                            </div>
-                            <div class="col-md-3 text-center mb-3">
-                                <a href="/shop/profile" class="btn btn-outline-success w-100">
-                                    <i class="bi bi-person-gear d-block fs-3"></i>
-                                    <small>My Profile</small>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="feature-title">Xem Báo Cáo</h3>
+                    <p class="feature-description">Thống kê bán hàng, doanh số và hiệu suất làm việc.</p>
+                    <a href="/shop/statistics" class="feature-button btn-success">XEM BÁO CÁO</a>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="mb-2">&copy; 2025 Nhóm 12 - OOP_N02_T3. Quản Lý Cửa Hàng Tạp Hóa</p>
+            <p class="mb-0"><small>Nhóm phát triển: Vũ Đức Vương, Tường Vân Tuyến</small></p>
+        </div>
+    </footer>
+
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add click effects to feature cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                card.addEventListener('click', function(e) {
+                    // Add click animation
+                    this.style.transform = 'translateY(-5px) scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-10px) scale(1.02)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

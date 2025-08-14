@@ -73,33 +73,6 @@
             border-radius: 12px;
             border: none;
         }
-        
-        .demo-accounts {
-            background: rgba(248, 249, 250, 0.8);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .demo-account {
-            background: white;
-            border-radius: 8px;
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            border: 1px solid #e9ecef;
-            transition: all 0.2s ease;
-        }
-        
-        .demo-account:hover {
-            border-color: #667eea;
-            transform: translateY(-1px);
-        }
-        
-        .demo-account code {
-            background: none;
-            color: #667eea;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
@@ -107,23 +80,6 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card login-card">
-                    <!-- Language Switcher -->
-                    <div class="text-end mb-3">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-translate me-1"></i><span th:text="#{language}">Language</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/changeLanguage?lang=vi">
-                                    <i class="bi bi-flag me-2"></i><span th:text="#{language.vietnamese}">Tiếng Việt</span>
-                                </a></li>
-                                <li><a class="dropdown-item" href="/changeLanguage?lang=en">
-                                    <i class="bi bi-flag me-2"></i><span th:text="#{language.english}">English</span>
-                                </a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    
                     <!-- Logo and Title -->
                     <div class="text-center mb-4">
                         <i class="bi bi-shop login-logo"></i>
@@ -168,58 +124,6 @@
                             </button>
                         </div>
                     </form>
-
-                    <!-- Demo Accounts -->
-                    <div class="demo-accounts">
-                        <h6 class="fw-bold text-muted mb-3">
-                            <i class="bi bi-info-circle me-1"></i><span th:text="#{login.demo.accounts}">Demo Accounts</span>
-                        </h6>
-                        
-                        <div class="demo-account" onclick="fillLogin('admin', '123456')">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong><span th:text="#{login.demo.admin}">Administrator</span></strong>
-                                    <br><small class="text-muted">User: <code>admin</code> | Pass: <code>123456</code></small>
-                                </div>
-                                <i class="bi bi-person-fill-gear text-primary"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="demo-account" onclick="fillLogin('e001', '123456')">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong><span th:text="#{login.demo.employee}">Employee</span></strong>
-                                    <br><small class="text-muted">User: <code>e001</code> | Pass: <code>123456</code></small>
-                                </div>
-                                <i class="bi bi-person-badge text-success"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="demo-account" onclick="fillLogin('c001', '123456')">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong><span th:text="#{login.demo.customer}">Customer</span></strong>
-                                    <br><small class="text-muted">User: <code>c001</code> | Pass: <code>123456</code></small>
-                                </div>
-                                <i class="bi bi-person-heart text-warning"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Footer Links -->
-                    <div class="text-center mt-4">
-                        <div class="small text-muted">
-                            <span th:text="#{login.footer.text}">© 2025 Shop Management System. All rights reserved.</span>
-                        </div>
-                        <div class="mt-2">
-                            <a href="/shop/" class="text-decoration-none me-3">
-                                <i class="bi bi-arrow-left me-1"></i><span th:text="#{login.back.home}">Back to Home</span>
-                            </a>
-                            <a href="/shop/dashboard" class="text-decoration-none">
-                                <i class="bi bi-speedometer2 me-1"></i><span th:text="#{login.view.demo}">View Demo</span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -229,20 +133,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Fill login form with demo credentials
-        function fillLogin(username, password) {
-            document.getElementById('username').value = username;
-            document.getElementById('password').value = password;
-            
-            // Add visual feedback
-            const usernameField = document.getElementById('username');
-            const passwordField = document.getElementById('password');
-            
-            usernameField.focus();
-            setTimeout(() => passwordField.focus(), 100);
-            setTimeout(() => usernameField.focus(), 200);
-        }
-        
         // Form validation and enhancement
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('loginForm');
@@ -250,80 +140,18 @@
             const usernameField = document.getElementById('username');
             const passwordField = document.getElementById('password');
             
-            // Real-time validation
-            function validateField(field, fieldName) {
-                const value = field.value.trim();
-                const isValid = value.length > 0;
-                
-                if (isValid) {
-                    field.classList.remove('is-invalid');
-                    field.classList.add('is-valid');
-                } else {
-                    field.classList.remove('is-valid');
-                    field.classList.add('is-invalid');
-                }
-                
-                return isValid;
-            }
-            
-            usernameField.addEventListener('blur', () => validateField(usernameField, 'Username'));
-            passwordField.addEventListener('blur', () => validateField(passwordField, 'Password'));
-            
             form.addEventListener('submit', function(e) {
                 const username = usernameField.value.trim();
                 const password = passwordField.value.trim();
                 
-                let isValid = true;
-                
-                if (!username) {
-                    usernameField.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    usernameField.classList.remove('is-invalid');
-                }
-                
-                if (!password) {
-                    passwordField.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    passwordField.classList.remove('is-invalid');
-                }
-                
-                if (!isValid) {
+                if (!username || !password) {
                     e.preventDefault();
-                    // Show error message
-                    let errorDiv = document.querySelector('.validation-error');
-                    if (!errorDiv) {
-                        errorDiv = document.createElement('div');
-                        errorDiv.className = 'alert alert-danger validation-error';
-                        errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>Vui lòng nhập tên đăng nhập và mật khẩu';
-                        form.insertBefore(errorDiv, form.firstChild);
-                    }
                     return;
-                }
-                
-                // Remove any validation errors
-                const errorDiv = document.querySelector('.validation-error');
-                if (errorDiv) {
-                    errorDiv.remove();
                 }
                 
                 // Show loading state
                 submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2 spinner-border spinner-border-sm"></i>Đang đăng nhập...';
                 submitBtn.disabled = true;
-                
-                // Re-enable submit button after 5 seconds in case of slow response
-                setTimeout(() => {
-                    submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập';
-                    submitBtn.disabled = false;
-                }, 5000);
-            });
-            
-            // Add Enter key support for demo accounts
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.closest('.demo-account')) {
-                    e.target.closest('.demo-account').click();
-                }
             });
         });
     </script>
