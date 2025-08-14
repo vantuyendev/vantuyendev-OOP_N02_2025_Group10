@@ -3,10 +3,12 @@ package com.shopmanagement.web.controller;
 import com.shopmanagement.entity.Product;
 import com.shopmanagement.entity.Customer;
 import com.shopmanagement.entity.Login;
+import com.shopmanagement.entity.Order;
 import com.shopmanagement.model.UserSession;
 import com.shopmanagement.service.ProductService;
 import com.shopmanagement.service.CustomerService;
 import com.shopmanagement.service.LoginService;
+import com.shopmanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class ShopWebController {
     
     @Autowired
     private LoginService loginService;
+    
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
@@ -390,9 +395,36 @@ public class ShopWebController {
         }
         
         try {
-            // TODO: Implement purchase logic with inventory management
-            response.put("success", true);
-            response.put("message", "Purchase completed successfully");
+            String customerId = userSession.getUserId();
+            String shippingAddress = (String) purchaseData.get("shippingAddress");
+            String paymentMethod = (String) purchaseData.get("paymentMethod");
+            String notes = (String) purchaseData.get("notes");
+            
+            // Validate required fields
+            if (shippingAddress == null || shippingAddress.trim().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Shipping address is required");
+                return ResponseEntity.status(400).body(response);
+            }
+            
+            if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Payment method is required");
+                return ResponseEntity.status(400).body(response);
+            }
+            
+            // Create order from cart
+            Order order = orderService.createOrderFromCart(customerId, shippingAddress, paymentMethod, notes);
+            
+            if (order != null) {
+                response.put("success", true);
+                response.put("message", "Order placed successfully! Order ID: " + order.getOrderId());
+                response.put("orderId", order.getOrderId());
+            } else {
+                response.put("success", false);
+                response.put("message", "Unable to create order. Cart may be empty.");
+            }
+            
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);
