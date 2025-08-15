@@ -183,6 +183,317 @@ public class ShopWebController {
     // Customer - Web actions
     // ------------------------
 
+    @GetMapping("/customers/add")
+    public String addCustomerForm(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
+
+        model.addAttribute("customer", new Customer());
+        model.addAttribute("userSession", userSession);
+        return "shop/add-customer";
+    }
+
+    @PostMapping("/customers/add")
+    public String addCustomerSubmit(@ModelAttribute Customer customer,
+                                   @RequestParam String password,
+                                   Model model,
+                                   HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
+
+        try {
+            Customer savedCustomer = customerService.createCustomer(customer, password);
+            return "redirect:/shop/customers";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tạo khách hàng: " + e.getMessage());
+            model.addAttribute("customer", customer);
+            model.addAttribute("userSession", userSession);
+            return "shop/add-customer";
+        }
+    }
+
+    @GetMapping("/customers/edit/{customerId}")
+    public String editCustomerForm(@PathVariable String customerId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
+
+        try {
+            Optional<Customer> customerOpt = customerService.findById(customerId);
+            if (customerOpt.isPresent()) {
+                model.addAttribute("customer", customerOpt.get());
+                model.addAttribute("userSession", userSession);
+                return "shop/edit-customer";
+            } else {
+                return "redirect:/shop/customers";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể tải thông tin khách hàng: " + e.getMessage());
+            return "redirect:/shop/customers";
+        }
+    }
+
+    @PostMapping("/customers/edit/{customerId}")
+    public String editCustomerSubmit(@PathVariable String customerId,
+                                    @ModelAttribute Customer customer,
+                                    Model model,
+                                    HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
+
+        try {
+            customer.setUserId(customerId);
+            customerService.updateCustomer(customer);
+            return "redirect:/shop/customers";
+        } catch (Exception e) {
+            model.addAttribute("error", "Không thể cập nhật khách hàng: " + e.getMessage());
+            model.addAttribute("customer", customer);
+            model.addAttribute("userSession", userSession);
+            return "shop/edit-customer";
+        }
+    }
+
+    @PostMapping("/customers/delete/{customerId}")
+    public String deleteCustomer(@PathVariable String customerId, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) return "redirect:/shop/login";
+        if (!userSession.isAdmin()) return "redirect:/shop/dashboard";
+
+        try {
+            customerService.deleteCustomer(customerId);
+        } catch (Exception e) {
+            // Log the error but continue to redirect to customers page
+            System.err.println("Error deleting customer " + customerId + ": " + e.getMessage());
+        }
+        return "redirect:/shop/customers";
+    }
+
+    // ------------------------
+    // Order Management - Web actions  
+    // ------------------------
+
+    @GetMapping("/orders")
+    public String orders(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        try {
+            List<Order> orders;
+            if (userSession.isCustomer()) {
+                // Customers can only see their own orders
+                orders = orderService.getCustomerOrders(userSession.getUserId());
+            } else if (userSession.isAdmin()) {
+                // Admin can see all orders
+                orders = orderService.getAllOrders();
+            } else {
+                orders = List.of(); // Empty list for other users
+            }
+            
+            model.addAttribute("orders", orders);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load orders: " + e.getMessage());
+        }
+        return "shop/orders";
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public String orderDetails(@PathVariable Long orderId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        try {
+            Optional<Order> orderOpt = orderService.findById(orderId);
+            if (orderOpt.isPresent()) {
+                Order order = orderOpt.get();
+                
+                // Check if user has permission to view this order
+                if (userSession.isCustomer() && !order.getCustomerId().equals(userSession.getUserId())) {
+                    return "redirect:/shop/orders";
+                }
+                
+                model.addAttribute("order", order);
+                model.addAttribute("userSession", userSession);
+                return "shop/order-details";
+            } else {
+                return "redirect:/shop/orders";
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load order details: " + e.getMessage());
+            return "redirect:/shop/orders";
+        }
+    }
+
+    @GetMapping("/my-orders")
+    public String myOrders(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isCustomer()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        try {
+            List<Order> orders = orderService.getCustomerOrders(userSession.getUserId());
+            model.addAttribute("orders", orders);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load your orders: " + e.getMessage());
+        }
+        return "shop/my-orders";
+    }
+
+    // ------------------------
+    // Cart Management
+    // ------------------------
+
+    @GetMapping("/cart")
+    public String cart(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isCustomer()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        model.addAttribute("userSession", userSession);
+        return "shop/cart";
+    }
+
+    @GetMapping("/checkout")
+    public String checkout(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isCustomer()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        model.addAttribute("userSession", userSession);
+        return "shop/checkout";
+    }
+
+    // ------------------------
+    // Inventory Management  
+    // ------------------------
+
+    @GetMapping("/inventory")
+    public String inventory(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isAdmin()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        try {
+            List<Product> lowStockProducts = productService.findLowStockProducts(10);
+            List<Product> allProducts = productService.findAll();
+            
+            model.addAttribute("lowStockProducts", lowStockProducts);
+            model.addAttribute("allProducts", allProducts);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load inventory data: " + e.getMessage());
+        }
+        return "shop/inventory";
+    }
+
+    @GetMapping("/stock-in")
+    public String stockIn(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isAdmin()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        try {
+            List<Product> products = productService.findAll();
+            model.addAttribute("products", products);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load stock data: " + e.getMessage());
+        }
+        return "shop/stock-in";
+    }
+
+    // ------------------------
+    // Sales and Revenue Management
+    // ------------------------
+
+    @GetMapping("/sales")
+    public String sales(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isAdmin()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        try {
+            List<Order> todayOrders = orderService.getTodayOrders();
+            model.addAttribute("todayOrders", todayOrders);
+            model.addAttribute("userSession", userSession);
+        } catch (Exception e) {
+            model.addAttribute("error", "Unable to load sales data: " + e.getMessage());
+        }
+        return "shop/sales";
+    }
+
+    @GetMapping("/revenue")
+    public String revenue(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isAdmin()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        model.addAttribute("userSession", userSession);
+        return "shop/revenue";
+    }
+
+    // ------------------------
+    // Wishlist Management
+    // ------------------------
+
+    @GetMapping("/wishlist")
+    public String wishlist(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null) {
+            return "redirect:/shop/login";
+        }
+        
+        if (!userSession.isCustomer()) {
+            return "redirect:/shop/dashboard";
+        }
+        
+        model.addAttribute("userSession", userSession);
+        return "shop/wishlist";
+    }
+
     // ------------------------
     // Lightweight stats API for dashboard.js
     // ------------------------
