@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <title th:text="#{app.title} + ' - ' + #{dashboard.title}">Quản Lý Cửa Hàng Tạp Hóa</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- External CSS -->
@@ -21,6 +21,7 @@
         
         .main-header {
             background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px 0;
@@ -95,6 +96,7 @@
         
         .feature-card {
             background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px 30px;
@@ -222,6 +224,12 @@
         .footer a:hover {
             color: white;
         }
+
+        .login-alert {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-radius: 15px !important;
+            border: none !important;
+        }
     </style>
 </head>
 <body>
@@ -338,7 +346,7 @@
 
             <!-- Login Required Alert for non-authenticated users -->
             <div th:unless="${userSession}" class="text-center mt-5">
-                <div class="alert alert-light d-inline-block" role="alert" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: none;">
+                <div class="alert alert-light login-alert d-inline-block" role="alert">
                     <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Đăng nhập để sử dụng đầy đủ tính năng</h5>
                     <p>Vui lòng <a href="/shop/login" class="alert-link fw-bold">đăng nhập</a> để truy cập các tính năng quản lý.</p>
                     <hr>

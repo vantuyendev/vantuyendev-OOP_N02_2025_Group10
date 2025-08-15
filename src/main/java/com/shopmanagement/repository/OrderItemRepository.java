@@ -67,11 +67,10 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     /**
      * Tìm top sản phẩm bán chạy với limit
      */
-    @Query(value = "SELECT oi.product_id, SUM(oi.quantity) as total_sold, p.product_name " +
+    @Query(value = "SELECT TOP (?1) oi.product_id, SUM(oi.quantity) as total_sold, p.product_name " +
            "FROM order_item oi " +
            "JOIN product p ON oi.product_id = p.product_id " +
            "GROUP BY oi.product_id, p.product_name " +
-           "ORDER BY total_sold DESC " +
-           "LIMIT :limit", nativeQuery = true)
-    List<Object[]> findTopSellingProducts(@Param("limit") int limit);
+           "ORDER BY total_sold DESC", nativeQuery = true)
+    List<Object[]> findTopSellingProducts(int limit);
 }

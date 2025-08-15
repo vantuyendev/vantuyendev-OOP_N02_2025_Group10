@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <title>Quản Lý Cửa Hàng Tạp Hóa - Sản Phẩm</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- External CSS -->
@@ -21,6 +21,7 @@
         
         .main-header {
             background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px 0;
@@ -78,6 +79,7 @@
         
         .content-card {
             background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
@@ -127,6 +129,7 @@
         .alert {
             border-radius: 12px;
             border: none;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
         
@@ -208,13 +211,15 @@
             <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="bi bi-check-circle me-2"></i>
                 <span th:text="${param.success}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" 
+                        aria-label="Đóng thông báo" title="Đóng thông báo"></button>
             </div>
             
             <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="bi bi-exclamation-triangle me-2"></i>
                 <span th:text="${param.error}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" 
+                        aria-label="Đóng thông báo" title="Đóng thông báo"></button>
             </div>
             
             <div th:if="${error}" class="alert alert-danger" role="alert">
@@ -277,7 +282,7 @@
                                             </a>
                                             <form th:action="@{'/shop/products/delete/' + ${product.productId}}" 
                                                   method="post" 
-                                                  style="display: inline;"
+                                                  class="d-inline"
                                                   onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                                                 <button type="submit" 
                                                         class="btn btn-sm btn-outline-danger"

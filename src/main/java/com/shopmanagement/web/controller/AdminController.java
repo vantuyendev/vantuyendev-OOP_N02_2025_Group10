@@ -19,7 +19,7 @@ import java.util.Optional;
  * Controller cho quản lý Admin và Employee
  */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping({"/admin", "/shop/admin"})
 public class AdminController {
 
     @Autowired

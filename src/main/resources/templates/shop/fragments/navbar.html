@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Fragment</title>
 </head>
 <body>
     <!-- Navigation Fragment -->
     <nav th:fragment="navbar" class="modern-navbar">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="navbar-brand" href="/shop/" style="text-decoration: none; color: inherit;">
+                <a class="navbar-brand" href="/shop/" th:href="@{/shop/}">
                     <i class="bi bi-shop me-2"></i><span th:text="#{app.title}">Quản Lý Cửa Hàng Tạp Hóa</span>
                 </a>
                 <div class="navbar-nav d-flex flex-row">
@@ -25,6 +27,11 @@
                             <a class="nav-link" href="/shop/customers"
                                th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/customers')} ? 'active' : ''">
                                 <i class="bi bi-person-hearts me-1"></i><span th:text="#{nav.customers}">Customers</span>
+                            </a>
+                            <!-- Employee Management for Admin -->
+                            <a class="nav-link" href="/shop/admin/employees"
+                               th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/employees')} ? 'active' : ''">
+                                <i class="bi bi-people me-1"></i>Nhân Viên
                             </a>
                         </div>
                         

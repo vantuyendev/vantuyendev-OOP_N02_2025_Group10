@@ -1,245 +1,262 @@
 package com.shopmanagement.controller.admin;
 
-import com.shopmanagement.entity.Category;
-import com.shopmanagement.entity.Product;
-import com.shopmanagement.entity.Customer;
-import com.shopmanagement.entity.Order;
-import com.shopmanagement.service.CategoryService;
-import com.shopmanagement.service.ProductService;
-import com.shopmanagement.service.CustomerService;
-import com.shopmanagement.service.OrderService;
+import com.shopmanagement.entity.Employee;
+import com.shopmanagement.entity.Login;
+import com.shopmanagement.service.EmployeeService;
+import com.shopmanagement.service.LoginService;
+import com.shopmanagement.model.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.HashMap;
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
- * REST Controller cho Admin Panel
- * Xử lý các request quản lý từ admin
+ * Controller cho quản lý Admin và Employee
  */
-@RestController
-@RequestMapping("/api/admin")
-@CrossOrigin(origins = "*")
-public class AdminRestController {
+@Controller
+@RequestMapping({"/admin", "/shop/admin"})
+public class AdminController {
+
+    @Autowired
+    private EmployeeService employeeService;
     
     @Autowired
-    private CategoryService categoryService;
-    
-    @Autowired
-    private ProductService productService;
-    
-    @Autowired
-    private CustomerService customerService;
-    
-    @Autowired
-    private OrderService orderService;
-    
-    // ==================== CATEGORY MANAGEMENT ====================
-    
+    private LoginService loginService;
+
     /**
-     * Lấy tất cả danh mục
+     * Trang chính Admin Dashboard
      */
-    @GetMapping("/categories")
-    public ResponseEntity<Map<String, Object>> getAllCategories() {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            List<Category> categories = categoryService.findAll();
-            response.put("success", true);
-            response.put("data", categories);
-            response.put("count", categories.size());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Lỗi hệ thống: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    @GetMapping("/dashboard")
+    public String adminDashboard(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
         }
+
+        // Thống kê cơ bản
+        model.addAttribute("totalEmployees", employeeService.count());
+        model.addAttribute("totalCustomers", loginService.countByStatus(1));
+        model.addAttribute("departments", employeeService.getAllDepartments());
+        model.addAttribute("roles", employeeService.getAllRoles());
+
+        return "admin/dashboard";
     }
-    
+
     /**
-     * Tạo danh mục mới
+     * Quản lý nhân viên
      */
-    @PostMapping("/categories")
-    public ResponseEntity<Map<String, Object>> createCategory(@Valid @RequestBody Category category) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            Category createdCategory = categoryService.createCategory(category);
-            response.put("success", true);
-            response.put("message", "Tạo danh mục thành công");
-            response.put("data", createdCategory);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Không thể tạo danh mục: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    @GetMapping("/employees")
+    public String manageEmployees(Model model, HttpSession session,
+                                @RequestParam(required = false) String department,
+                                @RequestParam(required = false) String role,
+                                @RequestParam(required = false) String search) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
         }
-    }
-    
-    /**
-     * Cập nhật danh mục
-     */
-    @PutMapping("/categories/{categoryId}")
-    public ResponseEntity<Map<String, Object>> updateCategory(@PathVariable Long categoryId, 
-                                                            @Valid @RequestBody Category category) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            category.setCategoryId(categoryId);
-            Category updatedCategory = categoryService.updateCategory(category);
-            response.put("success", true);
-            response.put("message", "Cập nhật danh mục thành công");
-            response.put("data", updatedCategory);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Không thể cập nhật danh mục: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+        List<Employee> employees;
+        
+        if (search != null && !search.trim().isEmpty()) {
+            employees = employeeService.searchByName(search.trim());
+        } else if (department != null && role != null && !department.isEmpty() && !role.isEmpty()) {
+            employees = employeeService.findByDepartmentAndRole(department, role);
+        } else if (department != null && !department.isEmpty()) {
+            employees = employeeService.findByDepartment(department);
+        } else if (role != null && !role.isEmpty()) {
+            employees = employeeService.findByRole(role);
+        } else {
+            employees = employeeService.findAll();
         }
+
+        model.addAttribute("employees", employees);
+        model.addAttribute("departments", employeeService.getAllDepartments());
+        model.addAttribute("roles", employeeService.getAllRoles());
+        model.addAttribute("selectedDepartment", department);
+        model.addAttribute("selectedRole", role);
+        model.addAttribute("search", search);
+
+        return "admin/employees";
     }
-    
+
     /**
-     * Xóa danh mục
+     * Form thêm nhân viên mới
      */
-    @DeleteMapping("/categories/{categoryId}")
-    public ResponseEntity<Map<String, Object>> deleteCategory(@PathVariable Long categoryId) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            categoryService.deleteCategory(categoryId);
-            response.put("success", true);
-            response.put("message", "Xóa danh mục thành công");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Không thể xóa danh mục: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    @GetMapping("/employees/add")
+    public String addEmployeeForm(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
         }
+
+        model.addAttribute("employee", new Employee());
+        model.addAttribute("departments", employeeService.getAllDepartments());
+        model.addAttribute("roles", employeeService.getAllRoles());
+
+        return "admin/add-employee";
     }
-    
-    // ==================== PRODUCT MANAGEMENT ====================
-    
+
     /**
-     * Lấy tất cả sản phẩm (Admin view)
+     * Xử lý thêm nhân viên mới
      */
-    @GetMapping("/products")
-    public ResponseEntity<Map<String, Object>> getAllProducts() {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            List<Product> products = productService.findAll();
-            response.put("success", true);
-            response.put("data", products);
-            response.put("count", products.size());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Lỗi hệ thống: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    @PostMapping("/employees/add")
+    public String addEmployee(@ModelAttribute Employee employee,
+                            @RequestParam String password,
+                            Model model,
+                            HttpSession session,
+                            RedirectAttributes redirectAttributes) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
         }
-    }
-    
-    /**
-     * Thống kê tổng quan cho admin dashboard
-     */
-    @GetMapping("/dashboard/stats")
-    public ResponseEntity<Map<String, Object>> getDashboardStats() {
-        Map<String, Object> response = new HashMap<>();
+
         try {
-            Map<String, Object> stats = new HashMap<>();
+            // Tạo login account cho employee
+            Login login = new Login(employee.getUserId(), password, 0); // 0 = Employee
+            loginService.createLogin(login);
             
-            // Thống kê cơ bản
-            stats.put("totalProducts", productService.count());
-            stats.put("totalCustomers", customerService.count());
-            stats.put("totalCategories", categoryService.count());
-            stats.put("totalOrders", orderService.count());
+            // Tạo employee
+            employeeService.createEmployee(employee);
             
-            // Thống kê đơn hàng theo trạng thái
-            stats.put("pendingOrders", orderService.countOrdersByStatus(Order.OrderStatus.PENDING));
-            stats.put("confirmedOrders", orderService.countOrdersByStatus(Order.OrderStatus.CONFIRMED));
-            stats.put("deliveredOrders", orderService.countOrdersByStatus(Order.OrderStatus.DELIVERED));
+            redirectAttributes.addFlashAttribute("successMessage", 
+                "Nhân viên " + employee.getEmployeeName() + " đã được thêm thành công!");
             
-            // Sản phẩm sắp hết hàng (quantity < 10)
-            stats.put("lowStockProducts", productService.findLowStockProducts(10).size());
-            
-            response.put("success", true);
-            response.put("data", stats);
-            return ResponseEntity.ok(response);
+            return "redirect:/admin/employees";
             
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Lỗi hệ thống: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-    
-    // ==================== CUSTOMER MANAGEMENT ====================
-    
-    /**
-     * Lấy tất cả khách hàng (Admin view)
-     */
-    @GetMapping("/customers")
-    public ResponseEntity<Map<String, Object>> getAllCustomers() {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            List<Customer> customers = customerService.findAll();
-            response.put("success", true);
-            response.put("data", customers);
-            response.put("count", customers.size());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Lỗi hệ thống: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-    
-    // ==================== ORDER MANAGEMENT ====================
-    
-    /**
-     * Lấy tất cả đơn hàng (Admin view)
-     */
-    @GetMapping("/orders")
-    public ResponseEntity<Map<String, Object>> getAllOrders() {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            List<Order> orders = orderService.getAllOrders();
-            response.put("success", true);
-            response.put("data", orders);
-            response.put("count", orders.size());
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Lỗi hệ thống: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-    
-    /**
-     * Cập nhật trạng thái đơn hàng
-     */
-    @PutMapping("/orders/{orderId}/status")
-    public ResponseEntity<Map<String, Object>> updateOrderStatus(@PathVariable Long orderId, 
-                                                               @RequestParam String status) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(status.toUpperCase());
-            Order updatedOrder = orderService.updateOrderStatus(orderId, orderStatus);
+            model.addAttribute("error", "Lỗi: " + e.getMessage());
+            model.addAttribute("employee", employee);
+            model.addAttribute("departments", employeeService.getAllDepartments());
+            model.addAttribute("roles", employeeService.getAllRoles());
             
-            response.put("success", true);
-            response.put("message", "Cập nhật trạng thái đơn hàng thành công");
-            response.put("data", updatedOrder);
-            return ResponseEntity.ok(response);
-            
-        } catch (IllegalArgumentException e) {
-            response.put("success", false);
-            response.put("message", "Trạng thái đơn hàng không hợp lệ");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Không thể cập nhật trạng thái: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return "admin/add-employee";
         }
+    }
+
+    /**
+     * Form sửa thông tin nhân viên
+     */
+    @GetMapping("/employees/edit/{userId}")
+    public String editEmployeeForm(@PathVariable String userId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
+        }
+
+        Optional<Employee> employeeOpt = employeeService.findById(userId);
+        if (!employeeOpt.isPresent()) {
+            return "redirect:/admin/employees?error=not_found";
+        }
+
+        model.addAttribute("employee", employeeOpt.get());
+        model.addAttribute("departments", employeeService.getAllDepartments());
+        model.addAttribute("roles", employeeService.getAllRoles());
+
+        return "admin/edit-employee";
+    }
+
+    /**
+     * Xử lý cập nhật thông tin nhân viên
+     */
+    @PostMapping("/employees/edit/{userId}")
+    public String editEmployee(@PathVariable String userId,
+                             @ModelAttribute Employee employee,
+                             Model model,
+                             HttpSession session,
+                             RedirectAttributes redirectAttributes) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
+        }
+
+        try {
+            employee.setUserId(userId);
+            employeeService.updateEmployee(employee);
+            
+            redirectAttributes.addFlashAttribute("successMessage", 
+                "Thông tin nhân viên " + employee.getEmployeeName() + " đã được cập nhật!");
+            
+            return "redirect:/admin/employees";
+            
+        } catch (Exception e) {
+            model.addAttribute("error", "Lỗi: " + e.getMessage());
+            model.addAttribute("employee", employee);
+            model.addAttribute("departments", employeeService.getAllDepartments());
+            model.addAttribute("roles", employeeService.getAllRoles());
+            
+            return "admin/edit-employee";
+        }
+    }
+
+    /**
+     * Xóa nhân viên
+     */
+    @PostMapping("/employees/delete/{userId}")
+    public String deleteEmployee(@PathVariable String userId,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
+        }
+
+        try {
+            // Xóa nhân viên (cascade sẽ xóa login account)
+            employeeService.deleteEmployee(userId);
+            
+            redirectAttributes.addFlashAttribute("successMessage", 
+                "Nhân viên đã được xóa thành công!");
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi khi xóa nhân viên: " + e.getMessage());
+        }
+
+        return "redirect:/admin/employees";
+    }
+
+    /**
+     * Chi tiết nhân viên
+     */
+    @GetMapping("/employees/{userId}")
+    public String employeeDetails(@PathVariable String userId, Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
+        }
+
+        Optional<Employee> employeeOpt = employeeService.findById(userId);
+        if (!employeeOpt.isPresent()) {
+            return "redirect:/admin/employees?error=not_found";
+        }
+
+        model.addAttribute("employee", employeeOpt.get());
+        return "admin/employee-details";
+    }
+
+    /**
+     * Thống kê theo department
+     */
+    @GetMapping("/statistics/departments")
+    public String departmentStatistics(Model model, HttpSession session) {
+        UserSession userSession = (UserSession) session.getAttribute("userSession");
+        if (userSession == null || !userSession.isAdmin()) {
+            return "redirect:/shop/login?error=access_denied";
+        }
+
+        List<String> departments = employeeService.getAllDepartments();
+        model.addAttribute("departments", departments);
+        
+        // Tính số nhân viên cho mỗi department
+        departments.forEach(dept -> {
+            long count = employeeService.countByDepartment(dept);
+            model.addAttribute("count_" + dept.replaceAll("\\s+", "_"), count);
+        });
+
+        return "admin/department-statistics";
     }
 }

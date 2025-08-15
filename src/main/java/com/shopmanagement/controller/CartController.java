@@ -41,6 +41,7 @@ public class CartController {
             return ResponseEntity.ok().body(Map.of(
                 "success", true,
                 "message", "Đã thêm sản phẩm vào giỏ hàng",
+                "cart", cart,
                 "cartItemCount", cartService.getCartItemCount(customerId),
                 "totalQuantity", cartService.getTotalQuantity(customerId)
             ));
