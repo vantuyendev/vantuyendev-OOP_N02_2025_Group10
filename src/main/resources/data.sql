@@ -1,11 +1,13 @@
 -- Data initialization cho H2 Database
 -- Dữ liệu demo cho Shop Management System
 
--- Insert LOGIN accounts với password = 123456 (theo demo accounts trong login.html)
+-- Insert LOGIN accounts với password = 123456 (sẽ được upgrade sang mã hóa khi đăng nhập lần đầu)
 INSERT INTO login (user_id, password, status, created_at, updated_at) VALUES 
 ('admin', '123456', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),        -- Admin account
 ('e001', '123456', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),         -- Employee account  
-('c001', '123456', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);         -- Customer account
+('e002', '123456', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),         -- Employee account 2
+('c001', '123456', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),         -- Customer account
+('c002', '123456', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);         -- Customer account 2
 
 -- Insert CATEGORIES
 INSERT INTO categories (category_name, description, created_at, updated_at) VALUES 
@@ -28,11 +30,13 @@ INSERT INTO product (product_name, category_id, price, quantity, description, br
 
 -- Insert CUSTOMER info
 INSERT INTO customer (user_id, customer_name, email, phone_number, address, date_of_birth, gender, loyalty_points, created_at, updated_at) VALUES 
-('c001', 'Nguyen Van A', 'customer1@example.com', '0901234567', '123 Nguyen Trai, Q1, TP.HCM', '1990-05-15', 'Nam', 500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('c001', 'Nguyen Van A', 'customer1@example.com', '0901234567', '123 Nguyen Trai, Q1, TP.HCM', '1990-05-15', 'Nam', 500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('c002', 'Le Thi C', 'customer2@example.com', '0902345678', '789 Tran Hung Dao, Q5, TP.HCM', '1992-08-20', 'Nu', 1000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert EMPLOYEE info
 INSERT INTO employee (user_id, employee_name, role, department, salary, hire_date, phone_number, address, emergency_contact, created_at, updated_at) VALUES 
-('e001', 'Tran Thi B', 'Nhân viên bán hàng', 'Bán hàng', 8000000, '2024-01-15', '0907654321', '456 Le Loi, Q3, TP.HCM', '0909999999', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('e001', 'Tran Thi B', 'Nhân viên bán hàng', 'Bán hàng', 8000000, '2024-01-15', '0907654321', '456 Le Loi, Q3, TP.HCM', '0909999999', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('e002', 'Pham Van D', 'Trưởng phòng', 'Kỹ thuật', 15000000, '2023-06-01', '0908765432', '321 Hai Bà Trưng, Q1, TP.HCM', '0908888888', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert sample ORDER
 INSERT INTO orders (customer_id, total_amount, status, payment_method, notes, order_date, updated_at) VALUES 

@@ -2,6 +2,7 @@ package com.shopmanagement.service;
 
 import com.shopmanagement.entity.Login;
 import com.shopmanagement.repository.LoginRepository;
+import com.shopmanagement.util.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
     
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     /**
      * Xác thực đăng nhập
      * @param userId ID người dùng
@@ -31,7 +35,29 @@ public class LoginService {
             return Optional.empty();
         }
         
-        return loginRepository.findByUserIdAndPassword(userId.trim(), password.trim());
+        // Tìm login theo userId
+        Optional<Login> loginOpt = loginRepository.findByUserId(userId.trim());
+        if (loginOpt.isPresent()) {
+            Login login = loginOpt.get();
+            
+            // Kiểm tra password cũ (không mã hóa) để backward compatibility
+            if (passwordEncoder.upgradeEncoding(login.getPassword())) {
+                // Password cũ, so sánh trực tiếp
+                if (login.getPassword().equals(password.trim())) {
+                    // Upgrade password sang dạng mã hóa mới
+                    login.setPassword(passwordEncoder.encode(password.trim()));
+                    loginRepository.save(login);
+                    return Optional.of(login);
+                }
+            } else {
+                // Password đã mã hóa, sử dụng encoder để verify
+                if (passwordEncoder.matches(password.trim(), login.getPassword())) {
+                    return Optional.of(login);
+                }
+            }
+        }
+        
+        return Optional.empty();
     }
     
     /**
@@ -43,6 +69,9 @@ public class LoginService {
         if (loginRepository.existsByUserId(login.getUserId())) {
             throw new IllegalArgumentException("User ID đã tồn tại: " + login.getUserId());
         }
+        
+        // Mã hóa password trước khi lưu
+        login.setPassword(passwordEncoder.encode(login.getPassword()));
         return loginRepository.save(login);
     }
     
@@ -70,7 +99,8 @@ public class LoginService {
         Optional<Login> login = authenticate(userId, oldPassword);
         if (login.isPresent()) {
             Login loginEntity = login.get();
-            loginEntity.setPassword(newPassword);
+            // Mã hóa mật khẩu mới
+            loginEntity.setPassword(passwordEncoder.encode(newPassword));
             loginRepository.save(loginEntity);
             return true;
         }

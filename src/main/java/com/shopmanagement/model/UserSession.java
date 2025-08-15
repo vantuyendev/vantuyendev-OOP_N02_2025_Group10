@@ -93,7 +93,7 @@ public class UserSession {
     }
     
     public boolean isEmployee() {
-        return false; // No employees in system
+        return status != null && status == 0 && !"admin".equalsIgnoreCase(userId);
     }
     
     public boolean isCustomer() {
