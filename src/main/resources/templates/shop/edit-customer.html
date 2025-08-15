@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{app.title} + ' - Edit Customer'">Shop Management System - Edit Customer</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- External CSS -->
@@ -12,6 +12,16 @@
     
     <!-- Custom CSS -->
     <link href="/css/modern-dashboard.css" rel="stylesheet">
+    
+    <style>
+        .textarea-large {
+            height: 100px;
+        }
+        
+        .textarea-medium {
+            height: 60px;
+        }
+    </style>
 </head>
 <body>
     <!-- Top Navigation Bar -->
@@ -86,7 +96,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="userId" th:field="*{userId}" readonly>
+                                        <input type="text" class="form-control" id="userId" th:field="*{userId}" readonly title="Customer ID (read-only)" aria-label="Customer ID">
                                         <label for="userId">
                                             <i class="bi bi-person-badge me-1"></i>Customer ID
                                         </label>
@@ -94,7 +104,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="customerName" th:field="*{customerName}" required>
+                                        <input type="text" class="form-control" id="customerName" th:field="*{customerName}" required title="Customer full name" aria-label="Customer full name">
                                         <label for="customerName">
                                             <i class="bi bi-person me-1"></i>Customer Name
                                         </label>
@@ -108,7 +118,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="email" th:field="*{email}">
+                                        <input type="email" class="form-control" id="email" th:field="*{email}" title="Customer email address" aria-label="Customer email address">
                                         <label for="email">
                                             <i class="bi bi-envelope me-1"></i>Email Address
                                         </label>
@@ -119,7 +129,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required>
+                                        <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required title="Customer phone number" aria-label="Customer phone number">
                                         <label for="phoneNumber">
                                             <i class="bi bi-telephone me-1"></i>Phone Number
                                         </label>
@@ -131,7 +141,7 @@
                             </div>
                             
                             <div class="form-floating mb-4">
-                                <textarea class="form-control" id="address" th:field="*{address}" style="height: 100px"></textarea>
+                                <textarea class="form-control textarea-large" id="address" th:field="*{address}" title="Customer address" aria-label="Customer address"></textarea>
                                 <label for="address">
                                     <i class="bi bi-geo-alt me-1"></i>Address
                                 </label>
@@ -162,7 +172,7 @@
                                         </div>
                                     </div>
                                     <div class="form-floating">
-                                        <textarea class="form-control" id="notes" placeholder="Special notes or preferences" style="height: 60px"></textarea>
+                                        <textarea class="form-control textarea-medium" id="notes" placeholder="Special notes or preferences" title="Customer notes and preferences" aria-label="Customer notes and preferences"></textarea>
                                         <label for="notes">Notes (Optional)</label>
                                     </div>
                                 </div>
@@ -185,10 +195,10 @@
                                         </div>
                                     </div>
                                     <div class="d-grid gap-2">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="sendTestEmail()">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="sendTestEmail()" title="Send test email to customer" aria-label="Send test email to customer">
                                             <i class="bi bi-envelope me-1"></i>Send Test Email
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-success" onclick="callCustomer()">
+                                        <button type="button" class="btn btn-sm btn-outline-success" onclick="callCustomer()" title="Call customer" aria-label="Call customer">
                                             <i class="bi bi-telephone me-1"></i>Call Customer
                                         </button>
                                     </div>
@@ -196,10 +206,10 @@
                             </div>
                             
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a href="/shop/customers" class="btn-modern btn-outline me-md-2">
+                                <a href="/shop/customers" class="btn-modern btn-outline me-md-2" title="Cancel editing" aria-label="Cancel editing">
                                     <i class="bi bi-x-circle me-2"></i>Cancel
                                 </a>
-                                <button type="submit" class="btn-modern btn-primary">
+                                <button type="submit" class="btn-modern btn-primary" title="Update customer information" aria-label="Update customer information">
                                     <i class="bi bi-check-circle me-2"></i>Update Customer
                                 </button>
                             </div>

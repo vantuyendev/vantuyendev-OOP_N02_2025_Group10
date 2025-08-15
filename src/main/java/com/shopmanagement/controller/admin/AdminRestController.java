@@ -241,4 +241,29 @@ public class AdminRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+    
+    // ==================== AUDIT MANAGEMENT ====================
+    
+    /**
+     * Get audit count (for statistics)
+     */
+    @GetMapping("/audit/count")
+    public ResponseEntity<Map<String, Object>> getAuditCount() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // For now, return a mock count since we don't have audit service yet
+            response.put("success", true);
+            response.put("data", Map.of(
+                "totalAuditLogs", 150,
+                "todayLogs", 12,
+                "weekLogs", 45,
+                "monthLogs", 150
+            ));
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Lỗi hệ thống: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{app.title} + ' - Advanced Search'">Shop Management System - Advanced Search</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- External CSS -->
@@ -12,6 +12,12 @@
     
     <!-- Custom CSS -->
     <link href="/css/modern-dashboard.css" rel="stylesheet">
+    
+    <style>
+        .clickable-brand {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="dashboard-body">
     <!-- Gradient Background -->
@@ -22,7 +28,7 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-auto">
-                    <div class="dashboard-brand" onclick="location.href='/shop/dashboard'" style="cursor: pointer;">
+                    <div class="dashboard-brand clickable-brand" onclick="location.href='/shop/dashboard'" title="Go to dashboard" aria-label="Go to dashboard">
                         <i class="bi bi-shop"></i>
                         <span>Quản Lý Cửa Hàng Tạp Hóa</span>
                     </div>

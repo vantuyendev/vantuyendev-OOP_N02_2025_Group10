@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Quản Lý Cửa Hàng Tạp Hóa - Customer Portal</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- External CSS -->
@@ -21,6 +21,7 @@
         
         .main-header {
             background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px 0;
@@ -101,6 +102,7 @@
         
         .feature-card {
             background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px 30px;
@@ -175,6 +177,12 @@
         .feature-button.btn-primary:hover {
             background: #4f87ff;
             color: white;
+        }
+        
+        .custom-info-alert {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            border: none;
         }
         
         .feature-button.btn-warning {
@@ -308,7 +316,7 @@
 
             <!-- Customer Info Alert -->
             <div class="text-center mt-5">
-                <div class="alert alert-light d-inline-block" role="alert" style="background: rgba(255, 255, 255, 0.9); border-radius: 15px; border: none;">
+                <div class="alert alert-light d-inline-block custom-info-alert" role="alert">
                     <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Thông tin dành cho khách hàng</h5>
                     <p>Với tài khoản khách hàng, bạn có thể xem sản phẩm, mua hàng và theo dõi đơn hàng.</p>
                     <hr>
